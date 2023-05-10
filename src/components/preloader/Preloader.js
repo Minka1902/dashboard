@@ -1,4 +1,4 @@
-const Preloader = ({ text }) => {
+const Preloader = ({ text = 'fix the problem' }) => {
   return (
     <section className="preloader_container">
       <div className="preloader__circle"></div>

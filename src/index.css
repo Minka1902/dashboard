@@ -4,6 +4,9 @@
 /* ! resource */
 @import url('./components/resource/resource.css');
 
+/* ! preloader */
+@import url('./components/preloader/preloader.css');
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
