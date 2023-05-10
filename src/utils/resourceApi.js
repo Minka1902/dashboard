@@ -5,7 +5,12 @@ class resourceApi {
 
     _fetch = ({ method = "GET", resourceUrl = this._resource }) =>
         fetch(`${resourceUrl}`, {
-            method
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                'mode': 'no-cors',
+                'Access-Control-Allow-Origin': '*',
+            },
         }).then(this._handleResponseJson)
 
     _handleResponseJson = (res) => (res.ok ? res.json() : Promise.reject(`Error: ${res.status}`));
