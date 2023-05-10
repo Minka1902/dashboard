@@ -8,6 +8,7 @@
     width: 620px;
     margin: 0 0 10px 15%;
     border-radius: 10px;
+    overflow: hidden;
 }
 
 .resource__name_container {
