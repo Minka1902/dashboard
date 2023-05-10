@@ -5,7 +5,7 @@ import Preloader from '../preloader/Preloader';
 
 export default function Resource(props) {
     const { resource, onClick } = props;
-    const [isPreloader, setIsPreloader] = React.useState(true);
+    const [isPreloader, setIsPreloader] = React.useState(false);
 
     const setIsPreloaderFalse=()=>{
         setIsPreloader(false);
