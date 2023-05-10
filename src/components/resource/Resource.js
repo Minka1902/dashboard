@@ -7,15 +7,20 @@ export default function Resource(props) {
     const { resource, onClick } = props;
     const [isPreloader, setIsPreloader] = React.useState(true);
 
+    const setIsPreloaderFalse=()=>{
+        setIsPreloader(false);
+    }
+
     const resourceClick = (evt) => {
         evt.preventDefault();
-        onClick(resource.name);
+        setIsPreloader(true);
+        onClick(resource.name, setIsPreloaderFalse);
     }
 
     return (
         <>
             {isPreloader ?
-                <div className="resource">
+                <div className="resource" onClick={setIsPreloaderFalse}>
                     <Preloader />
                 </div>
                 :

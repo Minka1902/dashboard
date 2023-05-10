@@ -9,6 +9,7 @@
     margin: 0 0 10px 15%;
     border-radius: 10px;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .resource__name_container {
