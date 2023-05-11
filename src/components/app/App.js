@@ -1,7 +1,8 @@
 import React from 'react';
 import Resource from '../resource/Resource';
 import resourceApiObj from '../../utils/resourceApi';
-import { resources } from '../../constants/constants';
+import { resources1 } from '../../constants/constants';
+import Header from '../header/Header';
 
 export default function App() {
 
@@ -29,11 +30,12 @@ export default function App() {
 
   return (
     <div className="app">
-      {
-        resources.map((resource, index) => {
+      <Header />
+      <div className='resources'>
+        {resources1.map((resource, index) => {
           return <Resource resource={resource} key={index} onClick={resourceClick} />
-        })
-      }
+        })}
+      </div>
     </div>
   );
 }

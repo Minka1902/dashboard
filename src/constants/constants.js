@@ -10,6 +10,7 @@ const resource4 = { name: 'cloud.il', status: 500, lastActive: '13.04.2023 17:26
 const resource5 = { name: '89.192.15.11', status: 208, lastActive: '12.11.2022 03:04:56', lastTry: date }
 
 export const resources = [resource1, resource2, resource3, resource4, resource5];
+export const resources1 = [resource1];
 
 // ! 	gets a month (august, Aug, 05, 12, 4) and returns the long version
 // TODO findMonth("Aug"); findMonth("8"); findMonth("08"); findMonth("august");
