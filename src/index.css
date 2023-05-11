@@ -16,6 +16,9 @@
 /* ! navmenu */
 @import url('./components/navMenu/navMenu.css');
 
+/* ! progressbar */
+@import url('./components/progressBar/progressBar.css');
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

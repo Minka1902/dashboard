@@ -3,6 +3,10 @@
 }
 
 .resources {
-    margin: auto;
-    margin-top: 10px;
+    margin: 10px auto 0 auto;
+    display: grid;
+    grid-template-columns: 130px 130px 130px 130px 130px;
+    grid-template-rows: 180px;
+    grid-gap: 10px;
+    width: min-content;
 }
