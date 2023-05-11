@@ -1,9 +1,8 @@
 .app {
-    max-width: 1440px;
-    background-color: antiquewhite;
+    background-color: rgba(233, 233, 233, 0);
 }
 
 .resources {
+    margin: auto;
     margin-top: 10px;
-    background-color: antiquewhite;
 }
