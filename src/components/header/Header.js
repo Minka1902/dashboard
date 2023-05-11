@@ -2,7 +2,6 @@ import * as React from 'react';
 import NavBar from "../navBar/NavBar";
 import NavMenu from "../navMenu/NavMenu";
 import logo from "../../images/geomage-logo.svg";
-import logoThemeDark from "../../images/NewsExplorer-theme-dark.svg";
 import HeaderButton from './HeaderButton';
 import openMenuIcon from '../../images/open-menu.svg';
 import openMenuIconThemeDark from '../../images/open-menu-theme-dark.svg';
@@ -65,18 +64,6 @@ export default function Header(props) {
 		return openMenuIcon;
 	}
 
-	const determineLogoSrc = () => {
-		if (theme) {
-			if (isNavMenuOpen) {
-				return logo;
-			} else {
-				return logoThemeDark;
-			}
-		} else {
-			return logo;
-		}
-	}
-
 	const savedArticlesClicked = () => {
 		setIsNavMenuOpen(false);
 		savedArticlesClick();
@@ -90,7 +77,7 @@ export default function Header(props) {
 	return (
 		<div className={`h-sb__container${theme ? ' h-sb__container_no-background' : ''}`}>
 			<header className={`header${theme ? ' header_theme_dark' : ''}${isNavMenuOpen ? ' header_darker' : ''}`}>
-				<img className={`header__logo ${theme ? 'header__logo_theme_dark' : ''}${isNavMenuOpen ? '_not' : ''}`} src={determineLogoSrc()} alt="News explorer logo" />
+				<img className={`header__logo ${theme ? 'header__logo_theme_dark' : ''}${isNavMenuOpen ? '_not' : ''}`} src={logo} alt="News explorer logo" />
 				{isNavBar ?
 					<>
 						<NavBar isHomePage={isHomePage} theme={theme} savedArticlesClick={savedArticlesClicked} homeClick={homeClicked} isLoggedIn={isLoggedIn} />
