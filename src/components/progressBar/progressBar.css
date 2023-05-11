@@ -1,0 +1,32 @@
+.progress-bar {
+    width: 70px;
+    height: 20px;
+    margin-left: 40px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    border: 1px solid rgb(134, 133, 133);
+    overflow: hidden;
+}
+
+.progress-bar__fill {
+    height: 100%;
+    background-color: orange;
+    transition: width 0.3s ease-in-out;
+}
+
+.progress-bar__label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: -20px;
+}
+
+.progress-bar__title {
+    margin-bottom: -17px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-left: -80px;
+}
