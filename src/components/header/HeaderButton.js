@@ -32,7 +32,7 @@ export default function HeaderButton(props) {
 				</button>
 				: 
 				<button className={`header__button${theme?' header__button_theme_dark':''}${isNavMenu?'_modified':''}`} onClick={handleButtonClick}>
-					Sign in
+					Add resource
 				</button>
 			}
 		</>

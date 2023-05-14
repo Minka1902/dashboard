@@ -10,7 +10,6 @@ class sourceApi {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
             },
-            mode: 'no-cors',
             body: JSON.stringify(data),
         }).then(this._handleResponseJson)
 
@@ -21,7 +20,6 @@ class sourceApi {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': 'http://127.0.0.1:3000',
             },
-            mode: 'no-cors',
         }).then(this._handleResponse)
 
     _handleResponseJson = (res) => (res.ok ? res.json() : Promise.reject(`Error: ${res.status}`));
