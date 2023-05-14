@@ -1,7 +1,7 @@
 .progress-bar {
     width: 70px;
     height: 20px;
-    margin-left: 40px;
+    margin-left: 50px;
     background-color: #e0e0e0;
     border-radius: 10px;
     border: 1px solid rgb(134, 133, 133);
@@ -28,5 +28,5 @@
     margin-bottom: -17px;
     font-size: 11px;
     font-weight: bold;
-    margin-left: -80px;
+    margin-left: -75px;
 }

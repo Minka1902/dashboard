@@ -11,6 +11,7 @@ class resourceApi {
                 'mode': 'no-cors',
                 'Access-Control-Allow-Origin': '*',
             },
+            mode: 'no-cors',
         }).then(this._handleResponseJson)
 
     _handleResponseJson = (res) => (res.ok ? res.json() : Promise.reject(`Error: ${res.status}`));
