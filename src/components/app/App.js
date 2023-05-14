@@ -19,7 +19,8 @@ export default function App() {
         })
         .catch((err) => {
           if (err) {
-            console.log(err);
+            const time = new Date();
+            const lastTry = `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}:${time.getMilliseconds()}`;
           }
         })
         .finally(() => {
