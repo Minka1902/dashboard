@@ -178,7 +178,7 @@ export default function App() {
   const handleAddSourceSubmit = ({ name, url }) => {
     resourceApiObj.refresh(url)
       .then(() => {
-        const source = { name, url, status: 200, lastActive: new Date(), lastChecked: new Date(), isActive: true }
+        const source = { name, url, status: 200, lastActive: new Date('1970-01-01'), lastChecked: new Date(), isActive: true }
         if (source) {
           createNewSource(source);
         }
