@@ -13,20 +13,11 @@ class sourceApi {
             },
         }).then(this._handleResponse)
 
-    _fetchNoBody = ({ method = "GET", path }) =>
-        fetch(`${this._rootUrl}${path}`, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-        }).then(this._handleResponse)
-
     _handleResponse = (res) => (res.ok ? res.json() : Promise.reject(`Error: ${res.status}`));
 
     initialize = () => this._fetch({ method: 'GET', url: '/get/all' });
 
-    getSourceInfo = (name) => this._fetchNoBody({ method: 'GET', url: `/get/${name}` });
+    getSourceInfo = (name) => this._fetch({ method: 'GET', url: `/get/${name}` });
 
     createSource = (newSource) => this._fetch({ method: 'POST', url: '/add-source', data: newSource });
 
