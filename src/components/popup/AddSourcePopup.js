@@ -2,7 +2,7 @@ import React from "react";
 import PopupWithForm from "./PopupWithForm";
 
 export default function AddSourcePopup(props) {
-    const { linkText, isOpen, handleSwitchPopup, handleLogin, onClose, buttonText = 'Submit' } = props;
+    const { linkText, isOpen, handleSwitchPopup, onSubmit, onClose, buttonText = 'Submit' } = props;
     const [name, setName] = React.useState('');
     const [url, setUrl] = React.useState('');
     const [isUrlCorrect, setIsUrlCorrect] = React.useState(false);
@@ -12,7 +12,7 @@ export default function AddSourcePopup(props) {
     const handleSubmit = (evt) => {
         evt.preventDefault();
         if (isValid) {
-            handleLogin(name, url);
+            onSubmit({ name, url });
             setIsValid(false);
         }
     };

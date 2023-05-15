@@ -1,14 +1,18 @@
 import React from 'react';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 import Resource2 from '../resource/Resource';
 import resourceApiObj from '../../utils/resourceApi';
 import sourceApiOBJ from '../../utils/sourceApi';
-import { resources } from '../../constants/constants';
+import usersApiOBJ from '../../utils/usersApi';
 import Header from '../header/Header';
 import LoginPopup from '../popup/LoginPopup';
 import AddSourcePopup from '../popup/AddSourcePopup';
 
 export default function App() {
-  // const [resources, setResources] = React.useState();
+  const [resources, setResources] = React.useState([]);
+  const [isUserFound, setIsUserFound] = React.useState(true);
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [currentUser, setCurrentUser] = React.useState();
   const [isLoginPopupOpen, setIsLoginPopupOpen] = React.useState(false);
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
   const resourceArray = { 'Geomage.com': 'https://www.geomage.com', '89.192.15.12': '2', 'nebius': '3', 'cloud.il': '4', '89.192.15.11': '5' };
@@ -83,29 +87,48 @@ export default function App() {
     }
   };
 
+  const findUserInfo = () => {
+    usersApiOBJ
+      .getCurrentUser()
+      .then((user) => {
+        if (user) {
+          setCurrentUser(user);
+          setLoggedIn(true);
+        } else {
+          setLoggedIn(false);
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          console.log(`Error type: ${err.message}`);
+          setLoggedIn(false);
+        }
+      })
+      .finally(() => {
+        closeAllPopups({ isProject: false });
+      });
+  }
+
   // * Handling login form submit
   const handleLoginSubmit = (email, password) => {
-    // usersApiOBJ
-    //   .login({ email, password })
-    //   .then((data) => {
-    //     if (data.jwt) {
-    //       localStorage.setItem('jwt', data.jwt);
-    //     }
-    //     if (data.user._id) {
-    //       setIsUserFound(true);
-    //       findUserInfo();
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(`Error type: ${err.message}`);
-    //     if ((err === 'Error: 404') || (err.message === 'Failed to fetch')) {
-    //       setIsUserFound(false);
-    //     }
-    //     setLoggedIn(false);
-    //   })
-    //   .finally(() => {
-    //     gettingSavedArticles();
-    //   })
+    usersApiOBJ
+      .login({ email, password })
+      .then((data) => {
+        if (data.jwt) {
+          localStorage.setItem('jwt', data.jwt);
+        }
+        if (data.user._id) {
+          setIsUserFound(true);
+          findUserInfo();
+        }
+      })
+      .catch((err) => {
+        console.log(`Error type: ${err.message}`);
+        if ((err === 'Error: 404') || (err.message === 'Failed to fetch')) {
+          setIsUserFound(false);
+        }
+        setLoggedIn(false);
+      });
   };
 
   // * close popup by ESCAPE 
@@ -138,40 +161,79 @@ export default function App() {
     return () => document.removeEventListener('mouseup', closeByClick);
   });
 
-  // React.useEffect(() => {
-  //   sourceApiOBJ.initialize()
-  //     .then((data) => {
-  //       if (data) {
-  //         setResources(data);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       if (err) {
-  //         console.log(err);
-  //       }
-  //     })
-  // }, []);
+  const createNewSource = (source) => {
+    sourceApiOBJ.createSource(source)
+      .then((data) => {
+        if (data) {
+          console.log(data);
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          console.log(err);
+        }
+      })
+  }
+
+  const handleAddSourceSubmit = ({ name, url }) => {
+    resourceApiObj.refresh(url)
+      .then(() => {
+        const source = { name, url, status: 200, lastActive: new Date(), lastChecked: new Date(), isActive: true }
+        if (source) {
+          createNewSource(source);
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          const source = { name, url, status: 500, lastActive: new Date('1970-01-01'), lastChecked: new Date(), isActive: true }
+          if (source) {
+            createNewSource(source);
+          }
+        }
+      })
+      .finally(()=>{
+        closeAllPopups();
+      });
+  };
+
+  React.useEffect(() => {
+    sourceApiOBJ.initialize()
+      .then((data) => {
+        if (data) {
+          setResources(data);
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          console.log(err);
+        }
+      })
+  }, []);
 
   return (
-    <div className="app">
-      <Header handleButtonClick={openAddSourcePopup} />
-      <div className='resources'>
-        {resources.map((resource, index) => {
-          return <Resource2 resource={resource} key={index} onClick={resourceClick} />
-        })}
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="app">
+        <Header handleButtonClick={openAddSourcePopup} />
+        <div className='resources'>
+          {resources[1] ? resources.map((resource, index) => {
+            return <Resource2 resource={resource} key={index} onClick={resourceClick} />
+          }) : <></>}
+        </div>
+        <LoginPopup
+          handleLogin={handleLoginSubmit}
+          isOpen={isLoginPopupOpen}
+          isFound={isUserFound}
+          linkText='Add source'
+          onClose={closeAllPopups}
+          handleSwitchPopup={switchPopups} />
+
+        <AddSourcePopup
+          onSubmit={handleAddSourceSubmit}
+          isOpen={isAddSourcePopupOpen}
+          linkText='Sign in'
+          handleSwitchPopup={switchPopups}
+          onClose={closeAllPopups} />
       </div>
-      <LoginPopup
-        handleLogin={handleLoginSubmit}
-        isOpen={isLoginPopupOpen}
-        isFound={true}
-        linkText='Add source'
-        onClose={closeAllPopups}
-        handleSwitchPopup={switchPopups} />
-      <AddSourcePopup
-        isOpen={isAddSourcePopupOpen}
-        linkText='Sign in'
-        handleSwitchPopup={switchPopups}
-        onClose={closeAllPopups} />
-    </div>
+    </CurrentUserContext.Provider>
   );
 }

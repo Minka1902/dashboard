@@ -16,18 +16,18 @@ class usersApi {
         'authorization': `Bearer ${auth}`,
       },
       body: JSON.stringify(data),
-      }).then(this._handleResponse)
+    }).then(this._handleResponse)
 
   _handleResponse = (res) => (res.ok ? res.json() : Promise.reject(`Error: ${res.status}`));
 
-  login = ({email, password}) => this._fetch({ method: "POST", url: "/signin", data: { email, password }});
+  login = ({ email, password }) => this._fetch({ method: "POST", url: "/signin", data: { email, password } });
 
   getCurrentUser = () => this._fetch({ method: "GET", url: "/users/me" });
 
-  signUp = ({email, password, username}) => this._fetch({ method: "POST", url: "/signup", data: { email, password, username }});
+  signUp = ({ email, password, username }) => this._fetch({ method: "POST", url: "/signup", data: { email, password, username } });
 }
 // ! DEBUG API
 // const usersApiOBJ = new usersApi({ auth: '4den6CaDRe58L5Jx85R7E38xpVcn8TZcyqznqZVpKFAjeqqG80eZQc1WCtRNM1Aq', rootUrl: 'http://localhost:3001' });
 // ! REAL API
-const usersApiOBJ = new usersApi({ auth: '4den6CaDRe58L5Jx85R7E38xpVcn8TZcyqznqZVpKFAjeqqG80eZQc1WCtRNM1Aq', rootUrl: 'https://michaelscharff-api.herokuapp.com' });
+const usersApiOBJ = new usersApi({ auth: '4den6CaDRe58L5Jx85R7E38xpVcn8TZcyqznqZVpKFAjeqqG80eZQc1WCtRNM1Aq', rootUrl: 'http://localhost:4000' });
 export default usersApiOBJ;

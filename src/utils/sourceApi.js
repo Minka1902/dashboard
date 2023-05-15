@@ -4,27 +4,27 @@ class sourceApi {
     }
 
     _fetch = ({ method = "GET", url, data }) =>
-        fetch(`${this._source}/${url}`, {
+        fetch(`${this._source}${url}`, {
+            method: method,
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+        }).then(this._handleResponse)
+
+    _fetchNoBody = ({ method = "GET", path }) =>
+        fetch(`${this._rootUrl}${path}`, {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
             },
-            body: JSON.stringify(data),
-        }).then(this._handleResponseJson)
-
-    _fetchNoBody = ({ method = "GET", path = this._path }) =>
-        fetch(`${this._rootUrl}${path}`, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': 'http://127.0.0.1:3000',
-            },
         }).then(this._handleResponse)
 
-    _handleResponseJson = (res) => (res.ok ? res.json() : Promise.reject(`Error: ${res.status}`));
+    _handleResponse = (res) => (res.ok ? res.json() : Promise.reject(`Error: ${res.status}`));
 
-    initialize = () => this._fetchNoBody({ method: 'GET', url: '/get/all' });
+    initialize = () => this._fetch({ method: 'GET', url: '/get/all' });
 
     getSourceInfo = (name) => this._fetchNoBody({ method: 'GET', url: `/get/${name}` });
 
