@@ -13,17 +13,19 @@ class sourceApi {
             },
         }).then(this._handleResponse)
 
-    _handleResponse = (res) => (res.ok ? res.json() : Promise.reject(`Error: ${res.status}`));
+    _handleResponse = (res) => (res.ok ? res.json() : Promise.reject(`Error: ${res.status}`))
 
-    initialize = () => this._fetch({ method: 'GET', url: '/get/all' });
+    initialize = () => this._fetch({ method: 'GET', url: '/get/all' })
 
-    getSourceInfo = (name) => this._fetch({ method: 'GET', url: `/get/${name}` });
+    getSourceInfo = (name) => this._fetch({ method: 'GET', url: `/get/${name}` })
 
-    createSource = (newSource) => this._fetch({ method: 'POST', url: '/add-source', data: newSource });
+    createSource = (newSource) => this._fetch({ method: 'POST', url: '/add-source', data: newSource })
 
-    updateSource = (name, newData) => this._fetch({ method: 'PUT', data: newData, url: `/update/${name}` });
+    updateSource = (name, newData) => this._fetch({ method: 'PUT', data: newData, url: `/update/${name}` })
 
     deleteSource = (name) => this._fetch({ method: 'DELETE', url: `/remove-source/${name}` })
+
+    checkSource = (url) => this._fetch({ method: 'GET', url: `/check-source/${url}` })
 }
 
 const sourceApiOBJ = new sourceApi();

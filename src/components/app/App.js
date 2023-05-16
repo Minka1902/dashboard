@@ -7,6 +7,7 @@ import usersApiOBJ from '../../utils/usersApi';
 import Header from '../header/Header';
 import LoginPopup from '../popup/LoginPopup';
 import AddSourcePopup from '../popup/AddSourcePopup';
+import * as auth from '../../utils/auth';
 
 export default function App() {
   const [resources, setResources] = React.useState([]);
@@ -15,6 +16,23 @@ export default function App() {
   const [currentUser, setCurrentUser] = React.useState();
   const [isLoginPopupOpen, setIsLoginPopupOpen] = React.useState(false);
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
+
+  // * checking if should auto-login
+  const isAutoLogin = () => {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      auth.checkToken(jwt)
+        .then((user) => {
+          if (user) {
+            setCurrentUser(user);
+            setLoggedIn(true);
+          }
+        })
+        .catch((err) => {
+          console.log(`Check token error: ${err}`);
+        });
+    }
+  }
 
   const closeAllPopups = () => {
     setIsLoginPopupOpen(false);
@@ -30,52 +48,82 @@ export default function App() {
   };
 
   const resourceClick = (resource, hidePreloader) => {
-    resourceApiObj.refresh(resource.url)
+    sourceApiOBJ.checkSource(resource.url)
       .then((data) => {
-        if (data) {
-          let newData = {};
-          newData.lastActive = data ? new Date() : resource.lastActive;
-          newData.isActive = data ? true : false;
-          newData.status = data ? data.status : resource.status;
-          newData.lastChecked = new Date();
-          newData.updatedAt = new Date();
-          sourceApiOBJ.updateSource(resource.name, newData)
-            .then((data) => {
-              if (data) {
-                console.log(data);
-              }
-            })
-            .catch((err) => {
-              if (err) {
-                console.log(err);
-              }
-            })
-        }
+        let newData = {};
+        newData.lastActive = data ? new Date() : resource.lastActive;
+        newData.isActive = data ? data.isActive : false;
+        newData.status = data ? data.status : resource.status;
+        newData.lastChecked = new Date();
+        newData.updatedAt = new Date();
+        sourceApiOBJ.updateSource(resource.name, newData)
+          .then((data) => {
+            if (data) {
+              console.log(data);
+            }
+          })
+          .catch((err) => {
+            if (err) {
+              console.log(err);
+            }
+          })
       })
       .catch((err) => {
-        if (err) {
-          let newData = {};
-          newData.lastActive = err ? new Date() : resource.lastActive;
-          newData.isActive = false;
-          newData.status = 404;
-          newData.lastChecked = new Date();
-          newData.updatedAt = new Date();
-          sourceApiOBJ.updateSource(resource.name, newData)
-            .then((data) => {
-              if (data) {
-                console.log(data);
-              }
-            })
-            .catch((err) => {
-              if (err) {
-                console.log(err);
-              }
-            })
-        }
+        console.log(err);
       })
       .finally(() => {
         hidePreloader();
       });
+
+
+
+
+    // resourceApiObj.refresh(resource.url)
+    //   .then((data) => {
+    //     if (data) {
+    //       let newData = {};
+    //       newData.lastActive = data ? new Date() : resource.lastActive;
+    //       newData.isActive = data ? true : false;
+    //       newData.status = data ? data.status : resource.status;
+    //       newData.lastChecked = new Date();
+    //       newData.updatedAt = new Date();
+    //       sourceApiOBJ.updateSource(resource.name, newData)
+    //         .then((data) => {
+    //           if (data) {
+    //             console.log(data);
+    //           }
+    //         })
+    //         .catch((err) => {
+    //           if (err) {
+    //             console.log(err);
+    //           }
+    //         })
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     if (err) {
+    //       let newData = {};
+    //       newData.lastActive = err ? new Date() : resource.lastActive;
+    //       newData.isActive = false;
+    //       newData.status = 404;
+    //       newData.lastChecked = new Date();
+    //       newData.updatedAt = new Date();
+    //       sourceApiOBJ.updateSource(resource.name, newData)
+    //         .then((data) => {
+    //           if (data) {
+    //             console.log(data);
+    //           }
+    //         })
+    //         .catch((err) => {
+    //           if (err) {
+    //             console.log(err);
+    //           }
+    //         })
+    //     }
+    //   })
+    //   .finally(() => {
+    //     hidePreloader();
+    //   });
   };
 
   const switchPopups = (evt) => {
@@ -184,16 +232,16 @@ export default function App() {
   }
 
   const handleAddSourceSubmit = ({ name, url }) => {
-    resourceApiObj.refresh(url)
-      .then(() => {
-        const source = { name, url, status: 200, lastActive: new Date('1970-01-01'), lastChecked: new Date(), isActive: true }
+    sourceApiOBJ.checkSource(url)
+      .then((data) => {
+        const source = { name, url, status: data.status, lastActive: new Date('1970-01-01'), lastChecked: new Date(), isActive: data.isActive }
         if (source) {
           createNewSource(source);
         }
       })
       .catch((err) => {
         if (err) {
-          const source = { name, url, status: 500, lastActive: new Date('1970-01-01'), lastChecked: new Date(), isActive: true }
+          const source = { name, url, status: 404, lastActive: new Date('1970-01-01'), lastChecked: new Date(), isActive: true }
           if (source) {
             createNewSource(source);
           }
@@ -217,6 +265,10 @@ export default function App() {
         }
       });
   }, []);
+
+  React.useEffect(() => {
+    isAutoLogin();
+  }, [])
 
   return (
     <CurrentUserContext.Provider value={currentUser}>

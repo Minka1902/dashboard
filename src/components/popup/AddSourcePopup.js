@@ -54,7 +54,7 @@ export default function AddSourcePopup(props) {
                             className="popup__input"
                             placeholder="Enter url"
                             id="login-url-input"
-                            type="url"
+                            type="text"
                             name="urlInput"
                             required
                             minLength="8"
