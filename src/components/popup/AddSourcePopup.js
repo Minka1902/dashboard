@@ -65,7 +65,7 @@ export default function AddSourcePopup(props) {
                         <p className={`popup__error-massage${isUrlCorrect ? '' : '_visible'}`}>Please enter valid URL.</p>
                     </>
                     :
-                    <h2 className="popup__content_other">Please log in.</h2>}
+                    <h2 className="popup__content_other">Please sign in.</h2>}
             </PopupWithForm>
         </>
     );

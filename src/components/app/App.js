@@ -21,7 +21,13 @@ export default function App() {
     setIsAddSourcePopupOpen(false);
   };
 
-  const openAddSourcePopup = () => setIsAddSourcePopupOpen(true);
+  const openPopup = () => {
+    if (loggedIn) {
+      setIsAddSourcePopupOpen(true);
+    } else {
+      setIsLoginPopupOpen(true);
+    }
+  };
 
   const resourceClick = (resource, hidePreloader) => {
     resourceApiObj.refresh(resource.url)
@@ -215,7 +221,7 @@ export default function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="app">
-        <Header handleButtonClick={openAddSourcePopup} />
+        <Header handleButtonClick={openPopup} />
         {loggedIn ? <h3 className='app__title'>Hello {currentUser.username}, welcome back!</h3> : <></>}
         <div className='resources'>
           {resources[0] ? resources.map((resource, index) => {
