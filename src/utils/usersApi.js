@@ -1,3 +1,5 @@
+import { BASE_URL } from "./auth";
+
 class usersApi {
   constructor(props) {
     this._authToken = props.auth;
@@ -29,5 +31,5 @@ class usersApi {
 // ! DEBUG API
 // const usersApiOBJ = new usersApi({ auth: '4den6CaDRe58L5Jx85R7E38xpVcn8TZcyqznqZVpKFAjeqqG80eZQc1WCtRNM1Aq', rootUrl: 'http://localhost:3001' });
 // ! REAL API
-const usersApiOBJ = new usersApi({ auth: '4den6CaDRe58L5Jx85R7E38xpVcn8TZcyqznqZVpKFAjeqqG80eZQc1WCtRNM1Aq', rootUrl: 'http://localhost:4000' });
+const usersApiOBJ = new usersApi({ auth: '4den6CaDRe58L5Jx85R7E38xpVcn8TZcyqznqZVpKFAjeqqG80eZQc1WCtRNM1Aq', rootUrl: BASE_URL });
 export default usersApiOBJ;

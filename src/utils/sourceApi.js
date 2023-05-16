@@ -1,6 +1,8 @@
+import { BASE_URL } from "./auth";
+
 class sourceApi {
     constructor() {
-        this._source = 'http://localhost:4000';
+        this._source = BASE_URL;
     }
 
     _fetch = ({ method = "GET", url, data }) =>
