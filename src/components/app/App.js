@@ -16,7 +16,11 @@ export default function App() {
   const [isLoginPopupOpen, setIsLoginPopupOpen] = React.useState(false);
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
 
-  // * checking if should auto-login
+  React.useEffect(() => {
+    initialize();
+    isAutoLogin();
+  }, [])
+
   const isAutoLogin = () => {
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
@@ -103,7 +107,6 @@ export default function App() {
       });
   }
 
-  // * Handling login form submit
   const handleLoginSubmit = (email, password) => {
     usersApiOBJ
       .login({ email, password })
@@ -124,36 +127,6 @@ export default function App() {
         setLoggedIn(false);
       });
   };
-
-  // * close popup by ESCAPE 
-  React.useEffect(() => {
-    const closeByEscape = (evt) => {
-      if (evt.key === 'Escape') {
-        closeAllPopups();
-      }
-    };
-
-    document.addEventListener('keydown', closeByEscape);
-    return () => document.removeEventListener('keydown', closeByEscape);
-    // eslint-disable-next-line
-  }, []);
-
-  // ! Adding event listener for the page
-  // ! Mouse event
-  React.useEffect(() => {
-    const closeByClick = (evt) => {
-      if (evt.target.classList.contains('popup_type_project')) {
-        closeAllPopups({ isProject: true });
-      } else {
-        if (evt.target.classList.contains("popup")) {
-          closeAllPopups({ isProject: false });
-        }
-      }
-    }
-
-    document.addEventListener('mouseup', closeByClick);
-    return () => document.removeEventListener('mouseup', closeByClick);
-  });
 
   const createNewSource = (source) => {
     sourceApiOBJ.createSource(source)
@@ -200,12 +173,37 @@ export default function App() {
           console.log(err);
         }
       });
-  }
+  };
 
+  // * close popup by ESCAPE 
   React.useEffect(() => {
-    initialize();
-    isAutoLogin();
-  }, [])
+    const closeByEscape = (evt) => {
+      if (evt.key === 'Escape') {
+        closeAllPopups();
+      }
+    };
+
+    document.addEventListener('keydown', closeByEscape);
+    return () => document.removeEventListener('keydown', closeByEscape);
+    // eslint-disable-next-line
+  }, []);
+
+  // ! Adding event listener for the page
+  // ! Mouse event
+  React.useEffect(() => {
+    const closeByClick = (evt) => {
+      if (evt.target.classList.contains('popup_type_project')) {
+        closeAllPopups({ isProject: true });
+      } else {
+        if (evt.target.classList.contains("popup")) {
+          closeAllPopups({ isProject: false });
+        }
+      }
+    }
+
+    document.addEventListener('mouseup', closeByClick);
+    return () => document.removeEventListener('mouseup', closeByClick);
+  });
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
