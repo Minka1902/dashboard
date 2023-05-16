@@ -15,6 +15,11 @@
     transition: visibility 0s 0.5s linear, opacity 0.5s linear;
 }
 
+.popup__content_other{
+    text-align: center;
+    height: 86px;
+}
+
 .popup__button {
     width: 358px;
     height: 50px;

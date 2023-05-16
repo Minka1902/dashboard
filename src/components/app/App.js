@@ -22,8 +22,6 @@ export default function App() {
     setIsAddSourcePopupOpen(false);
   };
 
-  const openLoginPopup = () => setIsLoginPopupOpen(true);
-
   const openAddSourcePopup = () => setIsAddSourcePopupOpen(true);
 
   const resourceClick = (name, hidePreloader) => {
@@ -191,7 +189,7 @@ export default function App() {
           }
         }
       })
-      .finally(()=>{
+      .finally(() => {
         closeAllPopups();
       });
   };
@@ -214,6 +212,7 @@ export default function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="app">
         <Header handleButtonClick={openAddSourcePopup} />
+        {loggedIn ? <h3 className='app__title'>Hello {currentUser.username}, welcome back!</h3> : <></>}
         <div className='resources'>
           {resources[1] ? resources.map((resource, index) => {
             return <Resource2 resource={resource} key={index} onClick={resourceClick} />
@@ -228,6 +227,7 @@ export default function App() {
           handleSwitchPopup={switchPopups} />
 
         <AddSourcePopup
+          isLoggedIn={loggedIn}
           onSubmit={handleAddSourceSubmit}
           isOpen={isAddSourcePopupOpen}
           linkText='Sign in'

@@ -2,7 +2,7 @@ import React from "react";
 import PopupWithForm from "./PopupWithForm";
 
 export default function AddSourcePopup(props) {
-    const { linkText, isOpen, handleSwitchPopup, onSubmit, onClose, buttonText = 'Submit' } = props;
+    const { linkText, isOpen, handleSwitchPopup, onSubmit, isLoggedIn, onClose, buttonText = 'Submit' } = props;
     const [name, setName] = React.useState('');
     const [url, setUrl] = React.useState('');
     const [isUrlCorrect, setIsUrlCorrect] = React.useState(false);
@@ -31,36 +31,42 @@ export default function AddSourcePopup(props) {
     }, [name, url]);
 
     return (
-        <PopupWithForm onSubmit={handleSubmit} isValid={isValid} handleSwitchPopup={handleSwitchPopup} linkText={linkText} name="add-source" title="Add source" isOpen={isOpen} onClose={onClose} buttonText={buttonText}>
-            <h3 className='popup__input-title'>Source name</h3>
-            <input
-                className="popup__input"
-                placeholder="Enter name"
-                id="login-name-input"
-                type="text"
-                name="nameInput"
-                required
-                minLength="2"
-                maxLength="40"
-                value={name}
-                onChange={(evt) => setName(evt.currentTarget.value)}
-                autoComplete="off"
-            />
-            <h3 className='popup__input-title'>Url</h3>
-            <input
-                className="popup__input"
-                placeholder="Enter url"
-                id="login-url-input"
-                type="url"
-                name="urlInput"
-                required
-                minLength="8"
-                maxLength="200"
-                value={url}
-                onChange={(evt) => setUrl(evt.currentTarget.value)}
-            />
-            <p className={`popup__error-massage${isUrlCorrect ? '' : '_visible'}`}>Please enter valid URL.</p>
-            {/* <p className={`popup__error-massage${isFound ? '' : '_visible'}`}>User not found</p> */}
-        </PopupWithForm>
+        <>
+            <PopupWithForm onSubmit={handleSubmit} isValid={isValid} handleSwitchPopup={handleSwitchPopup} linkText={linkText} name="add-source" title="Add source" isOpen={isOpen} onClose={onClose} buttonText={buttonText}>
+                {isLoggedIn ?
+                    <>
+                        <h3 className='popup__input-title'>Source name</h3>
+                        <input
+                            className="popup__input"
+                            placeholder="Enter name"
+                            id="login-name-input"
+                            type="text"
+                            name="nameInput"
+                            required
+                            minLength="2"
+                            maxLength="40"
+                            value={name}
+                            onChange={(evt) => setName(evt.currentTarget.value)}
+                            autoComplete="off"
+                        />
+                        <h3 className='popup__input-title'>Url</h3>
+                        <input
+                            className="popup__input"
+                            placeholder="Enter url"
+                            id="login-url-input"
+                            type="url"
+                            name="urlInput"
+                            required
+                            minLength="8"
+                            maxLength="200"
+                            value={url}
+                            onChange={(evt) => setUrl(evt.currentTarget.value)}
+                        />
+                        <p className={`popup__error-massage${isUrlCorrect ? '' : '_visible'}`}>Please enter valid URL.</p>
+                    </>
+                    :
+                    <h2 className="popup__content_other">Please log in.</h2>}
+            </PopupWithForm>
+        </>
     );
 }
