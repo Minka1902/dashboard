@@ -15,7 +15,7 @@ class sourceApi {
 
     _handleResponse = (res) => (res.ok ? res.json() : Promise.reject(`Error: ${res.status}`))
 
-    initialize = () => this._fetch({ method: 'GET', url: '/get/all' })
+    init = () => this._fetch({ method: 'GET', url: '/get/all' })
 
     getSourceInfo = (name) => this._fetch({ method: 'GET', url: `/get/${name}` })
 

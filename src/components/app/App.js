@@ -1,7 +1,6 @@
 import React from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import Resource2 from '../resource/Resource';
-import resourceApiObj from '../../utils/resourceApi';
 import sourceApiOBJ from '../../utils/sourceApi';
 import usersApiOBJ from '../../utils/usersApi';
 import Header from '../header/Header';
@@ -55,18 +54,15 @@ export default function App() {
         newData.isActive = data ? data.isActive : false;
         newData.status = data ? data.status : resource.status;
         newData.lastChecked = new Date();
-        newData.updatedAt = new Date();
         sourceApiOBJ.updateSource(resource.name, newData)
-          .then((data) => {
-            if (data) {
-              console.log(data);
-            }
-          })
           .catch((err) => {
             if (err) {
               console.log(err);
             }
           })
+          .finally(() => {
+            initialize()
+          });
       })
       .catch((err) => {
         console.log(err);
@@ -74,56 +70,6 @@ export default function App() {
       .finally(() => {
         hidePreloader();
       });
-
-
-
-
-    // resourceApiObj.refresh(resource.url)
-    //   .then((data) => {
-    //     if (data) {
-    //       let newData = {};
-    //       newData.lastActive = data ? new Date() : resource.lastActive;
-    //       newData.isActive = data ? true : false;
-    //       newData.status = data ? data.status : resource.status;
-    //       newData.lastChecked = new Date();
-    //       newData.updatedAt = new Date();
-    //       sourceApiOBJ.updateSource(resource.name, newData)
-    //         .then((data) => {
-    //           if (data) {
-    //             console.log(data);
-    //           }
-    //         })
-    //         .catch((err) => {
-    //           if (err) {
-    //             console.log(err);
-    //           }
-    //         })
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     if (err) {
-    //       let newData = {};
-    //       newData.lastActive = err ? new Date() : resource.lastActive;
-    //       newData.isActive = false;
-    //       newData.status = 404;
-    //       newData.lastChecked = new Date();
-    //       newData.updatedAt = new Date();
-    //       sourceApiOBJ.updateSource(resource.name, newData)
-    //         .then((data) => {
-    //           if (data) {
-    //             console.log(data);
-    //           }
-    //         })
-    //         .catch((err) => {
-    //           if (err) {
-    //             console.log(err);
-    //           }
-    //         })
-    //     }
-    //   })
-    //   .finally(() => {
-    //     hidePreloader();
-    //   });
   };
 
   const switchPopups = (evt) => {
@@ -217,17 +163,7 @@ export default function App() {
         }
       })
       .finally(() => {
-        sourceApiOBJ.initialize()
-          .then((data) => {
-            if (data) {
-              setResources(data);
-            }
-          })
-          .catch((err) => {
-            if (err) {
-              console.log(err);
-            }
-          });
+        initialize();
       });
   }
 
@@ -252,8 +188,8 @@ export default function App() {
       });
   };
 
-  React.useEffect(() => {
-    sourceApiOBJ.initialize()
+  const initialize = () => {
+    sourceApiOBJ.init()
       .then((data) => {
         if (data) {
           setResources(data);
@@ -264,9 +200,10 @@ export default function App() {
           console.log(err);
         }
       });
-  }, []);
+  }
 
   React.useEffect(() => {
+    initialize();
     isAutoLogin();
   }, [])
 
