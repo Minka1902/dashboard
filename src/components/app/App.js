@@ -15,7 +15,6 @@ export default function App() {
   const [currentUser, setCurrentUser] = React.useState();
   const [isLoginPopupOpen, setIsLoginPopupOpen] = React.useState(false);
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
-  const resourceArray = { 'Geomage.com': 'https://www.geomage.com', '89.192.15.12': '2', 'nebius': '3', 'cloud.il': '4', '89.192.15.11': '5' };
 
   const closeAllPopups = () => {
     setIsLoginPopupOpen(false);
@@ -24,56 +23,53 @@ export default function App() {
 
   const openAddSourcePopup = () => setIsAddSourcePopupOpen(true);
 
-  const resourceClick = (name, hidePreloader) => {
-    const resourceUrl = resourceArray[name];
-    if (resourceUrl) {
-      resourceApiObj.refresh(resourceUrl)
-        .then((data) => {
-          if (data) {
-            let newData = {};
-            newData.lastActive = data ? new Date() : null;
-            newData.isActive = data ? true : false;
-            newData.status = data ? 200 : 404;
-            newData.lastChecked = new Date();
-            newData.updatedAt = new Date();
-            sourceApiOBJ.updateSource(name, newData)
-              .then((data) => {
-                if (data) {
-                  console.log(data);
-                }
-              })
-              .catch((err) => {
-                if (err) {
-                  console.log(err);
-                }
-              })
-          }
-        })
-        .catch((err) => {
-          if (err) {
-            let newData = {};
-            newData.lastActive = err ? new Date() : null;
-            newData.isActive = false;
-            newData.status = 404;
-            newData.lastChecked = new Date();
-            newData.updatedAt = new Date();
-            sourceApiOBJ.updateSource(name, newData)
-              .then((data) => {
-                if (data) {
-                  console.log(data);
-                }
-              })
-              .catch((err) => {
-                if (err) {
-                  console.log(err);
-                }
-              })
-          }
-        })
-        .finally(() => {
-          hidePreloader();
-        });
-    }
+  const resourceClick = (resource, hidePreloader) => {
+    resourceApiObj.refresh(resource.url)
+      .then((data) => {
+        if (data) {
+          let newData = {};
+          newData.lastActive = data ? new Date() : resource.lastActive;
+          newData.isActive = data ? true : false;
+          newData.status = data ? data.status : resource.status;
+          newData.lastChecked = new Date();
+          newData.updatedAt = new Date();
+          sourceApiOBJ.updateSource(resource.name, newData)
+            .then((data) => {
+              if (data) {
+                console.log(data);
+              }
+            })
+            .catch((err) => {
+              if (err) {
+                console.log(err);
+              }
+            })
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          let newData = {};
+          newData.lastActive = err ? new Date() : resource.lastActive;
+          newData.isActive = false;
+          newData.status = 404;
+          newData.lastChecked = new Date();
+          newData.updatedAt = new Date();
+          sourceApiOBJ.updateSource(resource.name, newData)
+            .then((data) => {
+              if (data) {
+                console.log(data);
+              }
+            })
+            .catch((err) => {
+              if (err) {
+                console.log(err);
+              }
+            })
+        }
+      })
+      .finally(() => {
+        hidePreloader();
+      });
   };
 
   const switchPopups = (evt) => {

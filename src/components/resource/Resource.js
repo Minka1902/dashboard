@@ -13,7 +13,7 @@ export default function Resource(props) {
     const resourceClick = (evt) => {
         evt.preventDefault();
         setIsPreloader(true);
-        onClick(resource.name, setIsPreloaderFalse);
+        onClick(resource, setIsPreloaderFalse);
     }
 
     const calculatePrecentage = () => {
