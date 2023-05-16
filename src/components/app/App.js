@@ -161,16 +161,24 @@ export default function App() {
 
   const createNewSource = (source) => {
     sourceApiOBJ.createSource(source)
-      .then((data) => {
-        if (data) {
-          console.log(data);
-        }
-      })
       .catch((err) => {
         if (err) {
           console.log(err);
         }
       })
+      .finally(() => {
+        sourceApiOBJ.initialize()
+          .then((data) => {
+            if (data) {
+              setResources(data);
+            }
+          })
+          .catch((err) => {
+            if (err) {
+              console.log(err);
+            }
+          });
+      });
   }
 
   const handleAddSourceSubmit = ({ name, url }) => {
@@ -205,7 +213,7 @@ export default function App() {
         if (err) {
           console.log(err);
         }
-      })
+      });
   }, []);
 
   return (
@@ -214,7 +222,7 @@ export default function App() {
         <Header handleButtonClick={openAddSourcePopup} />
         {loggedIn ? <h3 className='app__title'>Hello {currentUser.username}, welcome back!</h3> : <></>}
         <div className='resources'>
-          {resources[1] ? resources.map((resource, index) => {
+          {resources[0] ? resources.map((resource, index) => {
             return <Resource2 resource={resource} key={index} onClick={resourceClick} />
           }) : <></>}
         </div>
