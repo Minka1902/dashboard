@@ -1,5 +1,6 @@
 .resource {
     border: 1.5px solid rgba(128, 128, 128, 0.384);
+    background-color: rgb(240, 240, 240);
     display: flex;
     flex-direction: column;
     width: 130px;
@@ -18,7 +19,6 @@
     text-align: left;
     padding-bottom: 5px;
     padding-left: 5px;
-    border-bottom: 1px solid rgba(128, 128, 128, 0.384);
 }
 
 .resource__image {
@@ -79,6 +79,26 @@
     margin: 10px auto 5px;
 }
 
-.no-memory{
+.no-memory {
     height: 154px;
+}
+
+.resource__button {
+    background-image: url('../../images/delete-icon.svg');
+    width: 20px;
+    height: 20px;
+    border: none;
+    margin: 2px 3px 0 0;
+}
+
+.resource__button:hover {
+    background-image: url('../../images/delete-icon_hover.svg');
+}
+
+.resource__name_container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.384);
 }

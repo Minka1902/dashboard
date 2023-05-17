@@ -50,6 +50,23 @@ export default function App() {
     }
   };
 
+  const deleteSource = (name) => {
+    sourceApiOBJ.deleteSource(name)
+      .then((data) => {
+        if (data) {
+          console.log(data)
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          console.log(err);
+        }
+      })
+      .finally(() => {
+        initialize();
+      })
+  };
+
   const resourceClick = (resource, hidePreloader) => {
     sourceApiOBJ.checkSource(resource.url)
       .then((data) => {
@@ -212,7 +229,7 @@ export default function App() {
         {loggedIn ? <h3 className='app__title'>Hello {currentUser.username}, welcome back!</h3> : <></>}
         <div className='resources'>
           {resources[0] ? resources.map((resource, index) => {
-            return <Resource2 resource={resource} key={index} onClick={resourceClick} />
+            return <Resource2 deleteSource={deleteSource} resource={resource} key={index} onClick={resourceClick} />
           }) : <></>}
         </div>
         <LoginPopup
