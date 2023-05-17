@@ -56,7 +56,7 @@
     color: red;
 }
 
-.resource__last-active {
+.resource__error-text {
     line-height: 15px;
     font-size: 13px;
     display: flex;
@@ -88,7 +88,7 @@
     width: 20px;
     height: 20px;
     border: none;
-    margin: 2px 3px 0 0;
+    margin: 3px 4px 0 0;
 }
 
 .resource__button:hover {

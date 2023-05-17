@@ -1,9 +1,10 @@
 import React from "react";
 import Preloader from '../preloader/Preloader';
 import ProgressBar from "../progressBar/ProgressBar";
+import { changeStringLength } from "../../constants/constants";
 
 export default function Resource(props) {
-    const { resource, onClick, deleteSource } = props;
+    const { resource, onClick, deleteSource, isLoggedIn } = props;
     const [isPreloader, setIsPreloader] = React.useState(false);
 
     const setIsPreloaderFalse = () => {
@@ -12,14 +13,16 @@ export default function Resource(props) {
 
     const resourceClick = (evt) => {
         evt.preventDefault();
-        setIsPreloader(true);
-        onClick(resource, setIsPreloaderFalse);
+        if (!evt.target.classList.contains('resource__button')) {
+            setIsPreloader(true);
+            onClick(resource, setIsPreloaderFalse);
+        }
     };
 
     const deleteClick = (evt) => {
         evt.preventDefault();
         deleteSource(resource.name);
-    }
+    };
 
     const calculatePrecentage = () => {
         const precent = resource.memoryLeft * 100;
@@ -62,20 +65,29 @@ export default function Resource(props) {
                             :
                             <></>
                     }
-                    <h3 className={`resource__last-active ${resource.totalMemory ? '' : 'no-memory'}`}>Resource active: {formatDate(resource.lastActive)} <br />Last tried: {formatDate(resource.lastChecked)}</h3>
+                    <h3 className={`resource__error-text ${resource.totalMemory ? '' : 'no-memory'}`}>Last active: {formatDate(resource.lastActive)} <br /><br />Last tried: {formatDate(resource.lastChecked)}</h3>
                     <h3 className={`resource__status ${resource.status === 200 ? '' : 'not-'}working`} >{resource.status}</h3>
                 </>);
             }
         }
     };
-    formatDate(resource.updatedAt);
+
+    const formatName = (name) => {
+        let newName = '';
+        if (name.length > 14) {
+            newName = `${changeStringLength(name, 11)}...`;
+            return newName;
+        }
+        return name;
+
+    };
 
     return (
         <>
             <div className="resource" onClick={resourceClick}>
                 <div className="resource__name_container">
-                    <h3 className="resource__name">{resource.name}</h3>
-                    <button className="resource__button" onClick={deleteClick} />
+                    <h3 className="resource__name" title={resource.name}>{formatName(resource.name)}</h3>
+                    {isLoggedIn ? <button className="resource__button" onClick={deleteClick} title='Delete source' /> : <></>}
                 </div>
                 {renderInfo()}
             </div>

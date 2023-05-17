@@ -5,6 +5,7 @@ import sourceApiOBJ from '../../utils/sourceApi';
 import usersApiOBJ from '../../utils/usersApi';
 import Header from '../header/Header';
 import LoginPopup from '../popup/LoginPopup';
+import ConfirmPopup from '../popup/ConfirmPopup';
 import AddSourcePopup from '../popup/AddSourcePopup';
 import * as auth from '../../utils/auth';
 
@@ -14,7 +15,9 @@ export default function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState();
   const [isLoginPopupOpen, setIsLoginPopupOpen] = React.useState(false);
+  const [isConfirmPopupOpen, setIsConfirmLoginPopupOpen] = React.useState(false);
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
+  const [deleteName, setDeleteName] = React.useState('');
 
   React.useEffect(() => {
     initialize();
@@ -40,6 +43,7 @@ export default function App() {
   const closeAllPopups = () => {
     setIsLoginPopupOpen(false);
     setIsAddSourcePopupOpen(false);
+    setIsConfirmLoginPopupOpen(false);
   };
 
   const openPopup = () => {
@@ -50,19 +54,15 @@ export default function App() {
     }
   };
 
-  const deleteSource = (name) => {
-    sourceApiOBJ.deleteSource(name)
-      .then((data) => {
-        if (data) {
-          console.log(data)
-        }
-      })
+  const deleteSource = () => {
+    sourceApiOBJ.deleteSource(deleteName)
       .catch((err) => {
         if (err) {
           console.log(err);
         }
       })
       .finally(() => {
+        closeAllPopups();
         initialize();
       })
   };
@@ -70,11 +70,10 @@ export default function App() {
   const resourceClick = (resource, hidePreloader) => {
     sourceApiOBJ.checkSource(resource.url)
       .then((data) => {
-        let newData = {};
-        newData.lastActive = data ? new Date() : resource.lastActive;
+        let newData = { lastActive: data.isActive ? new Date() : resource.lastActive };
         newData.isActive = data ? data.isActive : false;
-        newData.status = data ? data.status : resource.status;
-        newData.lastChecked = new Date();
+        newData.status = data.status;
+        newData.lastChecked = data.lastChecked;
         sourceApiOBJ.updateSource(resource.name, newData)
           .catch((err) => {
             if (err) {
@@ -82,11 +81,13 @@ export default function App() {
             }
           })
           .finally(() => {
-            initialize()
+            initialize();
           });
       })
       .catch((err) => {
-        console.log(err);
+        if (err) {
+          console.log(err);
+        }
       })
       .finally(() => {
         hidePreloader();
@@ -192,6 +193,11 @@ export default function App() {
       });
   };
 
+  const deleteClicked = (name) => {
+    setIsConfirmLoginPopupOpen(true);
+    setDeleteName(name);
+  }
+
   // * close popup by ESCAPE 
   React.useEffect(() => {
     const closeByEscape = (evt) => {
@@ -229,7 +235,7 @@ export default function App() {
         {loggedIn ? <h3 className='app__title'>Hello {currentUser.username}, welcome back!</h3> : <></>}
         <div className='resources'>
           {resources[0] ? resources.map((resource, index) => {
-            return <Resource deleteSource={deleteSource} resource={resource} key={index} onClick={resourceClick} />
+            return <Resource deleteSource={deleteClicked} resource={resource} key={index} onClick={resourceClick} isLoggedIn={loggedIn} />
           }) : <></>}
         </div>
         <LoginPopup
@@ -240,6 +246,8 @@ export default function App() {
           onClose={closeAllPopups}
           handleSwitchPopup={switchPopups} />
 
+        <ConfirmPopup isOpen={isConfirmPopupOpen} onClose={closeAllPopups} handleSubmit={deleteSource} />
+
         <AddSourcePopup
           isLoggedIn={loggedIn}
           onSubmit={handleAddSourceSubmit}
@@ -248,6 +256,7 @@ export default function App() {
           handleSwitchPopup={switchPopups}
           onClose={closeAllPopups} />
       </div>
+
     </CurrentUserContext.Provider>
   );
 }
