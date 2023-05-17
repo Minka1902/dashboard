@@ -1,6 +1,6 @@
 import React from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import Resource2 from '../resource/Resource';
+import Resource from '../resource/Resource';
 import sourceApiOBJ from '../../utils/sourceApi';
 import usersApiOBJ from '../../utils/usersApi';
 import Header from '../header/Header';
@@ -229,7 +229,7 @@ export default function App() {
         {loggedIn ? <h3 className='app__title'>Hello {currentUser.username}, welcome back!</h3> : <></>}
         <div className='resources'>
           {resources[0] ? resources.map((resource, index) => {
-            return <Resource2 deleteSource={deleteSource} resource={resource} key={index} onClick={resourceClick} />
+            return <Resource deleteSource={deleteSource} resource={resource} key={index} onClick={resourceClick} />
           }) : <></>}
         </div>
         <LoginPopup
