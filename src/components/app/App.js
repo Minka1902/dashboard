@@ -246,7 +246,10 @@ export default function App() {
           onClose={closeAllPopups}
           handleSwitchPopup={switchPopups} />
 
-        <ConfirmPopup isOpen={isConfirmPopupOpen} onClose={closeAllPopups} handleSubmit={deleteSource} />
+        <ConfirmPopup
+          isOpen={isConfirmPopupOpen}
+          onClose={closeAllPopups}
+          handleSubmit={deleteSource} />
 
         <AddSourcePopup
           isLoggedIn={loggedIn}

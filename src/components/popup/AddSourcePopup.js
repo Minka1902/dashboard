@@ -19,8 +19,9 @@ export default function AddSourcePopup(props) {
 
     React.useEffect(() => {
         const urlRegex = /^www\.[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/;
+        const ipRegex = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?::\d+)?$/;
         if (name) {
-            if (urlRegex.test(url)) {
+            if (urlRegex.test(url) || ipRegex.test(url)) {
                 setIsUrlCorrect(true);
                 setIsValid(true);
             } else {
