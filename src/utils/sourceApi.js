@@ -1,12 +1,13 @@
-import { BASE_URL } from "./auth";
+import { PUBLIC_BASE_URL, PRIVATE_BASE_URL } from "./auth";
 
 class sourceApi {
     constructor() {
-        this._source = BASE_URL;
+        this._publicUrl = PUBLIC_BASE_URL;
+        this._privateUrl = PRIVATE_BASE_URL;
     }
 
-    _fetch = ({ method = "GET", url, data }) =>
-        fetch(`${this._source}${url}`, {
+    _fetch = ({ method = "GET", url, data, isPrivate = false }) =>
+        fetch(`${isPrivate ? this._privateUrl : this._publicUrl}${url}`, {
             method: method,
             body: JSON.stringify(data),
             headers: {
@@ -27,7 +28,7 @@ class sourceApi {
 
     deleteSource = (name) => this._fetch({ method: 'DELETE', url: `/remove-source/${name}` })
 
-    checkSource = (url) => this._fetch({ method: 'GET', url: `/check-source/${url}` })
+    checkSource = (url) => this._fetch({ method: 'GET', url: `/check-source/${url}`, isPrivate: true })
 }
 
 const sourceApiOBJ = new sourceApi();
