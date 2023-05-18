@@ -22,7 +22,7 @@ export default function App() {
   React.useEffect(() => {
     initialize();
     isAutoLogin();
-  }, [])
+  }, []);
 
   const isAutoLogin = () => {
     const jwt = localStorage.getItem('jwt');
@@ -38,7 +38,7 @@ export default function App() {
           console.log(`Check token error: ${err}`);
         });
     }
-  }
+  };
 
   const closeAllPopups = () => {
     setIsLoginPopupOpen(false);
@@ -123,7 +123,7 @@ export default function App() {
       .finally(() => {
         closeAllPopups({ isProject: false });
       });
-  }
+  };
 
   const handleLoginSubmit = (email, password) => {
     usersApiOBJ
@@ -156,7 +156,7 @@ export default function App() {
       .finally(() => {
         initialize();
       });
-  }
+  };
 
   const handleAddSourceSubmit = ({ name, url }) => {
     sourceApiOBJ.checkSource(url)
@@ -196,7 +196,7 @@ export default function App() {
   const deleteClicked = (name) => {
     setIsConfirmLoginPopupOpen(true);
     setDeleteName(name);
-  }
+  };
 
   // * close popup by ESCAPE 
   React.useEffect(() => {
