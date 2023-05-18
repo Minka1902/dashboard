@@ -8,7 +8,7 @@ import openMenuIconThemeDark from '../../images/open-menu-theme-dark.svg';
 import headerCloseIcon from '../../images/header-close-icon.svg';
 
 export default function Header(props) {
-	const { handleButtonClick, isHomePage, scroll, noScroll, handleLogout, savedArticlesClick, homeClick, isLoggedIn, theme, children } = props;
+	const { isLoggedIn, isHomePage, theme, scroll, noScroll, handleLogout, firstButtonClick, secondButtonClick, handleButtonClick, children } = props;
 	const [isNavBar, setIsNavBar] = React.useState(window.innerWidth > 520);
 	const [isNavMenuOpen, setIsNavMenuOpen] = React.useState(false);
 	const [isFirstRender, setIsFirstRender] = React.useState(true);
@@ -22,12 +22,15 @@ export default function Header(props) {
 	};
 
 	React.useEffect(() => {
+		window.addEventListener('resize', checkWindowDimensions);
+		window.removeEventListener('resize', checkWindowDimensions);
+
 		checkWindowDimensions();
 	}, [isHomePage]);
 
 	React.useEffect(() => {
 		if (window.innerWidth < 520 && isLoggedIn === true) {
-			if(!isFirstRender){
+			if (!isFirstRender) {
 				toggleNavMenu();
 			}
 			setIsFirstRender(false);
@@ -40,10 +43,10 @@ export default function Header(props) {
 	});
 
 	const toggleNavMenu = () => {
-		if(isNavMenuOpen){
+		if (isNavMenuOpen) {
 			setIsNavMenuOpen(false);
 			scroll();
-		}else{
+		} else {
 			setIsNavMenuOpen(true);
 			noScroll();
 		}
@@ -64,14 +67,14 @@ export default function Header(props) {
 		return openMenuIcon;
 	}
 
-	const savedArticlesClicked = () => {
+	const secondButtonClicked = () => {
 		setIsNavMenuOpen(false);
-		savedArticlesClick();
+		secondButtonClick();
 	}
 
-	const homeClicked = () => {
+	const firstButtonClicked = () => {
 		setIsNavMenuOpen(false);
-		homeClick();
+		firstButtonClick();
 	}
 
 	return (
@@ -80,12 +83,12 @@ export default function Header(props) {
 				<img className={`header__logo ${theme ? 'header__logo_theme_dark' : ''}${isNavMenuOpen ? '_not' : ''}`} src={logo} alt="News explorer logo" />
 				{isNavBar ?
 					<>
-						<NavBar isHomePage={isHomePage} theme={theme} savedArticlesClick={savedArticlesClicked} homeClick={homeClicked} isLoggedIn={isLoggedIn} />
+						<NavBar isHomePage={isHomePage} theme={theme} firstButtonClick={firstButtonClick} isLoggedIn={isLoggedIn} />
 						<HeaderButton isLoggedIn={isLoggedIn} handleLogout={handleLogout} handleButtonClick={handleButtonClick} theme={theme} />
 					</>
 					:
 					<>
-						<NavMenu isOpen={isNavMenuOpen} isLoggedIn={isLoggedIn} savedArticlesClick={savedArticlesClicked} homeClick={homeClicked}>
+						<NavMenu isOpen={isNavMenuOpen} isLoggedIn={isLoggedIn} secondButtonClick={secondButtonClicked} firstButtonClick={firstButtonClicked}>
 							<HeaderButton isNavMenu={true} toggleNavMenu={toggleNavMenu} isLoggedIn={isLoggedIn} handleLogout={handleLogout} handleButtonClick={handleButtonClick} theme={theme} />
 						</NavMenu>
 						<button className={`header__button ${!isNavBar ? 'header__button_menu' : ''} ${theme ? ' header__logo_theme_dark' : ''}`} onClick={toggleNavMenu}>

@@ -231,7 +231,12 @@ export default function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="app">
-        <Header handleButtonClick={openPopup} />
+        <Header
+          handleButtonClick={openPopup}
+          theme={true}
+          isHomePage={false}
+          firstButtonClick={initialize}
+        />
         {loggedIn ? <h3 className='app__title'>Hello {currentUser.username}, welcome back!</h3> : <></>}
         <div className='resources'>
           {resources[0] ? resources.map((resource, index) => {
@@ -244,12 +249,14 @@ export default function App() {
           isFound={isUserFound}
           linkText='Add source'
           onClose={closeAllPopups}
-          handleSwitchPopup={switchPopups} />
+          handleSwitchPopup={switchPopups}
+        />
 
         <ConfirmPopup
           isOpen={isConfirmPopupOpen}
           onClose={closeAllPopups}
-          handleSubmit={deleteSource} />
+          handleSubmit={deleteSource}
+        />
 
         <AddSourcePopup
           isLoggedIn={loggedIn}
@@ -257,7 +264,8 @@ export default function App() {
           isOpen={isAddSourcePopupOpen}
           linkText='Sign in'
           handleSwitchPopup={switchPopups}
-          onClose={closeAllPopups} />
+          onClose={closeAllPopups}
+        />
       </div>
 
     </CurrentUserContext.Provider>

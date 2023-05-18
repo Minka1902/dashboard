@@ -52,7 +52,7 @@ export default function Resource(props) {
                 return (
                     <>
                         <img className="resource__image" src={resource.status === 200 ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Green_Light_Icon.svg/1200px-Green_Light_Icon.svg.png' : ''} alt={`Status: ${resource.status}`} title={`Status: ${resource.status}`} />
-                        <h3 className="resource__200_text">{formatDate(resource.updatedAt)}</h3>
+                        <h3 className="resource__200_text" title={`http://${resource.url}`}>{formatDate(resource.updatedAt)}</h3>
                     </>
                 );
             } else {
@@ -66,7 +66,7 @@ export default function Resource(props) {
                             <></>
                     }
                     <h3 className={`resource__error-text ${resource.totalMemory ? '' : 'no-memory'}`}>Last active: {formatDate(resource.lastActive)} <br /><br />Last tried: {formatDate(resource.lastChecked)}</h3>
-                    <h3 className={`resource__status ${resource.status === 200 ? '' : 'not-'}working`} >{resource.status}</h3>
+                    <h3 className={`resource__status ${resource.status === 200 ? '' : 'not-'}working`} title={`http://${resource.url}`} >{resource.status}</h3>
                 </>);
             }
         }
