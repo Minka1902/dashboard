@@ -4,12 +4,10 @@ import ProgressBar from "../progressBar/ProgressBar";
 import { changeStringLength } from "../../constants/constants";
 
 export default function Resource(props) {
-    const { resource, onClick, deleteSource, isLoggedIn } = props;
+    const { resource, onClick, deleteSource, isLoggedIn, isRefresh } = props;
     const [isPreloader, setIsPreloader] = React.useState(false);
 
-    const setIsPreloaderFalse = () => {
-        setIsPreloader(false);
-    }
+    const setIsPreloaderFalse = () => setIsPreloader(false);
 
     const resourceClick = (evt) => {
         evt.preventDefault();
@@ -43,7 +41,7 @@ export default function Resource(props) {
     };
 
     const renderInfo = () => {
-        if (isPreloader) {
+        if (isPreloader || isRefresh) {
             return (
                 <Preloader text="Reloading, please wait." />
             );
@@ -79,8 +77,13 @@ export default function Resource(props) {
             return newName;
         }
         return name;
-
     };
+
+    React.useEffect(() => {
+        if (isRefresh) {
+            onClick(resource, setIsPreloaderFalse);
+        }
+    }, [isRefresh]);
 
     return (
         <>

@@ -20,6 +20,7 @@ export default function App() {
   const [isConfirmPopupOpen, setIsConfirmLoginPopupOpen] = React.useState(false);
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
   const [deleteName, setDeleteName] = React.useState('');
+  const [isRefresh, setIsRefresh] = React.useState(false);
 
   const noScroll = () => html.classList.add('no-scroll');
 
@@ -29,6 +30,8 @@ export default function App() {
     initialize();
     isAutoLogin();
   }, []);
+
+  const setIsRefreshTrue = () => setIsRefresh(true);
 
   const isAutoLogin = () => {
     const jwt = localStorage.getItem('jwt');
@@ -196,6 +199,9 @@ export default function App() {
         if (err) {
           console.log(err);
         }
+      })
+      .finally(() => {
+        setIsRefresh(false);
       });
   };
 
@@ -252,12 +258,12 @@ export default function App() {
           handleButtonClick={openPopup}
           theme={true}
           isHomePage={false}
-          firstButtonClick={initialize}
+          firstButtonClick={setIsRefreshTrue}
         />
         {loggedIn ? <h3 className='app__title'>Hello {currentUser.username}, welcome back!</h3> : <></>}
         <div className='resources'>
           {resources[0] ? resources.map((resource, index) => {
-            return <Resource deleteSource={deleteClicked} resource={resource} key={index} onClick={resourceClick} isLoggedIn={loggedIn} />
+            return <Resource isRefresh={isRefresh} deleteSource={deleteClicked} resource={resource} key={index} onClick={resourceClick} isLoggedIn={loggedIn} />
           }) : <></>}
         </div>
         <LoginPopup
