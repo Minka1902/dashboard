@@ -85,6 +85,8 @@
 
 .resource__button {
     background-image: url('../../images/delete-icon.svg');
+    background-color: transparent;
+    background-repeat: no-repeat;
     width: 20px;
     height: 20px;
     border: none;
@@ -101,4 +103,10 @@
     flex-direction: row;
     justify-content: space-between;
     border-bottom: 1px solid rgba(128, 128, 128, 0.384);
+}
+
+@media screen and (max-width: 500px) {
+    .resource__image {
+        padding: 15px;
+    }
 }

@@ -72,8 +72,8 @@ export default function Resource(props) {
 
     const formatName = (name) => {
         let newName = '';
-        if (name.length > 14) {
-            newName = `${changeStringLength(name, 11)}...`;
+        if (name.length > 13) {
+            newName = `${changeStringLength(name, 10)}...`;
             return newName;
         }
         return name;
