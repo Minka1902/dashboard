@@ -22,6 +22,9 @@
 /* ! popup */
 @import url('./components/popup/popup.css');
 
+/* ! Footer */
+@import url('./components/footer/footer.css');
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

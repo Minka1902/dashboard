@@ -91,7 +91,7 @@ export default function Header(props) {
 						<NavMenu isOpen={isNavMenuOpen} isLoggedIn={isLoggedIn} secondButtonClick={secondButtonClicked} firstButtonClick={firstButtonClicked}>
 							<HeaderButton isNavMenu={true} toggleNavMenu={toggleNavMenu} isLoggedIn={isLoggedIn} handleLogout={handleLogout} handleButtonClick={handleButtonClick} theme={theme} />
 						</NavMenu>
-						<button className={`header__button ${!isNavBar ? 'header__button_menu' : ''} ${theme ? ' header__logo_theme_dark' : ''}`} onClick={toggleNavMenu}>
+						<button className={`header__button ${!isNavBar ? 'header__button_menu' : ''} ${theme ? ' header__logo_theme_dark' : ''}`} onClick={toggleNavMenu} title='Close window'>
 							<img src={determineButtonSrc()} alt="Menu icon" />
 						</button>
 					</>

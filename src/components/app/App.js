@@ -7,6 +7,7 @@ import Header from '../header/Header';
 import LoginPopup from '../popup/LoginPopup';
 import ConfirmPopup from '../popup/ConfirmPopup';
 import AddSourcePopup from '../popup/AddSourcePopup';
+import Footer from '../footer/Footer';
 import * as auth from '../../utils/auth';
 
 export default function App() {
@@ -202,6 +203,7 @@ export default function App() {
       })
       .finally(() => {
         setIsRefresh(false);
+        scroll();
       });
   };
 
@@ -290,7 +292,7 @@ export default function App() {
           onClose={closeAllPopups}
         />
       </div>
-
+      <Footer />
     </CurrentUserContext.Provider>
   );
 }
