@@ -238,7 +238,6 @@ export default function App() {
   React.useEffect(() => {
     const interval = setInterval(() => {
       initialize();
-      console.log('asd');
     }, (10 * 1000));
     return () => clearInterval(interval);
   }, []);
