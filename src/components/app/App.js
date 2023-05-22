@@ -10,6 +10,8 @@ import AddSourcePopup from '../popup/AddSourcePopup';
 import * as auth from '../../utils/auth';
 
 export default function App() {
+  const safeDocument = typeof document !== 'undefined' ? document : {};
+  const html = safeDocument.documentElement;
   const [resources, setResources] = React.useState([]);
   const [isUserFound, setIsUserFound] = React.useState(true);
   const [loggedIn, setLoggedIn] = React.useState(false);
@@ -18,6 +20,10 @@ export default function App() {
   const [isConfirmPopupOpen, setIsConfirmLoginPopupOpen] = React.useState(false);
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
   const [deleteName, setDeleteName] = React.useState('');
+
+  const noScroll = () => html.classList.add('no-scroll');
+
+  const scroll = () => html.classList.remove('no-scroll');
 
   React.useEffect(() => {
     initialize();
@@ -158,17 +164,17 @@ export default function App() {
       });
   };
 
-  const handleAddSourceSubmit = ({ name, url }) => {
+  const handleAddSourceSubmit = ({ name, url, isMemory }) => {
     sourceApiOBJ.checkSource(url)
       .then((data) => {
-        const source = { name, url, status: data.status, lastActive: new Date('1970-01-01'), lastChecked: new Date(), isActive: data.isActive }
+        const source = { name, url, isMemory, status: data.status, lastActive: new Date('1970-01-01'), lastChecked: new Date(), isActive: data.isActive }
         if (source) {
           createNewSource(source);
         }
       })
       .catch((err) => {
         if (err) {
-          const source = { name, url, status: 404, lastActive: new Date('1970-01-01'), lastChecked: new Date(), isActive: true }
+          const source = { name, url, isMemory, status: 404, lastActive: new Date('1970-01-01'), lastChecked: new Date(), isActive: true }
           if (source) {
             createNewSource(source);
           }
@@ -228,10 +234,22 @@ export default function App() {
     return () => document.removeEventListener('mouseup', closeByClick);
   });
 
+  // ! refreshing the source list every 10 seconds
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      initialize();
+      console.log('asd');
+    }, (10 * 1000));
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="app">
         <Header
+          noScroll={noScroll}
+          scroll={scroll}
+          isLoggedIn={false}
           handleButtonClick={openPopup}
           theme={true}
           isHomePage={false}

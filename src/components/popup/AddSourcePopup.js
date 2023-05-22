@@ -4,6 +4,7 @@ import PopupWithForm from "./PopupWithForm";
 export default function AddSourcePopup(props) {
     const { linkText, isOpen, handleSwitchPopup, onSubmit, isLoggedIn, onClose, buttonText = 'Submit' } = props;
     const [name, setName] = React.useState('');
+    const [isMemory, setIsMemory] = React.useState(true);
     const [url, setUrl] = React.useState('');
     const [isUrlCorrect, setIsUrlCorrect] = React.useState(false);
     const [isValid, setIsValid] = React.useState(false);
@@ -12,7 +13,7 @@ export default function AddSourcePopup(props) {
     const handleSubmit = (evt) => {
         evt.preventDefault();
         if (isValid) {
-            onSubmit({ name, url });
+            onSubmit({ name, url, isMemory });
             setIsValid(false);
         }
     };
@@ -40,7 +41,7 @@ export default function AddSourcePopup(props) {
                         <input
                             className="popup__input"
                             placeholder="Enter name"
-                            id="login-name-input"
+                            id="source-name-input"
                             type="text"
                             name="nameInput"
                             required
@@ -54,7 +55,7 @@ export default function AddSourcePopup(props) {
                         <input
                             className="popup__input"
                             placeholder="Enter url"
-                            id="login-url-input"
+                            id="source-url-input"
                             type="text"
                             name="urlInput"
                             required
@@ -64,6 +65,15 @@ export default function AddSourcePopup(props) {
                             onChange={(evt) => setUrl(evt.currentTarget.value)}
                         />
                         <p className={`popup__error-massage${isUrlCorrect ? '' : '_visible'}`}>Please enter valid URL.</p>
+                        <h3 className="popup__input-title">Is it a memory source?
+                            <input
+                                value={isMemory}
+                                name="isMemoryInput"
+                                type="checkbox"
+                                id="source-is-memory-input"
+                                onChange={(evt) => setIsMemory(evt.target.checked)}
+                            />
+                        </h3>
                     </>
                     :
                     <h2 className="popup__content_other">Please sign in.</h2>}
