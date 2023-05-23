@@ -33,6 +33,14 @@ export default function AddSourcePopup(props) {
         }
     }, [name, url]);
 
+    // ! Reseting the popup when closing
+    React.useEffect(() => {
+        setIsUrlCorrect(true);
+        setName('');
+        setUrl('');
+        setIsMemory(false);
+    }, [isOpen]);
+
     return (
         <>
             <PopupWithForm onSubmit={handleSubmit} isValid={isValid} handleSwitchPopup={handleSwitchPopup} linkText={isLoggedIn ? 'Sign out' : linkText} name="add-source" title="Add source" isOpen={isOpen} onClose={onClose} buttonText={buttonText}>
