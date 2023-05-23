@@ -1,8 +1,10 @@
-import PopupWithForm from './PopupWithForm';
 import React from 'react';
+import PopupWithForm from './PopupWithForm';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 
 export default function LoginPopup(props) {
-  const { linkText, isOpen, handleSwitchPopup, isFound, handleLogin, onClose, buttonText = 'Submit' } = props;
+  const currentUser = React.useContext(CurrentUserContext);
+  const { linkText, isOpen, handleSwitchPopup, isFound, handleLogin, onClose, buttonText = 'Submit', onSignOut } = props;
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [isValid, setIsValid] = React.useState(false);
@@ -87,37 +89,43 @@ export default function LoginPopup(props) {
   }, [email, password]);
 
   return (
-    <PopupWithForm onSubmit={handleSubmit} isValid={isValid} handleSwitchPopup={handleSwitchPopup} linkText={linkText} name="login" title="Sign in" isOpen={isOpen} onClose={onClose} buttonText={buttonText}>
-      <h3 className='popup__input-title'>Email</h3>
-      <input
-        className="popup__input"
-        placeholder="Enter email"
-        id="login-email-input"
-        type="email"
-        name="emailInput"
-        required
-        minLength="2"
-        maxLength="40"
-        value={email}
-        onChange={(evt) => setEmail(evt.currentTarget.value)}
-        autoComplete="off"
-      />
-      <p className={`popup__error-massage${isEmailCorrect ? '' : '_visible'}`}>Email incorrect</p>
-      <h3 className='popup__input-title'>Password</h3>
-      <input
-        className="popup__input"
-        placeholder="Enter password"
-        id="login-password-input"
-        type="password"
-        name="passwordInput"
-        required
-        minLength="8"
-        maxLength="200"
-        value={password}
-        onChange={(evt) => setPassword(evt.currentTarget.value)}
-      />
-      <p className={`popup__error-massage${isPasswordCorrect ? '' : '_visible'}${shouldAddSSign ? '_visible' : ''}`}>{passwordErrorText}</p>
-      <p className={`popup__error-massage${isFound ? '' : '_visible'}`}>User not found</p>
-    </PopupWithForm>
+    <>
+      {!currentUser ?
+        <PopupWithForm onSubmit={handleSubmit} isValid={isValid} handleSwitchPopup={handleSwitchPopup} linkText={linkText} name="login" title="Sign in" isOpen={isOpen} onClose={onClose} buttonText={buttonText}>
+          <h3 className='popup__input-title'>Email</h3>
+          <input
+            className="popup__input"
+            placeholder="Enter email"
+            id="login-email-input"
+            type="email"
+            name="emailInput"
+            required
+            minLength="2"
+            maxLength="40"
+            value={email}
+            onChange={(evt) => setEmail(evt.currentTarget.value)}
+            autoComplete="off"
+          />
+          <p className={`popup__error-massage${isEmailCorrect ? '' : '_visible'}`}>Email incorrect</p>
+          <h3 className='popup__input-title'>Password</h3>
+          <input
+            className="popup__input"
+            placeholder="Enter password"
+            id="login-password-input"
+            type="password"
+            name="passwordInput"
+            required
+            minLength="8"
+            maxLength="200"
+            value={password}
+            onChange={(evt) => setPassword(evt.currentTarget.value)}
+          />
+          <p className={`popup__error-massage${isPasswordCorrect ? '' : '_visible'}${shouldAddSSign ? '_visible' : ''}`}>{passwordErrorText}</p>
+          <p className={`popup__error-massage${isFound ? '' : '_visible'}`}>User not found</p>
+        </PopupWithForm> :
+        <PopupWithForm onSubmit={onSignOut} isValid={true} handleSwitchPopup={handleSwitchPopup} linkText={linkText} name="login" title="Sign in" isOpen={isOpen} onClose={onClose} buttonText='I know, sign out anyway.'>
+          <h3>{currentUser ? currentUser.username : ''}, you are already signed in.</h3 >
+        </PopupWithForm>}
+    </>
   );
 }

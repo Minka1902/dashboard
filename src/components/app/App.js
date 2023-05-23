@@ -16,7 +16,7 @@ export default function App() {
   const [resources, setResources] = React.useState([]);
   const [isUserFound, setIsUserFound] = React.useState(true);
   const [loggedIn, setLoggedIn] = React.useState(false);
-  const [currentUser, setCurrentUser] = React.useState();
+  const [currentUser, setCurrentUser] = React.useState(undefined);
   const [isLoginPopupOpen, setIsLoginPopupOpen] = React.useState(false);
   const [isConfirmPopupOpen, setIsConfirmLoginPopupOpen] = React.useState(false);
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
@@ -250,6 +250,13 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
+  // * Handling the logout click
+  const handleLogout = () => {
+    setLoggedIn(false);
+    localStorage.removeItem('jwt');
+    setCurrentUser(undefined);
+  };
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="app">
@@ -275,6 +282,7 @@ export default function App() {
           linkText='Add source'
           onClose={closeAllPopups}
           handleSwitchPopup={switchPopups}
+          onSignOut={handleLogout}
         />
 
         <ConfirmPopup

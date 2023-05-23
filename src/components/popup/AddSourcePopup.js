@@ -21,8 +21,9 @@ export default function AddSourcePopup(props) {
     React.useEffect(() => {
         const urlRegex = /^www\.[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/;
         const ipRegex = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?::\d+)?$/;
+        const privateUrlRegex = /^[\w-]+(\.[\w-]+)+$/;
         if (name) {
-            if (urlRegex.test(url) || ipRegex.test(url)) {
+            if (urlRegex.test(url) || ipRegex.test(url) || privateUrlRegex.test(url)) {
                 setIsUrlCorrect(true);
                 setIsValid(true);
             } else {
@@ -34,7 +35,7 @@ export default function AddSourcePopup(props) {
 
     return (
         <>
-            <PopupWithForm onSubmit={handleSubmit} isValid={isValid} handleSwitchPopup={handleSwitchPopup} linkText={linkText} name="add-source" title="Add source" isOpen={isOpen} onClose={onClose} buttonText={buttonText}>
+            <PopupWithForm onSubmit={handleSubmit} isValid={isValid} handleSwitchPopup={handleSwitchPopup} linkText={isLoggedIn ? 'Sign out' : linkText} name="add-source" title="Add source" isOpen={isOpen} onClose={onClose} buttonText={buttonText}>
                 {isLoggedIn ?
                     <>
                         <h3 className='popup__input-title'>Source name</h3>
