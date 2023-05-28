@@ -27,11 +27,6 @@ export default function App() {
 
   const scroll = () => html.classList.remove('no-scroll');
 
-  React.useEffect(() => {
-    initialize();
-    isAutoLogin();
-  }, []);
-
   const setIsRefreshTrue = () => setIsRefresh(true);
 
   const isAutoLogin = () => {
@@ -225,16 +220,17 @@ export default function App() {
     // eslint-disable-next-line
   }, []);
 
+  React.useEffect(() => {
+    initialize();
+    isAutoLogin();
+  }, []);
+
   // ! Adding event listener for the page
   // ! Mouse event
   React.useEffect(() => {
     const closeByClick = (evt) => {
-      if (evt.target.classList.contains('popup_type_project')) {
-        closeAllPopups({ isProject: true });
-      } else {
-        if (evt.target.classList.contains("popup")) {
-          closeAllPopups({ isProject: false });
-        }
+      if (evt.target.classList.contains("popup")) {
+        closeAllPopups();
       }
     }
 
