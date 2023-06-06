@@ -212,10 +212,6 @@ export default function App() {
       name: 'refresh',
       onClick: setIsRefreshTrue,
     },
-    {
-      name: 'michael',
-      onClick: ''
-    }
   ];
 
   // * close popup by ESCAPE 

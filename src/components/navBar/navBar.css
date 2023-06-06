@@ -1,9 +1,11 @@
 .nav-bar {
+  height: 100%;
   background-color: transparent;
   padding: 1rem;
   width: calc(100% - 400px);
   display: flex;
   justify-content: end;
+  align-items: center;
 }
 
 .nav-bar__list {
@@ -14,18 +16,17 @@
   justify-content: center;
 }
 
-.nav-bar__item {
-  margin-right: 1rem;
-}
+.nav-bar__item {}
 
 .nav-bar__button {
   box-sizing: border-box;
   background-color: transparent;
   color: #333;
-  border: none;
   padding: 0.5rem 1rem;
+  margin-top: 6px;
   font-size: 1rem;
   font-weight: bold;
+  border: none;
   border-radius: 4px;
   border-bottom: 2px solid transparent;
   cursor: pointer;
