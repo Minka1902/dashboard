@@ -7,7 +7,7 @@
 	border-bottom: rgba(196, 196, 196, 0.01) solid ;
 	box-shadow: inset 0px -1px 0px rgba(255, 255, 255, 0.2);
 	align-items: center;
-	justify-content: center;
+	justify-content: space-between;
 	z-index: 4;
 }
 

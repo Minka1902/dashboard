@@ -8,7 +8,7 @@ import openMenuIconThemeDark from '../../images/open-menu-theme-dark.svg';
 import headerCloseIcon from '../../images/header-close-icon.svg';
 
 export default function Header(props) {
-	const { isLoggedIn, isHomePage, theme, scroll, noScroll, handleLogout, firstButtonClick, secondButtonClick, handleButtonClick, children } = props;
+	const { isLoggedIn, isHomePage, theme, scroll, noScroll, handleLogout, buttons, handleButtonClick, children } = props;
 	const [isNavBar, setIsNavBar] = React.useState(window.innerWidth > 520);
 	const [isNavMenuOpen, setIsNavMenuOpen] = React.useState(false);
 	const [isFirstRender, setIsFirstRender] = React.useState(true);
@@ -67,14 +67,9 @@ export default function Header(props) {
 		return openMenuIcon;
 	}
 
-	const secondButtonClicked = () => {
-		setIsNavMenuOpen(false);
-		secondButtonClick();
-	}
-
 	const firstButtonClicked = () => {
 		setIsNavMenuOpen(false);
-		firstButtonClick();
+		buttons[0].onClick();
 	}
 
 	return (
@@ -83,12 +78,12 @@ export default function Header(props) {
 				<img className={`header__logo ${theme ? 'header__logo_theme_dark' : ''}${isNavMenuOpen ? '_not' : ''}`} src={logo} alt="News explorer logo" />
 				{isNavBar ?
 					<>
-						<NavBar isHomePage={isHomePage} theme={theme} firstButtonClick={firstButtonClick} isLoggedIn={isLoggedIn} />
+						<NavBar buttons={buttons} />
 						<HeaderButton isLoggedIn={isLoggedIn} handleLogout={handleLogout} handleButtonClick={handleButtonClick} theme={theme} />
 					</>
 					:
 					<>
-						<NavMenu isOpen={isNavMenuOpen} isLoggedIn={isLoggedIn} secondButtonClick={secondButtonClicked} firstButtonClick={firstButtonClicked}>
+						<NavMenu isOpen={isNavMenuOpen} isLoggedIn={isLoggedIn} firstButtonClick={firstButtonClicked}>
 							<HeaderButton isNavMenu={true} toggleNavMenu={toggleNavMenu} isLoggedIn={isLoggedIn} handleLogout={handleLogout} handleButtonClick={handleButtonClick} theme={theme} />
 						</NavMenu>
 						<button className={`header__button ${!isNavBar ? 'header__button_menu' : ''} ${theme ? ' header__logo_theme_dark' : ''}`} onClick={toggleNavMenu} title='Close window'>

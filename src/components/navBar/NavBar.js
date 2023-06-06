@@ -1,10 +1,21 @@
-export default function NavBar(props) {
-	const { isLoggedIn, firstButtonClick, secondButtonClick, theme, isHomePage } = props;
+import React from 'react';
+import { capitalizeFirstWord } from '../../constants/functions';
 
-	return (
-		<div className={`nav-bar ${isLoggedIn ? '' : 'nav-bar_reduced'}`}>
-			<button className={`nav-bar__button${isHomePage ? '_active' : ''}${theme ? '_theme_dark' : ''}`} onClick={firstButtonClick}>Refresh</button>
-			{isLoggedIn ? <button className={`nav-bar__button${isHomePage ? '' : '_active'}${theme ? '_theme_dark' : ''}`} onClick={secondButtonClick}>Saved articles</button> : <></>}
-		</div>
-	);
-}
+export default function NavBar({ buttons }) {
+    return (
+        <nav className="nav-bar">
+            <ul className="nav-bar__list">
+                {buttons.map((button, index) => (
+                    <li className="nav-bar__item" key={index}>
+                        <button
+                            className="nav-bar__button"
+                            onClick={button.onClick}
+                        >
+                            {capitalizeFirstWord(button.name)}
+                        </button>
+                    </li>
+                ))}
+            </ul>
+        </nav>
+    );
+};

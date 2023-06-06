@@ -207,6 +207,17 @@ export default function App() {
     setDeleteName(name);
   };
 
+  const buttons = [
+    {
+      name: 'refresh',
+      onClick: setIsRefreshTrue,
+    },
+    {
+      name: 'michael',
+      onClick: ''
+    }
+  ];
+
   // * close popup by ESCAPE 
   React.useEffect(() => {
     const closeByEscape = (evt) => {
@@ -260,10 +271,10 @@ export default function App() {
           noScroll={noScroll}
           scroll={scroll}
           isLoggedIn={false}
+          buttons={buttons}
           handleButtonClick={openPopup}
           theme={true}
           isHomePage={false}
-          firstButtonClick={setIsRefreshTrue}
         />
         {loggedIn ? <h3 className='app__title'>Hello {currentUser.username}, welcome back!</h3> : <></>}
         <div className='resources'>
