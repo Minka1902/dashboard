@@ -113,6 +113,7 @@
     width: 128px;
     background-color: rgb(0, 0, 0);
     opacity: 0;
+    transition: opacity 0.3s ease-in-out;
 }
 
 .resource__reload-icon {
@@ -124,13 +125,14 @@
     background-repeat: no-repeat;
     background-size: contain;
     opacity: 0;
+    transition: opacity 0.3s ease-in-out;
 }
 
-.opacity02{
+.opacity02 {
     opacity: 0.2;
 }
 
-.resource__reload-icon:hover{
+.resource__reload-icon:hover {
     opacity: 0.6;
 }
 
