@@ -19,6 +19,7 @@
     text-align: left;
     padding-bottom: 5px;
     padding-left: 5px;
+    cursor: text;
 }
 
 .resource__image {
@@ -103,6 +104,34 @@
     flex-direction: row;
     justify-content: space-between;
     border-bottom: 1px solid rgba(128, 128, 128, 0.384);
+}
+
+.resource__reload {
+    margin-top: 26.5px;
+    position: fixed;
+    height: 128px;
+    width: 128px;
+    background-color: rgb(0, 0, 0);
+    opacity: 0;
+}
+
+.resource__reload-icon {
+    margin-top: 26.5px;
+    position: fixed;
+    height: 128px;
+    width: 128px;
+    background-image: url('../../images/reload.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0;
+}
+
+.opacity02{
+    opacity: 0.2;
+}
+
+.resource__reload-icon:hover{
+    opacity: 0.6;
 }
 
 @media screen and (max-width: 500px) {

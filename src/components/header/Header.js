@@ -8,7 +8,7 @@ import openMenuIconThemeDark from '../../images/open-menu-theme-dark.svg';
 import headerCloseIcon from '../../images/header-close-icon.svg';
 
 export default function Header(props) {
-	const { isLoggedIn, isHomePage, theme, scroll, noScroll, handleLogout, buttons, handleButtonClick, children } = props;
+	const { isLoggedIn, isHomePage, theme, scroll, noScroll, handleLogout, navBarButtons, handleButtonClick, children } = props;
 	const [isNavBar, setIsNavBar] = React.useState(window.innerWidth > 520);
 	const [isNavMenuOpen, setIsNavMenuOpen] = React.useState(false);
 	const [isFirstRender, setIsFirstRender] = React.useState(true);
@@ -50,7 +50,7 @@ export default function Header(props) {
 			setIsNavMenuOpen(true);
 			noScroll();
 		}
-	}
+	};
 
 	const determineButtonSrc = () => {
 		if (theme) {
@@ -65,12 +65,12 @@ export default function Header(props) {
 			}
 		}
 		return openMenuIcon;
-	}
+	};
 
 	const firstButtonClicked = () => {
 		setIsNavMenuOpen(false);
-		buttons[0].onClick();
-	}
+		navBarButtons[0].onClick();
+	};
 
 	return (
 		<div className={`h-sb__container${theme ? ' h-sb__container_no-background' : ''}`}>
@@ -78,7 +78,7 @@ export default function Header(props) {
 				<img className={`header__logo ${theme ? 'header__logo_theme_dark' : ''}${isNavMenuOpen ? '_not' : ''}`} src={logo} alt="News explorer logo" />
 				{isNavBar ?
 					<>
-						<NavBar buttons={buttons} />
+						<NavBar buttons={navBarButtons} />
 						<HeaderButton isLoggedIn={isLoggedIn} handleLogout={handleLogout} handleButtonClick={handleButtonClick} theme={theme} />
 					</>
 					:

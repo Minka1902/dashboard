@@ -267,7 +267,7 @@ export default function App() {
           noScroll={noScroll}
           scroll={scroll}
           isLoggedIn={false}
-          buttons={buttons}
+          navBarButtons={buttons}
           handleButtonClick={openPopup}
           theme={true}
           isHomePage={false}

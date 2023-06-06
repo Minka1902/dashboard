@@ -6,14 +6,17 @@ import { changeStringLength } from "../../constants/constants";
 export default function Resource(props) {
     const { resource, onClick, deleteSource, isLoggedIn, isRefresh } = props;
     const [isPreloader, setIsPreloader] = React.useState(false);
+    const [isHovering, setIsHovering] = React.useState(false);
 
     const setIsPreloaderFalse = () => setIsPreloader(false);
 
     const resourceClick = (evt) => {
         evt.preventDefault();
         if (!evt.target.classList.contains('resource__button')) {
-            setIsPreloader(true);
-            onClick(resource, setIsPreloaderFalse);
+            if (evt.target.classList.contains('resource__reload-icon')) {
+                setIsPreloader(true);
+                onClick(resource, setIsPreloaderFalse);
+            }
         }
     };
 
@@ -85,11 +88,16 @@ export default function Resource(props) {
         }
     }, [isRefresh]);
 
+    React.useEffect(() => {
+
+    }, [isRefresh]);
+
     return (
         <>
             <div className="resource" onClick={resourceClick}>
                 <div className="resource__name_container">
                     <h3 className="resource__name" title={resource.name}>{formatName(resource.name)}</h3>
+                    {!isPreloader ? <><div className={`resource__reload ${isHovering ? 'opacity02' : ''}`}></div><img className="resource__reload-icon" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)} /></> : <></>}
                     {isLoggedIn ? <button className="resource__button" onClick={deleteClick} title='Delete source' /> : <></>}
                 </div>
                 {renderInfo()}
