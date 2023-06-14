@@ -26,7 +26,7 @@ export default function Resource(props) {
         deleteSource(resource.name);
     };
 
-    const calculatePrecentage = () => {
+    const calculatePercentage = () => {
         const precent = resource.memoryLeft * 100;
         return precent / resource.totalMemory;
     };
@@ -53,22 +53,22 @@ export default function Resource(props) {
             if (resource.status === 200) {
                 return (
                     <>
-                        <img className="resource__image" src={resource.status === 200 ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Green_Light_Icon.svg/1200px-Green_Light_Icon.svg.png' : ''} alt={`Status: ${resource.status}`} title={`Status: ${resource.status}`} />
-                        <h3 className="resource__200_text" title={`http://${resource.url}`}>{formatDate(resource.updatedAt)}</h3>
+                        <img className={`resource__image ${resource.name}`} src={resource.status === 200 ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Green_Light_Icon.svg/1200px-Green_Light_Icon.svg.png' : ''} alt={`Status: ${resource.status}`} title={`Status: ${resource.status}`} />
+                        <h3 className={`resource__200_text ${resource.name}`} title={`http://${resource.url}`}>{formatDate(resource.updatedAt)}</h3>
                     </>
                 );
             } else {
                 return (<>
                     {
                         resource.memoryLeft ?
-                            <div className="resource__memory_content">
-                                <ProgressBar value={calculatePrecentage()} maxValue={100} />
+                            <div className={`resource__memory_content ${resource.name}`}>
+                                <ProgressBar value={calculatePercentage()} maxValue={100} />
                             </div>
                             :
                             <></>
                     }
-                    <h3 className={`resource__error-text ${resource.totalMemory ? '' : 'no-memory'}`}>Last active: {formatDate(resource.lastActive)} <br /><br />Last tried: {formatDate(resource.lastChecked)}</h3>
-                    <h3 className={`resource__status ${resource.status === 200 ? '' : 'not-'}working`} title={`http://${resource.url}`} >{resource.status}</h3>
+                    <h3 className={`resource__error-text${resource.totalMemory ? '' : ' no-memory'} ${resource.name}`}>Last active: {formatDate(resource.lastActive)} <br /><br />Last tried: {formatDate(resource.lastChecked)}</h3>
+                    <h3 className={`resource__status ${resource.status === 200 ? '' : 'not-'}working ${resource.name}`} title={`http://${resource.url}`} >{resource.status}</h3>
                 </>);
             }
         }
@@ -91,12 +91,15 @@ export default function Resource(props) {
 
     return (
         <>
-            <div className="resource" onClick={resourceClick}>
-                <div className="resource__name_container">
-                    <h3 className="resource__name" title={resource.name}>{formatName(resource.name)}</h3>
-                    {!isPreloader ? <><div className={`resource__reload ${isHovering ? 'opacity02' : ''}`}></div><img className="resource__reload-icon" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)} /></> : <></>}
-                    {isLoggedIn ? <button className="resource__button" onClick={deleteClick} title='Delete source' /> : <></>}
+            <div className={`resource ${resource.name}`} onClick={resourceClick}>
+                <div className={`resource__name_container ${resource.name}`}>
+                    <h3 className={`resource__name ${resource.name}`} title={resource.name}>{formatName(resource.name)}</h3>
+                    {isLoggedIn ? <button className={`resource__button ${resource.name}`} onClick={deleteClick} title={`Delete ${resource.name}`} /> : <></>}
                 </div>
+                {!isPreloader ? <>
+                    <div className={`resource__reload${isHovering ? ' opacity02' : ''} ${resource.name}`}></div>
+                    <img className={`resource__reload-icon ${resource.name}`} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)} />
+                </> : <></>}
                 {renderInfo()}
             </div>
         </>
