@@ -16,6 +16,7 @@ export default function Resource(props) {
             if (evt.target.classList.contains('resource__reload-icon')) {
                 setIsPreloader(true);
                 onClick(resource, setIsPreloaderFalse);
+                setIsHovering(false);
             }
         }
     };
@@ -86,10 +87,6 @@ export default function Resource(props) {
         if (isRefresh) {
             onClick(resource, setIsPreloaderFalse);
         }
-    }, [isRefresh]);
-
-    React.useEffect(() => {
-
     }, [isRefresh]);
 
     return (
