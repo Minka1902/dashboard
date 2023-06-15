@@ -27,8 +27,8 @@ export default function Resource(props) {
     };
 
     const calculatePercentage = () => {
-        const precent = resource.memoryLeft * 100;
-        return precent / resource.totalMemory;
+        const percent = resource.memoryLeft * 100;
+        return percent / resource.totalMemory;
     };
 
     const formatDate = (inputDate) => {

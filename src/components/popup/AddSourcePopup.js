@@ -33,7 +33,7 @@ export default function AddSourcePopup(props) {
         }
     }, [name, url]);
 
-    // ! Reseting the popup when closing
+    // ! Resetting the popup when closing
     React.useEffect(() => {
         setIsUrlCorrect(true);
         setName('');
