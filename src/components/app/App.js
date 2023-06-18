@@ -295,6 +295,7 @@ export default function App() {
 
         <ConfirmPopup
           isOpen={isConfirmPopupOpen}
+          isDeleteSource={true}
           signupSuccessful={signupSuccessful}
           onClose={closeAllPopups}
           handleSubmit={deleteSource}

@@ -3,6 +3,7 @@
 	top: 0;
 	left: 0;
 	width: 100%;
+	max-width: 80px;
 	display: none;
 	flex-direction: column;
 	background-color: #1A1B22;
