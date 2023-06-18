@@ -228,8 +228,8 @@ export default function App() {
   }, []);
 
   React.useEffect(() => {
-    initialize();
     isAutoLogin();
+    initialize();
   }, []);
 
   // ! Adding event listener for the page
@@ -304,6 +304,6 @@ export default function App() {
         />
       </div>
       <Footer />
-    </CurrentUserContext.Provider>
+    </CurrentUserContext.Provider >
   );
-}
+};
