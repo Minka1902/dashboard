@@ -1,12 +1,16 @@
 import PopupWithForm from './PopupWithForm';
 
 export default function ConfirmPopup(props) {
-    const { isOpen, onClose, handleSubmit } = props;
+    const { isOpen, onClose, handleSubmit, isDeleteSource = false, signupSuccessful } = props;
 
     const onSubmit = (evt) => {
         evt.preventDefault();
         if (evt.type === 'submit' && evt.target.classList.contains('popup__form')) {
-            handleSubmit();
+            if (isDeleteSource) {
+                handleSubmit();
+            } else {
+                signupSuccessful();
+            }
         }
     }
 
@@ -18,10 +22,18 @@ export default function ConfirmPopup(props) {
     }
 
     return (
-        <PopupWithForm onSubmit={onSubmit} isValid={true} name="confirm" title="Sure you want to delete?" isOpen={isOpen} onClose={onClose} buttonText={'Yes, i am sure.'}>
-            <button className='popup__button' onClick={dontDelete}>
-                Don`t delete.
-            </button>
-        </PopupWithForm>
+        <>
+            {isDeleteSource ?
+                <PopupWithForm onSubmit={onSubmit} isValid={true} name="confirm" title="Sure you want to delete?" isOpen={isOpen} onClose={onClose} buttonText={'Yes, i am sure.'}>
+                    <button className='popup__button' onClick={dontDelete}>
+                        Don`t delete.
+                    </button>
+                </PopupWithForm>
+                :
+                <PopupWithForm onSubmit={onSubmit} isValid={true} name="confirm" title="You signed up successfully, please log in." isOpen={isOpen} onClose={onClose} buttonText={'Login now.'}>
+
+                </PopupWithForm>
+            }
+        </>
     );
 }

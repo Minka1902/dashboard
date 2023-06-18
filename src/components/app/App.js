@@ -214,6 +214,11 @@ export default function App() {
     },
   ];
 
+  const signupSuccessful = () => {
+    closeAllPopups();
+    setIsLoginPopupOpen(true);
+  };
+
   // * close popup by ESCAPE 
   React.useEffect(() => {
     const closeByEscape = (evt) => {
@@ -290,6 +295,7 @@ export default function App() {
 
         <ConfirmPopup
           isOpen={isConfirmPopupOpen}
+          signupSuccessful={signupSuccessful}
           onClose={closeAllPopups}
           handleSubmit={deleteSource}
         />
