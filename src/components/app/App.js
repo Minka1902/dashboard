@@ -9,6 +9,7 @@ import ConfirmPopup from '../popup/ConfirmPopup';
 import AddSourcePopup from '../popup/AddSourcePopup';
 import Footer from '../footer/Footer';
 import * as auth from '../../utils/auth';
+import RightClickMenu from '../rightClickMenu/RightClickMenu';
 
 export default function App() {
   const safeDocument = typeof document !== 'undefined' ? document : {};
@@ -277,12 +278,14 @@ export default function App() {
           theme={true}
           isHomePage={false}
         />
-        {loggedIn ? <h3 className='app__title'>Hello {currentUser.username}, welcome back!</h3> : <></>}
+        {loggedIn ? <h3 className='app__title'>{currentUser.username}, welcome back!</h3> : <></>}
         <div className='resources'>
           {resources[0] ? resources.map((resource, index) => {
             return <Resource isRefresh={isRefresh} deleteSource={deleteClicked} resource={resource} key={index} onClick={resourceClick} isLoggedIn={loggedIn} />
           }) : <></>}
         </div>
+
+        <RightClickMenu />
         <LoginPopup
           handleLogin={handleLoginSubmit}
           isOpen={isLoginPopupOpen}
