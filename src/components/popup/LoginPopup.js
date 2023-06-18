@@ -146,9 +146,9 @@ export default function LoginPopup(props) {
           <p className={`popup__error-massage${isPasswordCorrect ? '' : '_visible'}${shouldAddSSign ? '_visible' : ''}`}>{passwordErrorText}</p>
           <p className={`popup__error-massage${isFound ? '' : '_visible'}`}>User not found</p>
         </PopupWithForm> :
-        <PopupWithForm onSubmit={onSignOut} isValid={true} handleSwitchPopup={handleSwitchPopup} linkText={linkText} name="login" title="Sign in" isOpen={isOpen} onClose={onClose} buttonText='I know, sign out anyway.'>
+        <PopupWithForm onSubmit={onSignOut} isValid={true} handleSwitchPopup={handleSwitchPopup} linkText={linkText} name="login" title="Sign out" isOpen={isOpen} onClose={onClose} buttonText='I know, sign out anyway.'>
           <h3>{currentUser ? currentUser.username : ''}, you are already signed in.</h3 >
         </PopupWithForm>}
     </>
   );
-}
+};
