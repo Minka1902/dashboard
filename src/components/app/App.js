@@ -2,6 +2,7 @@ import React from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import Resource from '../resource/Resource';
 import sourceApiOBJ from '../../utils/sourceApi';
+import updateApi from '../../utils/updateApi';
 import usersApiOBJ from '../../utils/usersApi';
 import Header from '../header/Header';
 import LoginPopup from '../popup/LoginPopup';
@@ -152,6 +153,13 @@ export default function App() {
       });
   };
 
+  // * Handling the logout click
+  const handleLogout = () => {
+    setLoggedIn(false);
+    localStorage.removeItem('jwt');
+    setCurrentUser(undefined);
+  };
+
   const createNewSource = (source) => {
     sourceApiOBJ.createSource(source)
       .catch((err) => {
@@ -162,6 +170,17 @@ export default function App() {
       .finally(() => {
         initialize();
       });
+  };
+
+  const update = () => {
+    updateApi.getAllUpdates()
+      .then((data) => {
+        if (data) {
+          for (let i = 0; i < data.length; i++) {
+            let newUpdate = { totalMemory: data[i].totalMemory, memoryLeft: data[i].memoryLeft, updatedAt: data[i].updatedAt };
+          }
+        }
+      })
   };
 
   const handleAddSourceSubmit = ({ name, url, isMemory }) => {
@@ -251,6 +270,14 @@ export default function App() {
     return () => document.removeEventListener('mouseup', closeByClick);
   });
 
+  // ! checking for updates
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      // update();
+    }, (3 * 1000));
+    return () => clearInterval(interval);
+  }, []);
+
   // ! refreshing the source list every 10 seconds
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -258,13 +285,6 @@ export default function App() {
     }, (10 * 1000));
     return () => clearInterval(interval);
   }, []);
-
-  // * Handling the logout click
-  const handleLogout = () => {
-    setLoggedIn(false);
-    localStorage.removeItem('jwt');
-    setCurrentUser(undefined);
-  };
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
