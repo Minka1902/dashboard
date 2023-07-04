@@ -9,7 +9,6 @@ import ConfirmPopup from '../popup/ConfirmPopup';
 import AddSourcePopup from '../popup/AddSourcePopup';
 import Footer from '../footer/Footer';
 import * as auth from '../../utils/auth';
-import RightClickMenu from '../rightClickMenu/RightClickMenu';
 
 export default function App() {
   const safeDocument = typeof document !== 'undefined' ? document : {};
@@ -23,13 +22,16 @@ export default function App() {
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
   const [deleteName, setDeleteName] = React.useState('');
   const [isRefresh, setIsRefresh] = React.useState(false);
-
+  
+  // ???????????????????????????????????????????????????
+  // !!!!!!!!!!!!!     SCROLL handling     !!!!!!!!!!!!!
+  // ???????????????????????????????????????????????????
   const noScroll = () => html.classList.add('no-scroll');
-
   const scroll = () => html.classList.remove('no-scroll');
 
-  const setIsRefreshTrue = () => setIsRefresh(true);
-
+  // ???????????????????????????????????????????????????
+  // !!!!!!!!!!!!!!     USER handling     !!!!!!!!!!!!!!
+  // ???????????????????????????????????????????????????
   const isAutoLogin = () => {
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
@@ -43,69 +45,6 @@ export default function App() {
         .catch((err) => {
           console.log(`Check token error: ${err}`);
         });
-    }
-  };
-
-  const closeAllPopups = () => {
-    setIsLoginPopupOpen(false);
-    setIsAddSourcePopupOpen(false);
-    setIsConfirmLoginPopupOpen(false);
-  };
-
-  const openPopup = () => {
-    if (loggedIn) {
-      setIsAddSourcePopupOpen(true);
-    } else {
-      setIsLoginPopupOpen(true);
-    }
-  };
-
-  const deleteSource = () => {
-    sourceApiOBJ.deleteSource(deleteName)
-      .catch((err) => {
-        if (err) {
-          console.log(err);
-        }
-      })
-      .finally(() => {
-        closeAllPopups();
-        initialize();
-      })
-  };
-
-  const resourceClick = (resource, hidePreloader) => {
-    sourceApiOBJ.checkSource(resource.url)
-      .then((data) => {
-        let newData = { lastActive: data.isActive ? new Date() : resource.lastActive };
-        newData.isActive = data ? data.isActive : false;
-        newData.status = data.status;
-        newData.lastChecked = data.lastChecked;
-        sourceApiOBJ.updateSource(resource.name, newData)
-          .catch((err) => {
-            if (err) {
-              console.log(err);
-            }
-          })
-          .finally(() => {
-            initialize();
-          });
-      })
-      .catch((err) => {
-        if (err) {
-          console.log(err);
-        }
-      })
-      .finally(() => {
-        hidePreloader();
-      });
-  };
-
-  const switchPopups = (evt) => {
-    closeAllPopups();
-    if (evt.target.parentElement.parentElement.parentElement.parentElement.classList.contains(`popup_type_add-source`)) {
-      setIsLoginPopupOpen(true);
-    } else {
-      setIsAddSourcePopupOpen(true);
     }
   };
 
@@ -157,6 +96,67 @@ export default function App() {
     setLoggedIn(false);
     localStorage.removeItem('jwt');
     setCurrentUser(undefined);
+  };
+  
+  // ???????????????????????????????????????????????????
+  // !!!!!!!!!!!!!     POPUP handling     !!!!!!!!!!!!!!
+  // ???????????????????????????????????????????????????
+
+  const closeAllPopups = () => {
+    setIsLoginPopupOpen(false);
+    setIsAddSourcePopupOpen(false);
+    setIsConfirmLoginPopupOpen(false);
+  };
+
+  const openPopup = () => {
+    if (loggedIn) {
+      setIsAddSourcePopupOpen(true);
+    } else {
+      setIsLoginPopupOpen(true);
+    }
+  };
+  
+  // ???????????????????????????????????????????????????
+  // !!!!!!!!!!!!!     SOURCE handling     !!!!!!!!!!!!!
+  // ???????????????????????????????????????????????????
+  const deleteSource = () => {
+    sourceApiOBJ.deleteSource(deleteName)
+      .catch((err) => {
+        if (err) {
+          console.log(err);
+        }
+      })
+      .finally(() => {
+        closeAllPopups();
+        initialize();
+      })
+  };
+
+  const resourceClick = (resource, hidePreloader) => {
+    sourceApiOBJ.checkSource(resource.url)
+      .then((data) => {
+        let newData = { lastActive: data.isActive ? new Date() : resource.lastActive };
+        newData.isActive = data ? data.isActive : false;
+        newData.status = data.status;
+        newData.lastChecked = data.lastChecked;
+        sourceApiOBJ.updateSource(resource.name, newData)
+          .catch((err) => {
+            if (err) {
+              console.log(err);
+            }
+          })
+          .finally(() => {
+            initialize();
+          });
+      })
+      .catch((err) => {
+        if (err) {
+          console.log(err);
+        }
+      })
+      .finally(() => {
+        hidePreloader();
+      });
   };
 
   const createNewSource = (source) => {
@@ -214,6 +214,11 @@ export default function App() {
     setIsConfirmLoginPopupOpen(true);
     setDeleteName(name);
   };
+  
+  // ???????????????????????????????????????????????????
+  // !!!!!!!!!!!!!     ROUTE handling     !!!!!!!!!!!!!!
+  // ???????????????????????????????????????????????????
+  const setIsRefreshTrue = () => setIsRefresh(true);
 
   const buttons = [
     {
@@ -221,14 +226,11 @@ export default function App() {
       onClick: setIsRefreshTrue,
     },
   ];
-
-  const signupSuccessful = () => {
-    closeAllPopups();
-    setIsLoginPopupOpen(true);
-  };
-
-  // * close popup by ESCAPE 
-  React.useEffect(() => {
+  
+  // ???????????????????????????????????????????????????
+  // !!!!!!!!!!!!!     EVENT handling     !!!!!!!!!!!!!!
+  // ???????????????????????????????????????????????????
+  React.useEffect(() => { // * close popup when clicked ESCAPE
     const closeByEscape = (evt) => {
       if (evt.key === 'Escape') {
         closeAllPopups();
@@ -240,14 +242,7 @@ export default function App() {
     // eslint-disable-next-line
   }, []);
 
-  React.useEffect(() => {
-    isAutoLogin();
-    initialize();
-  }, []);
-
-  // ! Adding event listener for the page
-  // ! Mouse event
-  React.useEffect(() => {
+  React.useEffect(() => { // * close popup when clicked outside of it
     const closeByClick = (evt) => {
       if (evt.target.classList.contains("popup")) {
         closeAllPopups();
@@ -258,8 +253,15 @@ export default function App() {
     return () => document.removeEventListener('mouseup', closeByClick);
   });
 
-  // ! refreshing the source list every 10 seconds
+  // ???????????????????????????????????????????????????
+  // !!!!!!!!!!!!!     INIT handling     !!!!!!!!!!!!!!!
+  // ???????????????????????????????????????????????????
   React.useEffect(() => {
+    isAutoLogin();
+    initialize();
+  }, []);
+
+  React.useEffect(() => { // * starting the interval to check for new sources
     const interval = setInterval(() => {
       initialize();
     }, (10 * 1000));
@@ -285,7 +287,6 @@ export default function App() {
           }) : <></>}
         </div>
 
-        <RightClickMenu />
         <LoginPopup
           handleLogin={handleLoginSubmit}
           isOpen={isLoginPopupOpen}
@@ -299,7 +300,6 @@ export default function App() {
         <ConfirmPopup
           isOpen={isConfirmPopupOpen}
           isDeleteSource={true}
-          signupSuccessful={signupSuccessful}
           onClose={closeAllPopups}
           handleSubmit={deleteSource}
         />
