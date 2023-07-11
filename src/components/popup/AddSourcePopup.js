@@ -3,7 +3,7 @@ import PopupWithForm from "./PopupWithForm";
 import CurrentResourceContext from '../../contexts/CurrentResourceContext';
 
 export default function AddSourcePopup(props) {
-    const { currentResource } = React.useContext(CurrentResourceContext);
+    const currentResource = React.useContext(CurrentResourceContext);
     const { linkText, isOpen, handleSwitchPopup, onSubmit, isLoggedIn, onClose, buttonText = 'Submit', popupTitle } = props;
     const [name, setName] = React.useState('');
     const [url, setUrl] = React.useState('');

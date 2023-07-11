@@ -325,7 +325,7 @@ export default function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <CurrentResourceContext.Provider value={{ currentResource }}>
+      <CurrentResourceContext.Provider value={currentResource}>
         <RightClickMenu items={rightClickItems} />
         <div className="app">
           <Header
