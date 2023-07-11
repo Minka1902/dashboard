@@ -1,7 +1,7 @@
 import React from "react";
 import Preloader from '../preloader/Preloader';
 import ProgressBar from "../progressBar/ProgressBar";
-import { changeStringLength } from "../../constants/constants";
+import { changeStringLength, formatDate } from "../../constants/constants";
 
 export default function Resource(props) {
     const { resource, onClick, deleteSource, isLoggedIn, isRefresh } = props;
@@ -28,7 +28,7 @@ export default function Resource(props) {
 
     const calculatePercentage = () => {
         const percent = resource.memoryLeft * 100;
-        return percent / resource.totalMemory;
+        return (percent / resource.totalMemory).toFixed(2);
     };
 
     const formatDate = (inputDate) => {
@@ -51,12 +51,21 @@ export default function Resource(props) {
             );
         } else {
             if (resource.status === 200) {
-                return (
-                    <>
-                        <img className={`resource__image ${resource.name}`} src={resource.status === 200 ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Green_Light_Icon.svg/1200px-Green_Light_Icon.svg.png' : ''} alt={`Status: ${resource.status}`} title={`Status: ${resource.status}`} />
-                        <h3 className={`resource__200_text ${resource.name}`} title={`http://${resource.url}`}>{formatDate(resource.updatedAt)}</h3>
-                    </>
-                );
+                if (resource.memoryLeft) {
+                    return (
+                        <>
+                            <img className={`resource__image ${resource.name}`} src={resource.status === 200 ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Green_Light_Icon.svg/1200px-Green_Light_Icon.svg.png' : ''} alt={`Status: ${resource.status}`} title={`Status: ${resource.status}`} />
+                            <h3 className={`resource__200_text ${resource.name}`} title={`${calculatePercentage()}%`}><ProgressBar value={calculatePercentage()} maxValue={100} /></h3>
+                        </>
+                    );
+                } else {
+                    return (
+                        <>
+                            <img className={`resource__image ${resource.name}`} src={resource.status === 200 ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Green_Light_Icon.svg/1200px-Green_Light_Icon.svg.png' : ''} alt={`Status: ${resource.status}`} title={`Status: ${resource.status}`} />
+                            <h3 className={`resource__200_text ${resource.name}`} title={`http://${resource.url}`}>{formatDate(resource.updatedAt)}</h3>
+                        </>
+                    );
+                }
             } else {
                 return (<>
                     {
@@ -98,7 +107,7 @@ export default function Resource(props) {
                 </div>
                 {!isPreloader ? <>
                     <div className={`resource__reload${isHovering ? ' opacity02' : ''} ${resource.name}`}></div>
-                    <img className={`resource__reload-icon ${resource.name}`} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)} />
+                    <img className={`resource__reload-icon ${resource.name}`} title={`Last checked: ${formatDate(resource.lastChecked)}`} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)} />
                 </> : <></>}
                 {renderInfo()}
             </div>
