@@ -1,5 +1,6 @@
 import React from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
+import CurrentResourceContext from '../../contexts/CurrentResourceContext';
 import Resource from '../resource/Resource';
 import sourceApiOBJ from '../../utils/sourceApi';
 import usersApiOBJ from '../../utils/usersApi';
@@ -9,6 +10,7 @@ import ConfirmPopup from '../popup/ConfirmPopup';
 import AddSourcePopup from '../popup/AddSourcePopup';
 import Footer from '../footer/Footer';
 import * as auth from '../../utils/auth';
+import RightClickMenu from '../rightClickMenu/RightClickMenu';
 
 export default function App() {
   const safeDocument = typeof document !== 'undefined' ? document : {};
@@ -17,6 +19,7 @@ export default function App() {
   const [isUserFound, setIsUserFound] = React.useState(true);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState(undefined);
+  const [currentResource, setCurrentResource] = React.useState(undefined);
   const [isLoginPopupOpen, setIsLoginPopupOpen] = React.useState(false);
   const [isConfirmPopupOpen, setIsConfirmLoginPopupOpen] = React.useState(false);
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
@@ -119,8 +122,8 @@ export default function App() {
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!!     SOURCE handling     !!!!!!!!!!!!!
   // ???????????????????????????????????????????????????
-  const deleteSource = () => {
-    sourceApiOBJ.deleteSource(deleteName)
+  const deleteSource = ({ id }) => {
+    sourceApiOBJ.deleteSource(id ? id : deleteName)
       .catch((err) => {
         if (err) {
           console.log(err);
@@ -236,6 +239,13 @@ export default function App() {
     }
   };
 
+  const rightClickItems = [
+    { buttonText: 'delete resource', buttonClicked: deleteSource, filter: 'resource' },
+    { buttonText: 'sign out', buttonClicked: handleLogout, filter: 'header' },
+    { buttonText: 'edit resource', buttonClicked: handleLogout, filter: 'resource' },
+    { buttonText: 'add resource', buttonClicked: openPopup, filter: 'resources' },
+  ];
+
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!!     EVENT handling     !!!!!!!!!!!!!!
   // ???????????????????????????????????????????????????
@@ -279,50 +289,53 @@ export default function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <div className="app">
-        <Header
-          noScroll={noScroll}
-          scroll={scroll}
-          isLoggedIn={false}
-          navBarButtons={buttons}
-          handleButtonClick={openPopup}
-          theme={true}
-          isHomePage={false}
-        />
-        {loggedIn ? <h3 className='app__title'>{currentUser.username}, welcome back!</h3> : <></>}
-        <div className='resources'>
-          {resources[0] ? resources.map((resource, index) => {
-            return <Resource isRefresh={isRefresh} deleteSource={deleteClicked} resource={resource} key={index} onClick={resourceClick} isLoggedIn={loggedIn} />
-          }) : <></>}
+      <CurrentResourceContext.Provider value={{ currentResource }}>
+        <RightClickMenu items={rightClickItems} />
+        <div className="app">
+          <Header
+            noScroll={noScroll}
+            scroll={scroll}
+            isLoggedIn={false}
+            navBarButtons={buttons}
+            handleButtonClick={openPopup}
+            theme={true}
+            isHomePage={false}
+          />
+          {loggedIn ? <h3 className='app__title'>{currentUser.username}, welcome back!</h3> : <></>}
+          <div className='resources'>
+            {resources[0] ? resources.map((resource, index) => {
+              return <Resource isRefresh={isRefresh} deleteSource={deleteClicked} resource={resource} key={index} onClick={resourceClick} isLoggedIn={loggedIn} />
+            }) : <></>}
+          </div>
+
+          <LoginPopup
+            handleLogin={handleLoginSubmit}
+            isOpen={isLoginPopupOpen}
+            isFound={isUserFound}
+            linkText='Add source'
+            onClose={closeAllPopups}
+            handleSwitchPopup={switchPopups}
+            onSignOut={handleLogout}
+          />
+
+          <ConfirmPopup
+            isOpen={isConfirmPopupOpen}
+            isDeleteSource={true}
+            onClose={closeAllPopups}
+            handleSubmit={deleteSource}
+          />
+
+          <AddSourcePopup
+            isLoggedIn={loggedIn}
+            onSubmit={handleAddSourceSubmit}
+            isOpen={isAddSourcePopupOpen}
+            linkText='Sign in'
+            handleSwitchPopup={switchPopups}
+            onClose={closeAllPopups}
+          />
         </div>
-
-        <LoginPopup
-          handleLogin={handleLoginSubmit}
-          isOpen={isLoginPopupOpen}
-          isFound={isUserFound}
-          linkText='Add source'
-          onClose={closeAllPopups}
-          handleSwitchPopup={switchPopups}
-          onSignOut={handleLogout}
-        />
-
-        <ConfirmPopup
-          isOpen={isConfirmPopupOpen}
-          isDeleteSource={true}
-          onClose={closeAllPopups}
-          handleSubmit={deleteSource}
-        />
-
-        <AddSourcePopup
-          isLoggedIn={loggedIn}
-          onSubmit={handleAddSourceSubmit}
-          isOpen={isAddSourcePopupOpen}
-          linkText='Sign in'
-          handleSwitchPopup={switchPopups}
-          onClose={closeAllPopups}
-        />
-      </div>
-      <Footer />
+        <Footer />
+      </CurrentResourceContext.Provider>
     </CurrentUserContext.Provider >
   );
 };

@@ -100,7 +100,7 @@ export default function Resource(props) {
 
     return (
         <>
-            <div className={`resource ${resource.name}`} onClick={resourceClick}>
+            <div className={`resource`} id={resource.name} onClick={resourceClick}>
                 <div className={`resource__name_container ${resource.name}`}>
                     <h3 className={`resource__name ${resource.name}`} title={resource.name}>{formatName(resource.name)}</h3>
                     {isLoggedIn ? <button className={`resource__button ${resource.name}`} onClick={deleteClick} title={`Delete ${resource.name}`} /> : <></>}
