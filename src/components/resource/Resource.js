@@ -91,7 +91,7 @@ export default function Resource(props) {
         if (isRefresh) {
             onClick(resource, setIsPreloaderFalse);
         }
-    }, [isRefresh]);
+    }, [isRefresh]);   //eslint-disable-line
 
     return (
         <>

@@ -314,14 +314,14 @@ export default function App() {
   React.useEffect(() => {
     isAutoLogin();
     initialize();
-  }, []);
+  }, []);       //eslint-disable-line
 
   React.useEffect(() => { // * starting the interval to check for new sources
     const interval = setInterval(() => {
       initialize();
     }, (10 * 1000));
     return () => clearInterval(interval);
-  }, []);
+  }, []);       //eslint-disable-line
 
   return (
     <CurrentUserContext.Provider value={currentUser}>

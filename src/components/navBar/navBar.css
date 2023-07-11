@@ -4,7 +4,7 @@
   padding: 1rem;
   width: calc(100% - 400px);
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
 }
 
@@ -15,8 +15,6 @@
   display: flex;
   justify-content: center;
 }
-
-.nav-bar__item {}
 
 .nav-bar__button {
   box-sizing: border-box;

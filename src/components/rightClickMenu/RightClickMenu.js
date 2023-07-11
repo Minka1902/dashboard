@@ -44,7 +44,7 @@ export default function RightClickMenu({ items }) {
 
         document.addEventListener('contextmenu', handleContextMenu);
         return () => document.removeEventListener('contextmenu', handleContextMenu);
-    }, []);
+    }, []);         //eslint-disable-line
 
     //! closing the menu when the user clicks outside of it
     React.useEffect(() => {

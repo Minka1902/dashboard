@@ -47,7 +47,7 @@ export default function AddSourcePopup(props) {
                 setUrl(currentResource.url);
             }
         }
-    }, [isOpen]);
+    }, [isOpen]);           //eslint-disable-line
 
     return (
         <>
