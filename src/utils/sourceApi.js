@@ -20,7 +20,7 @@ class sourceApi {
 
     init = () => this._fetch({ method: 'GET', url: '/get/all' })
 
-    getSourceInfo = (name) => this._fetch({ method: 'GET', url: `/get/${name}` })
+    getSourceInfo = (id) => this._fetch({ method: 'GET', url: `/get/${id}` })
 
     createSource = (newSource) => this._fetch({ method: 'POST', url: '/add-source', data: newSource })
 
@@ -29,6 +29,8 @@ class sourceApi {
     deleteSource = (name) => this._fetch({ method: 'DELETE', url: `/remove-source/${name}` })
 
     checkSource = (url) => this._fetch({ method: 'GET', url: `/check-source/${url}`, isPrivate: true })
+
+    editSource = (name, newData) => this._fetch({ method: 'PUT', data: newData, url: `/edit/${name}` })
 }
 
 const sourceApiOBJ = new sourceApi();

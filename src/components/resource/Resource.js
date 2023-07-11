@@ -1,10 +1,10 @@
 import React from "react";
 import Preloader from '../preloader/Preloader';
 import ProgressBar from "../progressBar/ProgressBar";
-import { changeStringLength, formatDate } from "../../constants/constants";
+import { changeStringLength } from "../../constants/constants";
 
 export default function Resource(props) {
-    const { resource, onClick, deleteSource, isLoggedIn, isRefresh } = props;
+    const { resource, onClick, isRefresh } = props;
     const [isPreloader, setIsPreloader] = React.useState(false);
     const [isHovering, setIsHovering] = React.useState(false);
 
@@ -19,11 +19,6 @@ export default function Resource(props) {
                 setIsHovering(false);
             }
         }
-    };
-
-    const deleteClick = (evt) => {
-        evt.preventDefault();
-        deleteSource(resource.name);
     };
 
     const calculatePercentage = () => {
@@ -100,14 +95,13 @@ export default function Resource(props) {
 
     return (
         <>
-            <div className={`resource`} id={resource.name} onClick={resourceClick}>
+            <div className={`resource`} id={resource._id} onClick={resourceClick}>
                 <div className={`resource__name_container ${resource.name}`}>
                     <h3 className={`resource__name ${resource.name}`} title={resource.name}>{formatName(resource.name)}</h3>
-                    {isLoggedIn ? <button className={`resource__button ${resource.name}`} onClick={deleteClick} title={`Delete ${resource.name}`} /> : <></>}
                 </div>
                 {!isPreloader ? <>
                     <div className={`resource__reload${isHovering ? ' opacity02' : ''} ${resource.name}`}></div>
-                    <img className={`resource__reload-icon ${resource.name}`} title={`Last checked: ${formatDate(resource.lastChecked)}`} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)} />
+                    <div className={`resource__reload-icon ${resource.name}`} title={resource.status === 200 ? `Last checked: ${formatDate(resource.lastChecked)}` : ""} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)} />
                 </> : <></>}
                 {renderInfo()}
             </div>

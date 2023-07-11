@@ -1,6 +1,7 @@
 import React from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import CurrentResourceContext from '../../contexts/CurrentResourceContext';
+import RightClickMenu from '../rightClickMenu/RightClickMenu';
 import Resource from '../resource/Resource';
 import sourceApiOBJ from '../../utils/sourceApi';
 import usersApiOBJ from '../../utils/usersApi';
@@ -10,7 +11,6 @@ import ConfirmPopup from '../popup/ConfirmPopup';
 import AddSourcePopup from '../popup/AddSourcePopup';
 import Footer from '../footer/Footer';
 import * as auth from '../../utils/auth';
-import RightClickMenu from '../rightClickMenu/RightClickMenu';
 
 export default function App() {
   const safeDocument = typeof document !== 'undefined' ? document : {};
@@ -23,8 +23,8 @@ export default function App() {
   const [isLoginPopupOpen, setIsLoginPopupOpen] = React.useState(false);
   const [isConfirmPopupOpen, setIsConfirmLoginPopupOpen] = React.useState(false);
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
-  const [deleteName, setDeleteName] = React.useState('');
   const [isRefresh, setIsRefresh] = React.useState(false);
+  const [isEditSource, setIsEditSource] = React.useState(false);
 
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!!     SCROLL handling     !!!!!!!!!!!!!
@@ -94,7 +94,6 @@ export default function App() {
       });
   };
 
-  // * Handling the logout click
   const handleLogout = () => {
     setLoggedIn(false);
     localStorage.removeItem('jwt');
@@ -109,6 +108,7 @@ export default function App() {
     setIsLoginPopupOpen(false);
     setIsAddSourcePopupOpen(false);
     setIsConfirmLoginPopupOpen(false);
+    setIsEditSource(false);
   };
 
   const openPopup = () => {
@@ -119,11 +119,20 @@ export default function App() {
     }
   };
 
+  const switchPopups = (evt) => {
+    closeAllPopups();
+    if (evt.target.parentElement.parentElement.parentElement.parentElement.classList.contains(`popup_type_add-source`)) {
+      setIsLoginPopupOpen(true);
+    } else {
+      setIsAddSourcePopupOpen(true);
+    }
+  };
+
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!!     SOURCE handling     !!!!!!!!!!!!!
   // ???????????????????????????????????????????????????
-  const deleteSource = ({ id }) => {
-    sourceApiOBJ.deleteSource(id ? id : deleteName)
+  const deleteSource = (prop) => {
+    sourceApiOBJ.deleteSource(prop !== undefined ? prop.id : currentResource.idToDelete)
       .catch((err) => {
         if (err) {
           console.log(err);
@@ -132,6 +141,7 @@ export default function App() {
       .finally(() => {
         closeAllPopups();
         initialize();
+        setCurrentResource(null);
       })
   };
 
@@ -213,9 +223,43 @@ export default function App() {
       });
   };
 
-  const deleteClicked = (name) => {
+  const editSource = (newData) => {
+    if (currentResource._id) {
+      sourceApiOBJ.editSource(currentResource._id, newData)
+        .catch((error) => {
+          if (error) {
+            console.log(error);
+          }
+        })
+        .finally(() => {
+          initialize();
+          closeAllPopups();
+          setCurrentResource(null);
+        })
+    }
+  };
+
+  const editClicked = ({ id }) => {
+    setIsEditSource(true);
+    sourceApiOBJ.getSourceInfo(id)
+      .then((data) => {
+        if (data) {
+          setCurrentResource(data);
+        }
+      })
+      .catch((error) => {
+        if (error) {
+          console.log(error);
+        }
+      })
+      .finally(() => {
+        setIsAddSourcePopupOpen(true);
+      });
+  };
+
+  const deleteClicked = ({ id }) => {
     setIsConfirmLoginPopupOpen(true);
-    setDeleteName(name);
+    setCurrentResource({ idToDelete: id });
   };
 
   // ???????????????????????????????????????????????????
@@ -230,20 +274,12 @@ export default function App() {
     },
   ];
 
-  const switchPopups = (evt) => {
-    closeAllPopups();
-    if (evt.target.parentElement.parentElement.parentElement.parentElement.classList.contains(`popup_type_add-source`)) {
-      setIsLoginPopupOpen(true);
-    } else {
-      setIsAddSourcePopupOpen(true);
-    }
-  };
-
   const rightClickItems = [
-    { buttonText: 'delete resource', buttonClicked: deleteSource, filter: 'resource' },
+    { buttonText: 'delete resource', buttonClicked: deleteClicked, filter: 'resource' },
     { buttonText: 'sign out', buttonClicked: handleLogout, filter: 'header' },
-    { buttonText: 'edit resource', buttonClicked: handleLogout, filter: 'resource' },
+    { buttonText: 'edit resource', buttonClicked: editClicked, filter: 'resource' },
     { buttonText: 'add resource', buttonClicked: openPopup, filter: 'resources' },
+    { buttonText: 'refresh', buttonClicked: setIsRefreshTrue, filter: 'app' },
   ];
 
   // ???????????????????????????????????????????????????
@@ -304,7 +340,7 @@ export default function App() {
           {loggedIn ? <h3 className='app__title'>{currentUser.username}, welcome back!</h3> : <></>}
           <div className='resources'>
             {resources[0] ? resources.map((resource, index) => {
-              return <Resource isRefresh={isRefresh} deleteSource={deleteClicked} resource={resource} key={index} onClick={resourceClick} isLoggedIn={loggedIn} />
+              return <Resource isRefresh={isRefresh} resource={resource} key={index} onClick={resourceClick} />
             }) : <></>}
           </div>
 
@@ -327,9 +363,10 @@ export default function App() {
 
           <AddSourcePopup
             isLoggedIn={loggedIn}
-            onSubmit={handleAddSourceSubmit}
+            onSubmit={isEditSource ? editSource : handleAddSourceSubmit}
             isOpen={isAddSourcePopupOpen}
             linkText='Sign in'
+            popupTitle={isEditSource ? "Edit source" : "Add source"}
             handleSwitchPopup={switchPopups}
             onClose={closeAllPopups}
           />

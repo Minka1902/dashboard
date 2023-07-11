@@ -1,8 +1,10 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
+import CurrentResourceContext from '../../contexts/CurrentResourceContext';
 
 export default function AddSourcePopup(props) {
-    const { linkText, isOpen, handleSwitchPopup, onSubmit, isLoggedIn, onClose, buttonText = 'Submit' } = props;
+    const { currentResource } = React.useContext(CurrentResourceContext);
+    const { linkText, isOpen, handleSwitchPopup, onSubmit, isLoggedIn, onClose, buttonText = 'Submit', popupTitle } = props;
     const [name, setName] = React.useState('');
     const [url, setUrl] = React.useState('');
     const [isUrlCorrect, setIsUrlCorrect] = React.useState(false);
@@ -34,14 +36,22 @@ export default function AddSourcePopup(props) {
 
     // ! Resetting the popup when closing
     React.useEffect(() => {
-        setIsUrlCorrect(true);
-        setName('');
-        setUrl('');
+        if (popupTitle === 'Add source') {
+            setIsUrlCorrect(true);
+            setName('');
+            setUrl('');
+        } else {
+            if (currentResource) {
+                setIsValid(true);
+                setName(currentResource.name);
+                setUrl(currentResource.url);
+            }
+        }
     }, [isOpen]);
 
     return (
         <>
-            <PopupWithForm onSubmit={handleSubmit} isValid={isValid} handleSwitchPopup={handleSwitchPopup} linkText={isLoggedIn ? 'Sign out' : linkText} name="add-source" title="Add source" isOpen={isOpen} onClose={onClose} buttonText={buttonText}>
+            <PopupWithForm onSubmit={handleSubmit} isValid={isValid} handleSwitchPopup={handleSwitchPopup} linkText={isLoggedIn ? 'Sign out' : linkText} name="add-source" title={popupTitle} isOpen={isOpen} onClose={onClose} buttonText={buttonText}>
                 {isLoggedIn ?
                     <>
                         <h3 className='popup__input-title'>Source name</h3>
