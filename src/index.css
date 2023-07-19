@@ -1,6 +1,9 @@
 /* ! app */
 @import url('./components/app/app.css');
 
+/* ! rightClickMenu */
+@import url('./components/rightClickMenu/rightClickMenu.css');
+
 /* ! resource */
 @import url('./components/resource/resource.css');
 

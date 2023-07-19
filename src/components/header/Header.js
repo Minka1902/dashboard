@@ -73,26 +73,26 @@ export default function Header(props) {
 	};
 
 	return (
-		<div className={`h-sb__container${theme ? ' h-sb__container_no-background' : ''}`}>
-			<header className={`header${theme ? ' header_theme_dark' : ''}${isNavMenuOpen ? ' header_darker' : ''}`}>
-				<img className={`header__logo ${theme ? 'header__logo_theme_dark' : ''}${isNavMenuOpen ? '_not' : ''}`} src={logo} alt="News explorer logo" />
-				{isNavBar ?
-					<>
-						<NavBar buttons={navBarButtons} />
-						<HeaderButton isLoggedIn={isLoggedIn} handleLogout={handleLogout} handleButtonClick={handleButtonClick} theme={theme} />
-					</>
-					:
-					<>
-						<NavMenu isOpen={isNavMenuOpen} isLoggedIn={isLoggedIn} firstButtonClick={firstButtonClicked}>
-							<HeaderButton isNavMenu={true} toggleNavMenu={toggleNavMenu} isLoggedIn={isLoggedIn} handleLogout={handleLogout} handleButtonClick={handleButtonClick} theme={theme} />
-						</NavMenu>
-						<button className={`header__button ${!isNavBar ? 'header__button_menu' : ''} ${theme ? ' header__logo_theme_dark' : ''}`} onClick={toggleNavMenu} title='Close window'>
-							<img src={determineButtonSrc()} alt="Menu icon" />
-						</button>
-					</>
-				}
-			</header>
-			{children}
-		</div>
+		// <div className={`h-sb__container${theme ? ' h-sb__container_no-background' : ''}`}>
+		<header className={`header${theme ? ' header_theme_dark' : ''}${isNavMenuOpen ? ' header_darker' : ''}`}>
+			<img className={`header__logo ${theme ? 'header__logo_theme_dark' : ''}${isNavMenuOpen ? '_not' : ''}`} src={logo} alt="News explorer logo" />
+			{isNavBar ?
+				<>
+					<NavBar buttons={navBarButtons} />
+					<HeaderButton isLoggedIn={isLoggedIn} handleLogout={handleLogout} handleButtonClick={handleButtonClick} theme={theme} />
+				</>
+				:
+				<>
+					<NavMenu isOpen={isNavMenuOpen} isLoggedIn={isLoggedIn} firstButtonClick={firstButtonClicked}>
+						<HeaderButton isNavMenu={true} toggleNavMenu={toggleNavMenu} isLoggedIn={isLoggedIn} handleLogout={handleLogout} handleButtonClick={handleButtonClick} theme={theme} />
+					</NavMenu>
+					<button className={`header__button ${!isNavBar ? 'header__button_menu' : ''} ${theme ? ' header__logo_theme_dark' : ''}`} onClick={toggleNavMenu} title='Close window'>
+						<img src={determineButtonSrc()} alt="Menu icon" />
+					</button>
+				</>
+			}
+		</header>
+		// 	{children}
+		// </div>
 	);
 }

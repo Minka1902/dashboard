@@ -1,4 +1,5 @@
 import React from 'react';
+import { Route, Switch, withRouter, useHistory } from 'react-router-dom';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import CurrentResourceContext from '../../contexts/CurrentResourceContext';
 import RightClickMenu from '../rightClickMenu/RightClickMenu';
@@ -11,10 +12,14 @@ import ConfirmPopup from '../popup/ConfirmPopup';
 import AddSourcePopup from '../popup/AddSourcePopup';
 import Footer from '../footer/Footer';
 import * as auth from '../../utils/auth';
+import ProtectedRoute from '../protectedRoute/ProtectedRoute';
 
-export default function App() {
+function App() {
+  const currentUserContext = React.useContext(CurrentUserContext);    // eslint-disable-line
+  const currentResourceContext = React.useContext(CurrentResourceContext);    // eslint-disable-line
   const safeDocument = typeof document !== 'undefined' ? document : {};
   const html = safeDocument.documentElement;
+  const history = useHistory();
   const [resources, setResources] = React.useState([]);
   const [isUserFound, setIsUserFound] = React.useState(true);
   const [loggedIn, setLoggedIn] = React.useState(false);
@@ -25,6 +30,7 @@ export default function App() {
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
   const [isRefresh, setIsRefresh] = React.useState(false);
   const [isEditSource, setIsEditSource] = React.useState(false);
+  const [resourceIdToWatch, setResourceIdToWatch] = React.useState('');
 
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!!     SCROLL handling     !!!!!!!!!!!!!
@@ -141,7 +147,7 @@ export default function App() {
       .finally(() => {
         closeAllPopups();
         initialize();
-        setCurrentResource(null);
+        setCurrentResource(undefined);
       })
   };
 
@@ -239,9 +245,8 @@ export default function App() {
     }
   };
 
-  const editClicked = ({ id }) => {
-    setIsEditSource(true);
-    sourceApiOBJ.getSourceInfo(id)
+  const getSource = (id) => {
+    return sourceApiOBJ.getSourceInfo(id)
       .then((data) => {
         if (data) {
           setCurrentResource(data);
@@ -252,6 +257,11 @@ export default function App() {
           console.log(error);
         }
       })
+  };
+
+  const editClicked = ({ id }) => {
+    setIsEditSource(true);
+    getSource(id)
       .finally(() => {
         setIsAddSourcePopupOpen(true);
       });
@@ -267,19 +277,35 @@ export default function App() {
   // ???????????????????????????????????????????????????
   const setIsRefreshTrue = () => setIsRefresh(true);
 
+  const handleWatchResource = ({ id }) => {
+    setResourceIdToWatch(id);
+    history.push(`/resource/${id}`);
+    getSource(id);
+  };
+
   const buttons = [
     {
       name: 'refresh',
+      isAllowed: true,
       onClick: setIsRefreshTrue,
+    },
+    {
+      name: 'home',
+      path: '/',
+      isAllowed: true,
+      onClick: (evt) => {
+        history.push('/');
+      }
     },
   ];
 
   const rightClickItems = [
-    { buttonText: 'delete resource', buttonClicked: deleteClicked, filter: 'resource' },
-    { buttonText: 'sign out', buttonClicked: handleLogout, filter: 'header' },
-    { buttonText: 'edit resource', buttonClicked: editClicked, filter: 'resource' },
-    { buttonText: 'add resource', buttonClicked: openPopup, filter: 'resources' },
-    { buttonText: 'refresh', buttonClicked: setIsRefreshTrue, filter: 'app' },
+    { buttonText: 'refresh', buttonClicked: setIsRefreshTrue, filter: 'app', isAllowed: true },
+    { buttonText: 'sign out', buttonClicked: handleLogout, filter: 'header', isAllowed: true },
+    { buttonText: 'add resource', buttonClicked: openPopup, filter: 'resources', isAllowed: true },
+    { buttonText: 'edit resource', buttonClicked: editClicked, filter: 'resource', isAllowed: false },
+    { buttonText: 'watch resource', buttonClicked: handleWatchResource, filter: 'resource', isAllowed: false },
+    { buttonText: 'delete resource', buttonClicked: deleteClicked, filter: 'resource', isAllowed: false },
   ];
 
   // ???????????????????????????????????????????????????
@@ -311,7 +337,7 @@ export default function App() {
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!!     INIT handling     !!!!!!!!!!!!!!!
   // ???????????????????????????????????????????????????
-  React.useEffect(() => {
+  React.useEffect(() => { // * initializing the user and resources
     isAutoLogin();
     initialize();
   }, []);       //eslint-disable-line
@@ -326,23 +352,31 @@ export default function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <CurrentResourceContext.Provider value={currentResource}>
-        <RightClickMenu items={rightClickItems} />
-        <div className="app">
-          <Header
-            noScroll={noScroll}
-            scroll={scroll}
-            isLoggedIn={false}
-            navBarButtons={buttons}
-            handleButtonClick={openPopup}
-            theme={true}
-            isHomePage={false}
-          />
-          {loggedIn ? <h3 className='app__title'>{currentUser.username}, welcome back!</h3> : <></>}
-          <div className='resources'>
-            {resources[0] ? resources.map((resource, index) => {
-              return <Resource isRefresh={isRefresh} resource={resource} key={index} onClick={resourceClick} />
-            }) : <></>}
-          </div>
+        <RightClickMenu items={rightClickItems} isLoggedIn={loggedIn} />
+        <Header
+          noScroll={noScroll}
+          scroll={scroll}
+          isLoggedIn={false}
+          navBarButtons={buttons}
+          handleButtonClick={openPopup}
+          theme={true}
+          isHomePage={false}
+        />
+        <main className="app">
+          <Switch>
+            <Route exact path='/'>
+              {loggedIn ? <h3 className='app__title'>{currentUser.username}, welcome back!</h3> : <></>}
+              <div className='resources'>
+                {resources.length !== 0 ? resources.map((resource, index) => {
+                  return <Resource isRefresh={isRefresh} resource={resource} key={index} onClick={resourceClick} />
+                }) : <></>}
+              </div>
+            </Route>
+
+            <ProtectedRoute path={`/resource/${resourceIdToWatch}`} loggedIn={resourceIdToWatch ? true : false}>
+              <p>Resource {resourceIdToWatch}</p>
+            </ProtectedRoute>
+          </Switch>
 
           <LoginPopup
             handleLogin={handleLoginSubmit}
@@ -370,9 +404,10 @@ export default function App() {
             handleSwitchPopup={switchPopups}
             onClose={closeAllPopups}
           />
-        </div>
+        </main>
         <Footer />
       </CurrentResourceContext.Provider>
     </CurrentUserContext.Provider >
   );
 };
+export default withRouter(App);

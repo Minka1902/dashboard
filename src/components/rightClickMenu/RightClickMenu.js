@@ -1,7 +1,7 @@
 import React from 'react';
-import './rightClickMenu.css';
+import RightClickItem from './RightClickItem';
 
-export default function RightClickMenu({ items }) {
+export default function RightClickMenu({ items, isLoggedIn }) {
     const [isOpen, setIsOpen] = React.useState(false);
     const [position, setPosition] = React.useState({ x: 0, y: 0 });
     const [evt, setEvt] = React.useState(undefined);
@@ -82,15 +82,17 @@ export default function RightClickMenu({ items }) {
 
     return (
         <div className={`right-click-menu ${isOpen ? 'open' : ''}`} style={{ top: position.y, left: position.x }}>
-            {items.map((item, index) => (
-                <button
-                    key={index}
-                    className={`menu-item${handleFilter(evt ? evt.target : undefined, item.filter).found ? '' : ' none'}`}
-                    onClick={() => handleItemClick(item)}
-                >
-                    {item.buttonText.toLowerCase().replace(/^\w/, (c) => c.toUpperCase())}
-                </button>
-            ))}
+            {items.map((item, index) => {
+                if (isLoggedIn) {
+                    return <RightClickItem item={item} key={index} index={index} handleClick={handleItemClick} isNone={handleFilter(evt ? evt.target : undefined, item.filter).found} />;
+                } else {
+                    if (item.isAllowed) {
+                        return <RightClickItem item={item} key={index} index={index} handleClick={handleItemClick} isNone={handleFilter(evt ? evt.target : undefined, item.filter).found} />;
+                    }
+                    return;
+                }
+            }
+            )}
         </div>
     );
 };
