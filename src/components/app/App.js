@@ -1,18 +1,19 @@
 import React from 'react';
 import { Route, Switch, withRouter, useHistory } from 'react-router-dom';
+import ProtectedRoute from '../protectedRoute/ProtectedRoute';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import CurrentResourceContext from '../../contexts/CurrentResourceContext';
-import RightClickMenu from '../rightClickMenu/RightClickMenu';
-import Resource from '../resource/Resource';
 import sourceApiOBJ from '../../utils/sourceApi';
 import usersApiOBJ from '../../utils/usersApi';
+import * as auth from '../../utils/auth';
 import Header from '../header/Header';
+import RightClickMenu from '../rightClickMenu/RightClickMenu';
+import Resource from '../resource/Resource';
+import * as Charts from '../chart/Charts';
 import LoginPopup from '../popup/LoginPopup';
 import ConfirmPopup from '../popup/ConfirmPopup';
 import AddSourcePopup from '../popup/AddSourcePopup';
 import Footer from '../footer/Footer';
-import * as auth from '../../utils/auth';
-import ProtectedRoute from '../protectedRoute/ProtectedRoute';
 
 function App() {
   const currentUserContext = React.useContext(CurrentUserContext);    // eslint-disable-line
@@ -30,7 +31,6 @@ function App() {
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
   const [isRefresh, setIsRefresh] = React.useState(false);
   const [isEditSource, setIsEditSource] = React.useState(false);
-  const [resourceIdToWatch, setResourceIdToWatch] = React.useState('');
 
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!!     SCROLL handling     !!!!!!!!!!!!!
@@ -278,7 +278,6 @@ function App() {
   const setIsRefreshTrue = () => setIsRefresh(true);
 
   const handleWatchResource = ({ id }) => {
-    setResourceIdToWatch(id);
     history.push(`/resource/${id}`);
     getSource(id);
   };
@@ -291,10 +290,10 @@ function App() {
     },
     {
       name: 'home',
-      path: '/',
       isAllowed: true,
       onClick: (evt) => {
         history.push('/');
+        setCurrentResource(undefined)
       }
     },
   ];
@@ -306,6 +305,22 @@ function App() {
     { buttonText: 'edit resource', buttonClicked: editClicked, filter: 'resource', isAllowed: false },
     { buttonText: 'watch resource', buttonClicked: handleWatchResource, filter: 'resource', isAllowed: false },
     { buttonText: 'delete resource', buttonClicked: deleteClicked, filter: 'resource', isAllowed: false },
+  ];
+
+  const chartData = [
+    { date: '01/06/2023', memoryLeft: 20000 },
+    { date: '08/06/2023', memoryLeft: 20000 },
+    { date: '10/06/2023', memoryLeft: 38000 },
+    { date: '12/06/2023', memoryLeft: 16500 },
+    { date: '14/06/2023', memoryLeft: 29200 },
+    { date: '18/06/2023', memoryLeft: 27600 },
+    { date: '19/06/2023', memoryLeft: 24600 },
+    { date: '22/06/2023', memoryLeft: 39000 },
+    { date: '23/06/2023', memoryLeft: 24000 },
+    { date: '24/06/2023', memoryLeft: 20300 },
+    { date: '26/06/2023', memoryLeft: 16500 },
+    { date: '27/06/2023', memoryLeft: 14050 },
+    { date: '29/06/2023', memoryLeft: 13500 },
   ];
 
   // ???????????????????????????????????????????????????
@@ -373,8 +388,9 @@ function App() {
               </div>
             </Route>
 
-            <ProtectedRoute path={`/resource/${resourceIdToWatch}`} loggedIn={resourceIdToWatch ? true : false}>
-              <p>Resource {resourceIdToWatch}</p>
+            <ProtectedRoute path={`/resource/${currentResource ? currentResource._id : ''}`} loggedIn={loggedIn}>
+              <h3 className='app__title'>Resource {currentResource ? currentResource.name : ''}</h3>
+              <Charts.LineChart title={{ text: '' }} chartData={chartData} subtitle={false} />
             </ProtectedRoute>
           </Switch>
 
