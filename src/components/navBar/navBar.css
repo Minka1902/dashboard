@@ -1,14 +1,9 @@
-.nav-bar {
-  height: 100%;
+.navigation-bar {
   background-color: transparent;
-  padding: 1rem;
-  width: calc(100% - 400px);
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  padding: auto 1rem;
 }
 
-.nav-bar__list {
+.navigation-bar__list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -16,23 +11,39 @@
   justify-content: center;
 }
 
-.nav-bar__button {
-  box-sizing: border-box;
-  background-color: transparent;
-  color: #333;
-  padding: 0.5rem 1rem;
-  margin-top: 6px;
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 4px;
-  border-bottom: 2px solid transparent;
-  cursor: pointer;
-  transition: border-color 0.3s ease-in-out, background-color 0.4s ease-in-out, border-radius 0.3s ease-in-out;
+.navigation-bar__item {
+  margin-right: 1rem;
 }
 
-.nav-bar__button:hover {
-  border-color: black;
+.navigation-bar__item:hover .navigation-bar__button {
+  box-sizing: border-box;
+  border-bottom: 2px solid #64646475;
+}
+
+.navigation-bar__button {
+  max-height: 36px;
+  width: max-content;
+  background-color: #f4f4f4;
+  background-color: transparent;
+  text-shadow: 0px 0px 5px #333333;
+  color: #333;
+  border: 1px solid #49494923;
+  border-bottom-width: 2px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.4s ease-in-out;
+}
+
+.checked {
+  box-sizing: border-box;
+  border-bottom: 2px solid #0000009f;
+}
+
+.navigation-bar__button:hover {
   background-color: #ddd;
-  border-radius: 20px;
+  background-color: transparent;
+  text-shadow: 0px 0px 0px #333333;
 }

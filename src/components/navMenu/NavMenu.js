@@ -1,19 +1,31 @@
 import * as React from 'react';
 
 export default function NavMenu(props) {
-	const { isOpen, isLoggedIn, firstButtonClick, secondButtonClick, children } = props;
+	const { isOpen, isLoggedIn, children, buttons, navMenuClick } = props;
+
+	const determineButton = (button) => {
+		if (isLoggedIn) {
+			return true;
+		} else {
+			if (button.isAllowed) {
+				return true;
+			}
+		}
+		return false;
+	};
+
+	const buttonClick = (button) => {
+		navMenuClick();
+		button.onClick();
+	};
 
 	return (
 		<>
 			<div className={`nav-menu${isOpen ? ' nav-menu_opened' : ''}`}>
 				<div className="nav-menu__container">
-					<button className='nav-menu__button' onClick={firstButtonClick}>Refresh</button>
-					{
-						isLoggedIn ?
-							<button className='nav-menu__button' onClick={secondButtonClick}>Saved articles</button>
-							:
-							<></>
-					}
+					{buttons.map((button, index) => {
+						return (determineButton(button) ? <button className='nav-menu__button' onClick={() => buttonClick(button)} key={index}>{button.name}</button> : <></>)
+					})}
 				</div>
 				{children}
 			</div>
