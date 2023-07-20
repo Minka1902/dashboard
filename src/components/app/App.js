@@ -5,6 +5,7 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 import CurrentResourceContext from '../../contexts/CurrentResourceContext';
 import sourceApiOBJ from '../../utils/sourceApi';
 import usersApiOBJ from '../../utils/usersApi';
+import collectionApiObj from '../../utils/collectionApi';
 import * as auth from '../../utils/auth';
 import Header from '../header/Header';
 import RightClickMenu from '../rightClickMenu/RightClickMenu';
@@ -31,6 +32,7 @@ function App() {
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
   const [isRefresh, setIsRefresh] = React.useState(false);
   const [isEditSource, setIsEditSource] = React.useState(false);
+  const [chartData, setChartData] = React.useState();
 
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!!     SCROLL handling     !!!!!!!!!!!!!
@@ -139,16 +141,22 @@ function App() {
   // ???????????????????????????????????????????????????
   const deleteSource = (prop) => {
     sourceApiOBJ.deleteSource(prop !== undefined ? prop.id : currentResource.idToDelete)
+      .then((source) => {
+        if (source) {
+          deleteCollection(source.name)
+            .finally(() => {
+              closeAllPopups();
+              initialize();
+              setCurrentResource(undefined);
+            })
+        }
+      })
       .catch((err) => {
         if (err) {
           console.log(err);
         }
-      })
-      .finally(() => {
-        closeAllPopups();
-        initialize();
-        setCurrentResource(undefined);
-      })
+      });
+
   };
 
   const resourceClick = (resource, hidePreloader) => {
@@ -180,13 +188,18 @@ function App() {
 
   const createNewSource = (source) => {
     sourceApiOBJ.createSource(source)
+      .then((data) => {
+        if (data) {
+          createCollection(data.name)
+            .finally(() => {
+              initialize();
+            });
+        }
+      })
       .catch((err) => {
         if (err) {
           console.log(err);
         }
-      })
-      .finally(() => {
-        initialize();
       });
   };
 
@@ -245,11 +258,14 @@ function App() {
     }
   };
 
-  const getSource = (id) => {
+  const getSource = (id, isWatch = false) => {
     return sourceApiOBJ.getSourceInfo(id)
       .then((data) => {
         if (data) {
           setCurrentResource(data);
+          if (isWatch) {
+            getAllEntries(data.name);
+          }
         }
       })
       .catch((error) => {
@@ -273,13 +289,48 @@ function App() {
   };
 
   // ???????????????????????????????????????????????????
+  // !!!!!!!!!!!     COLLECTION handling     !!!!!!!!!!!
+  // ???????????????????????????????????????????????????
+  const createCollection = (name) => {
+    return collectionApiObj.createCollection(name)
+      .catch((err) => {
+        if (err) {
+          console.log(err);
+        }
+      })
+  };
+
+  const deleteCollection = (name) => {
+    return collectionApiObj.deleteCollection(name)
+      .catch((err) => {
+        if (err) {
+          console.log(err);
+        }
+      })
+  };
+
+  const getAllEntries = (name) => {
+    collectionApiObj.getEntries(name)
+      .then(({ data, found }) => {
+        if (found !== 0) {
+          setChartData(data);
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          console.log(err);
+        }
+      })
+  };
+
+  // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!!     ROUTE handling     !!!!!!!!!!!!!!
   // ???????????????????????????????????????????????????
   const setIsRefreshTrue = () => setIsRefresh(true);
 
   const handleWatchResource = ({ id }) => {
     history.push(`/resource/${id}`);
-    getSource(id);
+    getSource(id, true);
   };
 
   const buttons = [
@@ -291,7 +342,7 @@ function App() {
     {
       name: 'home',
       isAllowed: true,
-      onClick: (evt) => {
+      onClick: () => {
         history.push('/');
         setCurrentResource(undefined)
       }
@@ -305,22 +356,6 @@ function App() {
     { buttonText: 'edit resource', buttonClicked: editClicked, filter: 'resource', isAllowed: false },
     { buttonText: 'watch resource', buttonClicked: handleWatchResource, filter: 'resource', isAllowed: false },
     { buttonText: 'delete resource', buttonClicked: deleteClicked, filter: 'resource', isAllowed: false },
-  ];
-
-  const chartData = [
-    { date: '01/06/2023', memoryLeft: 20000 },
-    { date: '08/06/2023', memoryLeft: 20000 },
-    { date: '10/06/2023', memoryLeft: 38000 },
-    { date: '12/06/2023', memoryLeft: 16500 },
-    { date: '14/06/2023', memoryLeft: 29200 },
-    { date: '18/06/2023', memoryLeft: 27600 },
-    { date: '19/06/2023', memoryLeft: 24600 },
-    { date: '22/06/2023', memoryLeft: 39000 },
-    { date: '23/06/2023', memoryLeft: 24000 },
-    { date: '24/06/2023', memoryLeft: 20300 },
-    { date: '26/06/2023', memoryLeft: 16500 },
-    { date: '27/06/2023', memoryLeft: 14050 },
-    { date: '29/06/2023', memoryLeft: 13500 },
   ];
 
   // ???????????????????????????????????????????????????
@@ -372,7 +407,7 @@ function App() {
           noScroll={noScroll}
           scroll={scroll}
           isLoggedIn={false}
-          navBarButtons={buttons}
+          buttons={buttons}
           handleButtonClick={openPopup}
           theme={true}
           isHomePage={false}
@@ -388,9 +423,9 @@ function App() {
               </div>
             </Route>
 
-            <ProtectedRoute path={`/resource/${currentResource ? currentResource._id : ''}`} loggedIn={loggedIn}>
-              <h3 className='app__title'>Resource {currentResource ? currentResource.name : ''}</h3>
-              <Charts.LineChart title={{ text: '' }} chartData={chartData} subtitle={false} />
+            <ProtectedRoute path={`/resource/${currentResource ? currentResource._id : ''}`} loggedIn={loggedIn && window.innerWidth >= 530}>
+              <h3 className='app__title'>{currentResource ? currentResource.name : ''}</h3>
+              <Charts.LineChart title={{ text: 'Date / Capacity' }} chartClass='app__chart' chartData={chartData} subtitle={false} />
             </ProtectedRoute>
           </Switch>
 

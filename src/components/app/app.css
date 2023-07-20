@@ -13,6 +13,12 @@
     position: relative;
 }
 
+.app__chart {
+    margin: 0 auto;
+    width: calc(100% - 190px);
+    height: calc(100% - 190px);
+}
+
 .resources {
     margin: 10px auto 0 auto;
     display: grid;
