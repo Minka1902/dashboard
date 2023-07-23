@@ -119,6 +119,7 @@
 .resource__reload-icon {
     margin-top: 26.5px;
     position: fixed;
+    padding: 30px;
     height: 128px;
     width: 128px;
     background-image: url('../../images/reload.svg');
@@ -126,6 +127,7 @@
     background-size: contain;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
+    animation: rotate 4s linear infinite;
 }
 
 .opacity02 {
@@ -139,5 +141,15 @@
 @media screen and (max-width: 500px) {
     .resource__image {
         padding: 15px;
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(-360deg);
     }
 }

@@ -1,4 +1,7 @@
 .footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
 	height: 80px;
 	max-width: 1440px;
 	width: 100%;

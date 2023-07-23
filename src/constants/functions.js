@@ -244,8 +244,11 @@ export const formatCreditCardNumber = (number, isHidden, howMuch) => {
 // ! 	gets a date string and returns it after some formatting 
 // TODO formatDate('2023-06-26T14:06:21.868Z')
 // ?  	14:06 26.06
-export const formatDate = (dateString) => {
-    const options = { weekday: 'long', hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' };
+export const formatDate = (dateString, isWeekday) => {
+    let options = { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' };
+    if (isWeekday === undefined) {
+        options.weekday = 'long';
+    }
     const formattedDate = new Date(dateString).toLocaleString('en-US', options);
 
     const [, day, time, month] = formattedDate.match(/(.+), (\d{2}:\d{2}) (.+)/);
@@ -293,4 +296,3 @@ export const formatAmount = (amount) => {
         return `${groups.join(",")}.${stringAfterDot}`;
     }
 };
-

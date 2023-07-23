@@ -142,7 +142,7 @@ function App() {
   const deleteSource = (prop) => {
     sourceApiOBJ.deleteSource(prop !== undefined ? prop.id : currentResource.idToDelete)
       .then((source) => {
-        if (source) {
+        if (source.totalMemory !== undefined) {
           deleteCollection(source.name)
             .finally(() => {
               closeAllPopups();
@@ -320,7 +320,7 @@ function App() {
         if (err) {
           console.log(err);
         }
-      })
+      });
   };
 
   // ???????????????????????????????????????????????????
@@ -335,15 +335,20 @@ function App() {
 
   const buttons = [
     {
-      name: 'refresh',
+      name: 'Home',
       isAllowed: true,
-      onClick: setIsRefreshTrue,
-    },
-    {
-      name: 'home',
-      isAllowed: true,
+      path: '/',
       onClick: () => {
         history.push('/');
+        setCurrentResource(undefined)
+      }
+    },
+    {
+      name: 'About us',
+      isAllowed: true,
+      path: '/about-us',
+      onClick: () => {
+        history.push('/about-us');
         setCurrentResource(undefined)
       }
     },
@@ -354,7 +359,7 @@ function App() {
     { buttonText: 'sign out', buttonClicked: handleLogout, filter: 'header', isAllowed: true },
     { buttonText: 'add resource', buttonClicked: openPopup, filter: 'resources', isAllowed: true },
     { buttonText: 'edit resource', buttonClicked: editClicked, filter: 'resource', isAllowed: false },
-    { buttonText: 'watch resource', buttonClicked: handleWatchResource, filter: 'resource', isAllowed: false },
+    { buttonText: 'watch resource', buttonClicked: handleWatchResource, filter: 'memory', isAllowed: false },
     { buttonText: 'delete resource', buttonClicked: deleteClicked, filter: 'resource', isAllowed: false },
   ];
 
@@ -403,16 +408,15 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <CurrentResourceContext.Provider value={currentResource}>
         <RightClickMenu items={rightClickItems} isLoggedIn={loggedIn} />
-        <Header
-          noScroll={noScroll}
-          scroll={scroll}
-          isLoggedIn={false}
-          buttons={buttons}
-          handleButtonClick={openPopup}
-          theme={true}
-          isHomePage={false}
-        />
         <main className="app">
+          <Header
+            noScroll={noScroll}
+            scroll={scroll}
+            isLoggedIn={false}
+            buttons={buttons}
+            handleButtonClick={openPopup}
+            theme={true}
+          />
           <Switch>
             <Route exact path='/'>
               {loggedIn ? <h3 className='app__title'>{currentUser.username}, welcome back!</h3> : <></>}
@@ -423,9 +427,16 @@ function App() {
               </div>
             </Route>
 
+            <Route path='/about-us'>
+              <section name='about-us'>
+                <h1>Geomage</h1>
+                <p>Geomage is a company founded in 2003 by Nathan Scharff</p>
+              </section>
+            </Route>
+
             <ProtectedRoute path={`/resource/${currentResource ? currentResource._id : ''}`} loggedIn={loggedIn && window.innerWidth >= 530}>
               <h3 className='app__title'>{currentResource ? currentResource.name : ''}</h3>
-              <Charts.LineChart title={{ text: 'Date / Capacity' }} chartClass='app__chart' chartData={chartData} subtitle={false} />
+              <Charts.LineChart title={{ text: 'Time / Capacity' }} chartClass='app__chart' chartData={chartData} subtitle={false} />
             </ProtectedRoute>
           </Switch>
 
@@ -455,8 +466,8 @@ function App() {
             handleSwitchPopup={switchPopups}
             onClose={closeAllPopups}
           />
+          <Footer />
         </main>
-        <Footer />
       </CurrentResourceContext.Provider>
     </CurrentUserContext.Provider >
   );
