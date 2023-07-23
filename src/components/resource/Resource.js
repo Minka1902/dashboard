@@ -35,14 +35,18 @@ export default function Resource(props) {
                 if (resource.memoryLeft) {
                     return (
                         <>
-                            <img className={`resource__image ${resource.name}`} src={resource.status === 200 ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Green_Light_Icon.svg/1200px-Green_Light_Icon.svg.png' : ''} alt={`Status: ${resource.status}`} title={`Status: ${resource.status}`} />
+                            <div className="resource__image">
+                                <div className="resource__image_light"></div>
+                            </div>
                             <h3 className={`resource__200_text ${resource.name}`} title={`${calculatePercentage()}%`}><ProgressBar value={calculatePercentage()} maxValue={100} /></h3>
                         </>
                     );
                 } else {
                     return (
                         <>
-                            <img className={`resource__image ${resource.name}`} src={resource.status === 200 ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Green_Light_Icon.svg/1200px-Green_Light_Icon.svg.png' : ''} alt={`Status: ${resource.status}`} title={`Status: ${resource.status}`} />
+                            <div className="resource__image">
+                                <div className="resource__image_light"></div>
+                            </div>
                             <h3 className={`resource__200_text ${resource.name}`} title={`http://${resource.url}`}>{formatDate(resource.updatedAt, false)}</h3>
                         </>
                     );
@@ -85,10 +89,10 @@ export default function Resource(props) {
                 <div className={`resource__name_container ${resource.name}`}>
                     <h3 className={`resource__name ${resource.name}`} title={resource.name}>{formatName(resource.name)}</h3>
                 </div>
+                {renderInfo()}
                 {!isPreloader ? <>
                     <div className={`resource__reload-icon ${resource.name}`} title={resource.status === 200 ? `Last checked: ${formatDate(resource.lastChecked, false)}` : ""} />
                 </> : <></>}
-                {renderInfo()}
             </div>
         </>
     );
