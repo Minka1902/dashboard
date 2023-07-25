@@ -7,6 +7,7 @@
 
 .app__title {
     margin: 0 auto;
+    text-align: center;
 }
 
 .no-scroll {
@@ -16,8 +17,8 @@
 
 .app__chart {
     margin: 0 auto;
-    width: calc(100% - 190px);
-    height: calc(100% - 190px);
+    width: calc(100% - 150px);
+    height: calc(100% - 150px);
 }
 
 .resources {
@@ -29,23 +30,30 @@
     width: min-content;
 }
 
+section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 @media screen and (max-width: 300px) {
     .resources {
         grid-template-columns: 130px;
         grid-template-rows: 180px;
+        padding-bottom: 40px;
     }
 }
 
 @media screen and (min-width: 300.5px) and (max-width: 500px) {
     .resources {
         grid-template-columns: 130px 130px;
-        grid-template-rows: 180px;
+        padding-bottom: 65px;
     }
 }
 
 @media screen and (min-width: 500.5px) and (max-width: 800px) {
     .resources {
         grid-template-columns: 130px 130px 130px;
-        grid-template-rows: 180px;
+        padding-bottom: 38px;
     }
 }

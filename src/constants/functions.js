@@ -246,13 +246,23 @@ export const formatCreditCardNumber = (number, isHidden, howMuch) => {
 // ?  	14:06 26.06
 export const formatDate = (dateString, isWeekday) => {
     let options = { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' };
+    let realTime = '';
     if (isWeekday === undefined) {
         options.weekday = 'long';
     }
     const formattedDate = new Date(dateString).toLocaleString('en-US', options);
 
-    const [, day, time, month] = formattedDate.match(/(.+), (\d{2}:\d{2}) (.+)/);
-    return `${day} ${time} ${month}`;
+    const [, day, time, dayPart] = formattedDate.match(/(.+), (\d{2}:\d{2}) (.+)/);
+    if (dayPart === 'PM') {
+        let tempNum = parseFloat(`${time[0]}${time[1]}`) + 12;
+        let temp = tempNum.toString();
+        realTime += temp[0];
+        realTime += temp[1];
+        for (let i = 2; i < time.length; i++) {
+            realTime += time[i];
+        }
+    }
+    return `${day} ${realTime !== '' ? realTime : time}`;
 };
 
 // ! 	gets a number and returns it after some formatting 

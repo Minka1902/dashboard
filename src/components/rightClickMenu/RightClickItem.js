@@ -4,7 +4,7 @@ export default function RightClickItem({ item, isNone, index, handleClick }) {
     if (item) {
         return (
             <button
-                key={index}
+                key={item.buttonText || index}
                 className={`menu-item${!isNone ? ' none' : ''}`}
                 onClick={() => handleClick(item)}
             >

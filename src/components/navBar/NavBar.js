@@ -19,31 +19,32 @@ export default function NavBar(props) {
 
     const buttonClick = (button) => {
         setButtonCheckedName(button.name);
-        button.onClick();
+        button.onClick && button.onClick();
     };
 
     React.useEffect(() => {
         const listen = history.listen((location) => {
-            for (let i = 0; i < buttons.length; i++) {
-                if (location.pathname === buttons[i].path) {
-                    setButtonCheckedName(buttons[i].name);
-                }
+            const button = buttons.find(button => button.path === location.pathname);
+            if (button) {
+                setButtonCheckedName(button.name);
+            } else {
+                setButtonCheckedName('');
             }
         });
 
-        return listen;
-    }, []);
+        return () => listen();
+    }, []);         //eslint-disable-line
 
     return (
         <nav className="navigation-bar">
             <ul className="navigation-bar__list">
-                {buttons.map((button, index) => {
-                    return <li className="navigation-bar__item" key={index}>
+                {buttons.map((button) => {
+                    return <li className="navigation-bar__item" key={button.name}>
                         <button
                             className={`navigation-bar__button${buttonCheckedName === button.name ? ' checked' : ''}
                             ${!determineIsAllowed(button) ? ' none' : ''}`}
                             onClick={() => buttonClick(button)}
-                            key={index}
+                            key={button.name}
                         >
                             {button.name}
                         </button>

@@ -143,18 +143,18 @@ function App() {
     sourceApiOBJ.deleteSource(prop !== undefined ? prop.id : currentResource.idToDelete)
       .then((source) => {
         if (source.totalMemory !== undefined) {
-          deleteCollection(source.name)
-            .finally(() => {
-              closeAllPopups();
-              initialize();
-              setCurrentResource(undefined);
-            })
+          deleteCollection(source.name);
         }
       })
       .catch((err) => {
         if (err) {
           console.log(err);
         }
+      })
+      .finally(() => {
+        closeAllPopups();
+        initialize();
+        setCurrentResource(undefined);
       });
 
   };
@@ -224,22 +224,18 @@ function App() {
       });
   };
 
-  const initialize = () => {
-    sourceApiOBJ.init()
-      .then((data) => {
-        if (data) {
-          setResources(data);
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          console.log(err);
-        }
-      })
-      .finally(() => {
-        setIsRefresh(false);
-        scroll();
-      });
+  const initialize = async () => {
+    try {
+      const data = await sourceApiOBJ.init();
+      if (data) {
+        setResources(data);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsRefresh(false);
+      scroll();
+    }
   };
 
   const editSource = (newData) => {
@@ -333,15 +329,17 @@ function App() {
     getSource(id, true);
   };
 
+  const handleHomeClick = () => {
+    history.push('/');
+    setCurrentResource(undefined)
+  };
+
   const buttons = [
     {
       name: 'Home',
       isAllowed: true,
       path: '/',
-      onClick: () => {
-        history.push('/');
-        setCurrentResource(undefined)
-      }
+      onClick: handleHomeClick
     },
     {
       name: 'About us',
@@ -355,7 +353,7 @@ function App() {
   ];
 
   const rightClickItems = [
-    { buttonText: 'refresh', buttonClicked: setIsRefreshTrue, filter: 'app', isAllowed: true },
+    { buttonText: 'refresh', buttonClicked: setIsRefreshTrue, filter: 'root', isAllowed: true },
     { buttonText: 'sign out', buttonClicked: handleLogout, filter: 'header', isAllowed: true },
     { buttonText: 'add resource', buttonClicked: openPopup, filter: 'resources', isAllowed: true },
     { buttonText: 'edit resource', buttonClicked: editClicked, filter: 'resource', isAllowed: false },
@@ -407,67 +405,67 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <CurrentResourceContext.Provider value={currentResource}>
-        <RightClickMenu items={rightClickItems} isLoggedIn={loggedIn} />
-        <main className="app">
-          <Header
-            noScroll={noScroll}
-            scroll={scroll}
-            isLoggedIn={false}
-            buttons={buttons}
-            handleButtonClick={openPopup}
-            theme={true}
-          />
-          <Switch>
-            <Route exact path='/'>
+        <Header
+          noScroll={noScroll}
+          scroll={scroll}
+          isLoggedIn={false}
+          buttons={buttons}
+          handleButtonClick={openPopup}
+          theme={true}
+        />
+        <Switch>
+          <Route exact path='/'>
+            <section name='home' id='home'>
               {loggedIn ? <h3 className='app__title'>{currentUser.username}, welcome back!</h3> : <></>}
-              <div className='resources'>
+              <div className='resources' >
                 {resources.length !== 0 ? resources.map((resource, index) => {
                   return <Resource isRefresh={isRefresh} resource={resource} key={index} onClick={resourceClick} />
                 }) : <></>}
               </div>
-            </Route>
+            </section>
+          </Route>
 
-            <Route path='/about-us'>
-              <section name='about-us'>
-                <h1>Geomage</h1>
-                <p>Geomage is a company founded in 2003 by Nathan Scharff</p>
-              </section>
-            </Route>
+          <Route path='/about-us'>
+            <section name='about-us' id='about-us'>
+              <h1>Geomage</h1>
+              <p>Geomage is a company founded in 2003 by Nathan Scharff</p>
+            </section>
+          </Route>
 
-            <ProtectedRoute path={`/resource/${currentResource ? currentResource._id : ''}`} loggedIn={loggedIn && window.innerWidth >= 530}>
-              <h3 className='app__title'>{currentResource ? currentResource.name : ''}</h3>
-              <Charts.LineChart title={{ text: 'Time / Capacity' }} chartClass='app__chart' chartData={chartData} subtitle={false} />
-            </ProtectedRoute>
-          </Switch>
+          <ProtectedRoute path={`/resource/${currentResource ? currentResource._id : ''}`} loggedIn={loggedIn && window.innerWidth >= 530}>
+            <h3 className='app__title'>{currentResource ? currentResource.name : ''}</h3>
+            <Charts.LineChart title={{ text: 'Time / Capacity' }} chartClass='app__chart' chartData={chartData} subtitle={false} />
+          </ProtectedRoute>
+        </Switch>
 
-          <LoginPopup
-            handleLogin={handleLoginSubmit}
-            isOpen={isLoginPopupOpen}
-            isFound={isUserFound}
-            linkText='Add source'
-            onClose={closeAllPopups}
-            handleSwitchPopup={switchPopups}
-            onSignOut={handleLogout}
-          />
+        <LoginPopup
+          handleLogin={handleLoginSubmit}
+          isOpen={isLoginPopupOpen}
+          isFound={isUserFound}
+          linkText='Add source'
+          onClose={closeAllPopups}
+          handleSwitchPopup={switchPopups}
+          onSignOut={handleLogout}
+        />
 
-          <ConfirmPopup
-            isOpen={isConfirmPopupOpen}
-            isDeleteSource={true}
-            onClose={closeAllPopups}
-            handleSubmit={deleteSource}
-          />
+        <ConfirmPopup
+          isOpen={isConfirmPopupOpen}
+          isDeleteSource={true}
+          onClose={closeAllPopups}
+          handleSubmit={deleteSource}
+        />
 
-          <AddSourcePopup
-            isLoggedIn={loggedIn}
-            onSubmit={isEditSource ? editSource : handleAddSourceSubmit}
-            isOpen={isAddSourcePopupOpen}
-            linkText='Sign in'
-            popupTitle={isEditSource ? "Edit source" : "Add source"}
-            handleSwitchPopup={switchPopups}
-            onClose={closeAllPopups}
-          />
-          <Footer />
-        </main>
+        <AddSourcePopup
+          isLoggedIn={loggedIn}
+          onSubmit={isEditSource ? editSource : handleAddSourceSubmit}
+          isOpen={isAddSourcePopupOpen}
+          linkText='Sign in'
+          popupTitle={isEditSource ? "Edit source" : "Add source"}
+          handleSwitchPopup={switchPopups}
+          onClose={closeAllPopups}
+        />
+        <RightClickMenu items={rightClickItems} isLoggedIn={loggedIn} />
+        <Footer homeClick={handleHomeClick} />
       </CurrentResourceContext.Provider>
     </CurrentUserContext.Provider >
   );

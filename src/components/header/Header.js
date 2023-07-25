@@ -17,22 +17,16 @@ export default function Header(props) {
 	};
 
 	const checkWindowDimensions = () => {
-		if (window.innerWidth > 520) {
-			setIsNavBar(true);
-			setIsNavMenuOpen(false);
-		} else {
-			setIsNavBar(false);
-			if (isNavMenuOpen) {
-				noScroll();
-			} else {
-				scroll();
-			}
-		}
+		const mediaQuery = window.matchMedia('(min-width: 520px)');
+		setIsNavBar(mediaQuery.matches);
+		setIsNavMenuOpen(false);
 	};
 
 	React.useEffect(() => {
+		checkWindowDimensions();
 		window.addEventListener('resize', checkWindowDimensions);
-	});
+		return () => window.removeEventListener('resize', checkWindowDimensions);
+	}, []);
 
 	React.useEffect(() => {
 		if (window.innerWidth < 520 && isLoggedIn === true) {

@@ -212,17 +212,6 @@ svg {
     margin: 0;
 }
 
-.popup__text_regestration {
-    font-family: 'Inter', Arial, sans-serif;
-    font-style: normal;
-    font-weight: 900;
-    font-size: 24px;
-    line-height: 29px;
-    text-align: center;
-    color: black;
-    border: 2px solid red;
-}
-
 .popup__title {
     width: 358px;
     text-align: left;
@@ -252,17 +241,6 @@ svg {
     opacity: 1;
     pointer-events: all;
     transition: visibility 0s, opacity 0.5s linear;
-}
-
-.popup_type_regestration-confirm {
-    position: fixed;
-    top: calc(50% - 165px);
-    left: calc(50% - 215px);
-    width: 430px;
-    height: 330px;
-    background: #FFFFFF;
-    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
-    border-radius: 10px;
 }
 
 @media screen and (max-width:500px) {

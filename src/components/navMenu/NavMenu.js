@@ -23,9 +23,7 @@ export default function NavMenu(props) {
 		<>
 			<div className={`nav-menu${isOpen ? ' nav-menu_opened' : ''}`}>
 				<div className="nav-menu__container">
-					{buttons.map((button, index) => {
-						return (determineButton(button) ? <button className='nav-menu__button' onClick={() => buttonClick(button)} key={index}>{button.name}</button> : <></>)
-					})}
+					{buttons.map((button) => (determineButton(button) ? <button className='nav-menu__button' onClick={() => buttonClick(button)} key={button.name}>{button.name}</button> : <></>))}
 				</div>
 				{children}
 			</div>
@@ -33,4 +31,4 @@ export default function NavMenu(props) {
 			<div className={`overlay${isOpen ? ' overlay_opened' : ''}`}></div>
 		</>
 	);
-}
+};

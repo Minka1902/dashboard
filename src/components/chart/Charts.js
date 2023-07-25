@@ -1,5 +1,5 @@
 import React from "react";
-import Chart from 'chart.js/auto';
+import Chart from 'chart.js/auto';      //eslint-disable-line
 import { Pie, Bar, Line } from "react-chartjs-2";
 import { formatDate } from "../../constants/functions";
 
@@ -86,10 +86,10 @@ export function LineChart({ chartData, title = 'Please pass a title.', subtitle 
     let data;
     if (chartData !== undefined)
         data = {
-            labels: chartData.map((data) => formatDate(data.checkedAt)),
+            labels: chartData.map((data) => formatDate(data.checkedAt, false)),
             datasets: [{
                 label: label,
-                data: chartData.map((data) => data.percent),
+                data: chartData.map((data) => 100 - data.percent),
                 backgroundColor: [
                     "rgba(75,192,192,1)",
                     "#50AF95",
