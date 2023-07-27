@@ -428,7 +428,7 @@ function App() {
           <Route path='/about-us'>
             <section name='about-us' id='about-us'>
               <h1>Geomage</h1>
-              <p>Geomage is a company founded in 2003 by Nathan Scharff</p>
+              <p>Geomage is a company founded in 2003.</p>
             </section>
           </Route>
 

@@ -17,8 +17,8 @@
 
 .app__chart {
     margin: 0 auto;
-    width: calc(100% - 150px);
-    height: calc(100% - 150px);
+    width: 50%;
+    height: 50%;
 }
 
 .resources {

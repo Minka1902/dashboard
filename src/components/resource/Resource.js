@@ -39,7 +39,7 @@ export default function Resource(props) {
                                 <div className={`resource__reload-icon ${resource.name}`} />
                                 <div className="resource__image_light" title={`Last checked: ${formatDate(resource.lastChecked)}`}></div>
                             </div>
-                            <h3 className={`resource__200_text ${resource.name}`} title={`${calculatePercentage()}%`}><ProgressBar value={100 - calculatePercentage()} maxValue={100} /></h3>
+                            <h3 className={`resource__200_text ${resource.name}`} title={`${100 - calculatePercentage()}%`}><ProgressBar value={100 - calculatePercentage()} maxValue={100} /></h3>
                         </>
                     );
                 } else {
@@ -59,7 +59,7 @@ export default function Resource(props) {
                         resource.memoryLeft ?
                             <div className={`resource__memory_content ${resource.name}`}>
                                 <div className={`resource__reload-icon ${resource.name}`} title={`Last checked: ${formatDate(resource.lastChecked)}`} />
-                                <ProgressBar value={calculatePercentage()} maxValue={100} />
+                                <ProgressBar value={calculatePercentage()} title={`${100 - calculatePercentage()}%`} maxValue={100} />
                             </div>
                             :
                             <></>
