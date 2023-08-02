@@ -1,18 +1,18 @@
-import { changeStringLength } from "../constants/constants";
+import { changeStringLength } from "../constants/functions";
 
 const removePort = () => {
   let url = window.origin;
-  const startIndex = url.indexOf(':');
+  const startIndex = url.indexOf(':', url.indexOf('https:'));
   const endIndex = url.length - 1;
   const newOrigin = changeStringLength(url, endIndex - startIndex);
   return newOrigin;
-}
+};
 
-export const PUBLIC_BASE_URL = `${removePort()}:4001`;
-export const PRIVATE_BASE_URL = `${removePort()}:4004`;
+export const PUBLIC_URL = `${removePort()}:4001`;
+export const PRIVATE_URL = `${removePort()}:4004`;
 
 export const register = (password, email) => {
-  return fetch(`${PUBLIC_BASE_URL}/signup`, {
+  return fetch(`${PUBLIC_URL}/signup`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -26,7 +26,7 @@ export const register = (password, email) => {
 };
 
 export const authorize = (password, email) => {
-  return fetch(`${PUBLIC_BASE_URL}/signin`, {
+  return fetch(`${PUBLIC_URL}/signin`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -40,7 +40,7 @@ export const authorize = (password, email) => {
 };
 
 export const checkToken = (token) => {
-  return fetch(`${PUBLIC_BASE_URL}/users/me`, {
+  return fetch(`${PUBLIC_URL}/users/me`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',

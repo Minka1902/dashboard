@@ -1,4 +1,4 @@
-import { PUBLIC_BASE_URL } from "./auth";
+import { PUBLIC_URL } from "./auth";
 
 class usersApi {
   constructor(props) {
@@ -31,5 +31,5 @@ class usersApi {
 // ! DEBUG API
 // const usersApiOBJ = new usersApi({ auth: '4den6CaDRe58L5Jx85R7E38xpVcn8TZcyqznqZVpKFAjeqqG80eZQc1WCtRNM1Aq', rootUrl: 'http://localhost:3001' });
 // ! REAL API
-const usersApiOBJ = new usersApi({ auth: '4den6CaDRe58L5Jx85R7E38xpVcn8TZcyqznqZVpKFAjeqqG80eZQc1WCtRNM1Aq', rootUrl: PUBLIC_BASE_URL });
+const usersApiOBJ = new usersApi({ auth: '4den6CaDRe58L5Jx85R7E38xpVcn8TZcyqznqZVpKFAjeqqG80eZQc1WCtRNM1Aq', rootUrl: PUBLIC_URL });
 export default usersApiOBJ;

@@ -1624,6 +1624,9 @@
 
 /* plus sign */
 .add-button__sign {
+    position: absolute;
+    margin-left: 18px;
+    margin-top: 3px;
     width: 100%;
     transition-duration: .3s;
     display: flex;

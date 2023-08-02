@@ -545,7 +545,6 @@ export function SvgITunes({ color = '#F66267', isColored = true }) {
     );
 };
 
-
 export function SvgJava({ color = '#000', isColored = true }) {
     return (
         <svg viewBox="0 0 24 24">
@@ -553,7 +552,6 @@ export function SvgJava({ color = '#000', isColored = true }) {
         </svg>
     );
 };
-
 
 export function SvgKickStarter({ color = '#05CE78', isColored = true }) {
     return (

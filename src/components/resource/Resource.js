@@ -2,7 +2,7 @@ import React from "react";
 import Preloader from '../preloader/Preloader';
 import ProgressBar from "../progressBar/ProgressBar";
 import { formatDate } from '../../constants/functions';
-import { changeStringLength } from "../../constants/constants";
+import { changeStringLength } from "../../constants/functions";
 
 export default function Resource(props) {
     const { resource, onClick, isRefresh } = props;

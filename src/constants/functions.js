@@ -1,3 +1,5 @@
+import { shortMonthArray, monthArray, shortMonthArrayLow, memoryUnits } from './constants';
+
 // ! 	gets a HTML string, returns the number of words.
 // TODO findElementByName("<div><h3 class="class__name">hello world!</h3></div>", 'h3');
 // ?  	<h3 class="class__name">hello world!</h3>
@@ -20,7 +22,24 @@ export const wordCount = (text) => {
         }
     }
     return counter;
-}
+};
+
+// ! 	gets a month (august, Aug, 05, 12, 4) and returns the long version
+// TODO findMonth("Aug"); findMonth("8"); findMonth("08"); findMonth("august");
+// ?  	August
+export const findMonth = ({ month, isShortMonth }) => {
+    let index = 0;
+    if (typeof month === "number") {
+        index = month;
+    } else {
+        if (month.length === 3) {
+            index = shortMonthArrayLow.indexOf(`${month}`);
+        } else {
+            index = monthArray.indexOf(`${month}`);
+        }
+    }
+    return isShortMonth ? shortMonthArray[index] : monthArray[index];
+};
 
 // ! 	gets a string and the desired length.
 // TODO changeStringLength("i am michael scharff", 12);
@@ -29,6 +48,7 @@ export const changeStringLength = (str, desiredLength) => {
     while (str.length > desiredLength) {
         str = str.substring(0, str.length - 1);
     }
+    return str;
 };
 
 // ! 	gets a HTML string, the element you want to exclude and true if its a react component. returns only the element.
@@ -50,9 +70,9 @@ export const findElementByName = (str, elementToFind, isReactComponent = false) 
         newStr += str[startIndex + i];
     }
     return newStr;
-}
+};
 
-// ! 	gets an array of numbers and removes all the duplictes from it
+// ! 	gets an array of numbers and removes all the duplicates from it
 // TODO removeDuplicates([1,1,1,2,2,3,4,5,5,5,4])
 // ?  	[1,2,3,4,5]
 export const removeDuplicates = (nums) => {
@@ -305,4 +325,17 @@ export const formatAmount = (amount) => {
         }
         return `${groups.join(",")}.${stringAfterDot}`;
     }
+};
+
+// ! 	gets a number and returns it after some formatting 
+// TODO formatMemory(1656729231360)
+// ?  	"1.6567 TB"
+export const formatMemory = (memory) => {
+    let counter = 0;
+    let tempMem = memory;
+    while (tempMem >= 1000) {
+        counter++;
+        tempMem = tempMem / 1000;
+    }
+    return `${memory === 0 ? 0 : tempMem.toFixed(4)} ${memoryUnits[counter]}`;
 };

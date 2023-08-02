@@ -1,9 +1,9 @@
-import { PUBLIC_BASE_URL, PRIVATE_BASE_URL } from "./auth";
+import { PUBLIC_URL, PRIVATE_URL } from "./auth";
 
 class sourceApi {
     constructor() {
-        this._publicUrl = PUBLIC_BASE_URL;
-        this._privateUrl = PRIVATE_BASE_URL;
+        this._publicUrl = PUBLIC_URL;
+        this._privateUrl = PRIVATE_URL;
     }
 
     _fetch = ({ method = "GET", url, data, isPrivate = false }) =>

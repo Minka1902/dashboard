@@ -70,9 +70,17 @@ export default function RightClickMenu({ items, isLoggedIn }) {
 
     return (
         <div className={`right-click-menu ${isOpen ? 'open' : ''}`} style={{ top: position.y, left: position.x }}>
-            {filteredItems.map((item, index) => (
-                <RightClickItem item={item} key={index} index={index} handleClick={handleItemClick} isNone={handleFilter(evt ? evt.target : undefined, item.filter).found} />
-            ))}
+            {filteredItems.map((item, index) => {
+                if (item.filter !== 'header') {
+                    return <RightClickItem item={item} key={index} index={index} handleClick={handleItemClick} isNone={handleFilter(evt ? evt.target : undefined, item.filter).found} />
+                } else {
+                    if (isLoggedIn) {
+                        return <RightClickItem item={item} key={index} index={index} handleClick={handleItemClick} isNone={handleFilter(evt ? evt.target : undefined, item.filter).found} />
+                    } else {
+                        <></>
+                    }
+                }
+            })}
         </div>
     );
 };

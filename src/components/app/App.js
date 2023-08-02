@@ -8,9 +8,12 @@ import usersApiOBJ from '../../utils/usersApi';
 import collectionApiObj from '../../utils/collectionApi';
 import * as auth from '../../utils/auth';
 import Header from '../header/Header';
+import * as Buttons from '../buttons/Buttons';
 import RightClickMenu from '../rightClickMenu/RightClickMenu';
 import Resource from '../resource/Resource';
 import * as Charts from '../chart/Charts';
+import { formatMemory, formatDate } from '../../constants/functions';
+import Preloader from '../preloader/Preloader';
 import LoginPopup from '../popup/LoginPopup';
 import ConfirmPopup from '../popup/ConfirmPopup';
 import AddSourcePopup from '../popup/AddSourcePopup';
@@ -31,6 +34,7 @@ function App() {
   const [isConfirmPopupOpen, setIsConfirmLoginPopupOpen] = React.useState(false);
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
   const [isRefresh, setIsRefresh] = React.useState(false);
+  const [isPreloader, setIsPreloader] = React.useState(false);
   const [isEditSource, setIsEditSource] = React.useState(false);
   const [chartData, setChartData] = React.useState();
 
@@ -132,7 +136,11 @@ function App() {
     if (evt.target.parentElement.parentElement.parentElement.parentElement.classList.contains(`popup_type_add-source`)) {
       setIsLoginPopupOpen(true);
     } else {
-      setIsAddSourcePopupOpen(true);
+      if (evt.target.classList.contains('signin')) {
+        setIsLoginPopupOpen(true);
+      } else {
+        setIsAddSourcePopupOpen(true);
+      }
     }
   };
 
@@ -160,6 +168,7 @@ function App() {
   };
 
   const resourceClick = (resource, hidePreloader) => {
+    setIsPreloader(true);
     sourceApiOBJ.checkSource(resource.url)
       .then((data) => {
         let newData = { lastActive: data.isActive ? new Date() : resource.lastActive };
@@ -413,10 +422,11 @@ function App() {
           handleButtonClick={openPopup}
           theme={true}
         />
+
         <Switch>
           <Route exact path='/'>
             <section name='home' id='home'>
-              {loggedIn ? <h3 className='app__title'>{currentUser.username}, welcome back!</h3> : <></>}
+              {loggedIn ? <h3 className='app__title'>{currentUser.username}, welcome back!</h3> : <h3 className='app__title'>Welcome.<br />To edit resources please <span className='signin' onClick={switchPopups}>sign in</span>.</h3>}
               <div className='resources' >
                 {resources.length !== 0 ? resources.map((resource, index) => {
                   return <Resource isRefresh={isRefresh} resource={resource} key={index} onClick={resourceClick} />
@@ -433,8 +443,26 @@ function App() {
           </Route>
 
           <ProtectedRoute path={`/resource/${currentResource ? currentResource._id : ''}`} loggedIn={loggedIn && window.innerWidth >= 530}>
-            <h3 className='app__title'>{currentResource ? currentResource.name : ''}</h3>
-            <Charts.LineChart title={{ text: 'Time / Capacity' }} chartClass='app__chart' chartData={chartData} subtitle={false} />
+            <h3 className='app__title'>https://{currentResource ? currentResource.url : ''}</h3>
+            <div className="add-button__container">
+              <Buttons.ButtonAdd title='Reload' buttonText="Reload" onClick={() => { resourceClick(currentResource, () => { setIsPreloader(false) }) }} />
+            </div>
+            <div>
+              {isPreloader ?
+                <Preloader />
+                :
+                <Charts.LineChart title={{ text: 'Time / Capacity' }} chartClass='app__chart' chartData={chartData} subtitle={false} />
+              }
+              <div className='app__resource_info-container'>
+                {currentResource ? <div className='flex row width50 auto around'>
+                  <p className='zero-margin'>Resource: <span className={`${currentResource ? (currentResource.isActive ? 'green' : 'red') : 'red'}`}>{currentResource ? (currentResource.isActive ? 'active' : 'not active') : 'not active'}</span></p>
+                  <p className='zero-margin'>Status: <span className={`${currentResource.status === 200 ? 'green' : 'red'}`}>{currentResource ? currentResource.status : 'Not available'}</span></p>
+                </div> : <></>}
+                {currentResource ? <p className='zero-margin'>Available memory: {formatMemory(currentResource ? currentResource.memoryLeft : 0)} of {formatMemory(currentResource ? currentResource.totalMemory : 0)}</p> : <></>}
+                {currentResource ? <p className='zero-margin'>Last checked: {formatDate(currentResource.lastChecked)}</p> : <></>}
+                {currentResource ? (currentResource.status !== 200 ? <p className='zero-margin'>Last active: {formatDate(currentResource.lastActive)}</p> : <></>) : <></>}
+              </div>
+            </div>
           </ProtectedRoute>
         </Switch>
 

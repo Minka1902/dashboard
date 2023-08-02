@@ -1,6 +1,6 @@
 import React from "react";
 import './buttons.css';
-import { SvgDoubleCheck, SvgSend } from "../../images/SvgComponents";
+import { SvgDoubleCheck, SvgSend, SvgReload } from "../../images/SvgComponents";
 
 export function ButtonGlitch({ buttonText = 'Click Me!', onClick }) {
     return (
