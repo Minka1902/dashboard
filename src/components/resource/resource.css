@@ -124,6 +124,10 @@
     border-bottom: 1px solid rgba(128, 128, 128, 0.384);
 }
 
+#more-button {
+    margin: auto 0;
+}
+
 .resource__reload-icon {
     position: absolute;
     height: 128px;

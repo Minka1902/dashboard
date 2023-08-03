@@ -3,6 +3,7 @@ import Preloader from '../preloader/Preloader';
 import ProgressBar from "../progressBar/ProgressBar";
 import { formatDate } from '../../constants/functions';
 import { changeStringLength } from "../../constants/functions";
+import { SvgMore } from "../../images/SvgComponents";
 
 export default function Resource(props) {
     const { resource, onClick, isRefresh } = props;
@@ -92,6 +93,7 @@ export default function Resource(props) {
             <div className={`resource ${resource.memoryLeft !== undefined ? 'memory' : ''}`} id={resource._id} onClick={resourceClick}>
                 <div className={`resource__name_container ${resource.name}`}>
                     <h3 className={`resource__name ${resource.name}`} title={resource.name}>{formatName(resource.name)}</h3>
+                    <SvgMore />
                 </div>
                 {renderInfo()}
             </div>

@@ -608,3 +608,13 @@ export function SvgXBox({ color = '#2EC839', isColored = true }) {
         </svg>
     );
 };
+
+export function SvgMore({ color = '#000', onClick }) {
+    return (
+        <svg viewBox="0 0 24 24" onClick={onClick} id='more-button'>
+            <path stroke={color} id='more-button' fill={color} fillRule="evenodd" d="M12 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" clipRule="evenodd"></path>
+            <path stroke={color} id='more-button' fill={color} fillRule="evenodd" d="M12 9a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" clipRule="evenodd"></path>
+            <path stroke={color} id='more-button' fill={color} fillRule="evenodd" d="M12 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" clipRule="evenodd"></path>
+        </svg>
+    );
+};

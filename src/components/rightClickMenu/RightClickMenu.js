@@ -42,7 +42,9 @@ export default function RightClickMenu({ items, isLoggedIn }) {
         //! closing the menu when the user clicks outside of it
         const closeMenu = (evt) => {
             if (!evt.target.classList.contains('menu-item') && !evt.target.classList.contains('right-click-menu')) {
-                setIsOpen(false);
+                if (evt.target.id !== 'more-button') {
+                    setIsOpen(false);
+                }
             }
         };
         //! closing the menu when the user clicks the ESCAPE key
@@ -55,13 +57,24 @@ export default function RightClickMenu({ items, isLoggedIn }) {
         const closeWhenScroll = () => {
             setIsOpen(false);
         };
+        //! opening the menu when the user clicks on the more button
+        const handleMoreClick = (event) => {
+            event.preventDefault();
+            setEvt(event);
+            if (event.target.id === 'more-button') {
+                setIsOpen(true);
+                setPosition({ x: event.clientX, y: event.clientY });
+            }
+        };
 
         document.addEventListener('contextmenu', handleContextMenu);
+        document.addEventListener('click', handleMoreClick);
         document.addEventListener('click', closeMenu);
         document.addEventListener('keydown', closeByEscape);
         document.addEventListener('scroll', closeWhenScroll);
         return () => {
             document.removeEventListener('contextmenu', handleContextMenu);
+            document.removeEventListener('click', handleMoreClick);
             document.removeEventListener('click', closeMenu);
             document.removeEventListener('keydown', closeByEscape);
             document.removeEventListener('scroll', closeWhenScroll);
@@ -77,7 +90,7 @@ export default function RightClickMenu({ items, isLoggedIn }) {
                     if (isLoggedIn) {
                         return <RightClickItem item={item} key={index} index={index} handleClick={handleItemClick} isNone={handleFilter(evt ? evt.target : undefined, item.filter).found} />
                     } else {
-                        <></>
+                        return <></>
                     }
                 }
             })}
