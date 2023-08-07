@@ -129,7 +129,7 @@ export default function LoginPopup(props) {
               value={password}
               onChange={(evt) => setPassword(evt.currentTarget.value)}
             />
-            <button className='popup__input_show-password-button' onClick={handleTogglePasswordVisibility}>
+            <button type='button' className='popup__input_show-password-button' onClick={handleTogglePasswordVisibility}>
               {isTypePassword ?
                 <Svgs.SvgEye /> :
                 <Svgs.SvgNotEye />}
@@ -138,7 +138,7 @@ export default function LoginPopup(props) {
           <p className={`popup__error-massage${isPasswordCorrect ? '' : '_visible'}${shouldAddSSign ? '_visible' : ''}`}>{passwordErrorText}</p>
           <p className={`popup__error-massage${isFound ? '' : '_visible'}`}>User not found</p>
         </PopupWithForm> :
-        <PopupWithForm onSubmit={onSignOut} isValid={true} handleSwitchPopup={handleSwitchPopup} linkText={linkText} name="login" title="Sign out" isOpen={isOpen} onClose={onClose} buttonText='I know, sign out anyway.'>
+        <PopupWithForm onSubmit={onSignOut} isValid={true} handleSwitchPopup={handleSwitchPopup} linkText={linkText} name="login" title="Sign out" isOpen={isOpen} onClose={onClose} buttonText='Sign out anyway'>
           <h3>{currentUser ? currentUser.username : ''}, you are already signed in.</h3 >
         </PopupWithForm>}
     </>

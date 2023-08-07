@@ -17,7 +17,7 @@ export default function PopupWithForm(props) {
 				<h2 className="popup__title">{title}</h2>
 				<form onSubmit={onSubmit} className={`popup__form form-${name}`} name={name}>
 					{children}
-					<button type="submit" className={`popup__button${isValid ? '' : '_invalid'}`}>
+					<button type="submit" onClick={onSubmit} className={`popup__button${isValid ? '' : '_invalid'}`}>
 						{buttonText}
 					</button>
 					{linkText ? <h3 className="popup__link-text">or <Link onClick={handleLinkClick} to={buttonText === 'Sign in' ? "/add-source" : "/"} className="popup__link">{linkText}</Link> </h3> : <></>}
