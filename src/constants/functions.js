@@ -330,7 +330,7 @@ export const formatAmount = (amount) => {
 // ! 	gets a number and returns it after some formatting 
 // TODO formatMemory(1656729231360)
 // ?  	"1.6567 TB"
-export const formatMemory = (memory) => {
+export const formatMemory = (memory = 0) => {
     let counter = 0;
     let tempMem = memory;
     while (tempMem >= 1000) {
