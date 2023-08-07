@@ -95,6 +95,9 @@
 
 	.footer__link {
 		text-align: left;
+		height: min-content;
+		font-size: 13px;
+		line-height: 16px;
 	}
 
 	.footer__link:last-child {
@@ -103,6 +106,8 @@
 
 	.footer__text {
 		margin: 10px auto 5px;
+		font-size: 13px;
+		line-height: 16px;
 	}
 }
 
