@@ -82,7 +82,7 @@ export function BarChart({ chartData, title = defTitle, subtitle = defSubtitle, 
     );
 };
 
-export function LineChart({ chartData, title = 'Please pass a title.', subtitle = defSubtitle, chartClass = 'chart-bar-container', label }) {
+export function LineChart({ chartData, title = 'Please pass a title.', subtitle = defSubtitle, chartClass = 'chart-bar-container', label, isXZero = false, isYZero = false }) {
     let data;
     if (chartData !== undefined)
         data = {
@@ -91,12 +91,7 @@ export function LineChart({ chartData, title = 'Please pass a title.', subtitle 
                 label: label,
                 data: chartData.map((data) => 100 - data.percent),
                 backgroundColor: [
-                    "rgba(75,192,192,1)",
-                    "#50AF95",
-                    "#a31a2f",
-                    "#af5a2f",
-                    "#f3ba2f",
-                    "#ffffff"
+                    '#ABCDEF',
                 ],
                 borderColor: "black",
                 borderWidth: 2
@@ -108,6 +103,14 @@ export function LineChart({ chartData, title = 'Please pass a title.', subtitle 
             <Line
                 data={data}
                 options={{
+                    scales: {
+                        y: {
+                            beginAtZero: isYZero,
+                        },
+                        x: {
+                            beginAtZero: isXZero
+                        }
+                    },
                     plugins: {
                         title: {
                             display: true,
@@ -123,7 +126,7 @@ export function LineChart({ chartData, title = 'Please pass a title.', subtitle 
                         },
                         legend: {
                             display: false
-                        }
+                        },
                     }
                 }}
             />
@@ -131,7 +134,7 @@ export function LineChart({ chartData, title = 'Please pass a title.', subtitle 
     );
     else return (
         <div>
-            you have no data
+            You have no data.
         </div>
     );
 };
