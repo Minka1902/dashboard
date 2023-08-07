@@ -611,10 +611,40 @@ export function SvgXBox({ color = '#2EC839', isColored = true }) {
 
 export function SvgMore({ color = '#000', onClick }) {
     return (
-        <svg viewBox="0 0 24 24" onClick={onClick} id='more-button'>
+        <svg onClick={onClick} id='more-button'>
             <path stroke={color} id='more-button' fill={color} fillRule="evenodd" d="M12 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" clipRule="evenodd"></path>
             <path stroke={color} id='more-button' fill={color} fillRule="evenodd" d="M12 9a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" clipRule="evenodd"></path>
             <path stroke={color} id='more-button' fill={color} fillRule="evenodd" d="M12 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" clipRule="evenodd"></path>
         </svg>
+    );
+};
+
+export function SvgMail({ color = '', isColored = true, title = 'Email' }) {
+    return (
+        <div title={title}>
+            <svg viewBox="0 0 24 24">
+                <path fill={isColored ? '#FC3F1D' : color} stroke='transparent' d="M5.856 6.84a.75.75 0 0 0-1.106.66V17a.75.75 0 0 0 1.5 0V8.756l5.394 2.904c.222.12.49.12.712 0l5.394-2.904V17a.75.75 0 0 0 1.5 0V7.5a.75.75 0 0 0-1.106-.66L12 10.148 5.856 6.84Z"></path>
+                <path fill={isColored ? '#4e4e4e' : color} stroke='transparent' fillRule="evenodd" d="M17.31 3.722a59.632 59.632 0 0 0-10.62 0l-1.518.135a3.53 3.53 0 0 0-3.179 3.006 35.508 35.508 0 0 0 0 10.274 3.53 3.53 0 0 0 3.18 3.005l1.516.136c3.534.316 7.088.316 10.622 0l1.517-.136a3.53 3.53 0 0 0 3.179-3.005 35.508 35.508 0 0 0 0-10.274 3.53 3.53 0 0 0-3.18-3.006l-1.516-.135ZM6.824 5.216a58.133 58.133 0 0 1 10.354 0l1.517.136a2.03 2.03 0 0 1 1.829 1.728 34.005 34.005 0 0 1 0 9.84 2.03 2.03 0 0 1-1.829 1.728l-1.517.136c-3.444.308-6.91.308-10.354 0l-1.517-.136a2.03 2.03 0 0 1-1.829-1.728 34.008 34.008 0 0 1 0-9.84 2.03 2.03 0 0 1 1.829-1.728l1.517-.136Z" clipRule="evenodd"></path>
+            </svg>
+        </div>
+    );
+}
+
+export function SvgSignOut({ color = '#000' }) {
+    return (
+        <svg viewBox="0 0 18 16">
+            <path fillRule="evenodd" clipRule="evenodd" d="M6 2L2 2L2 14H6V16H2C0.89543 16 0 15.1046 0 14V2C0 0.89543 0.895432 0 2 0H6V2ZM13.5856 9.00002L9.29274 13.1339L10.707 14.4958L17.4141 8.03706L10.707 1.57837L9.29274 2.9402L13.5856 7.0741H4V9.00002H13.5856Z" fill={color} />
+        </svg>
+    );
+};
+
+export function SvgPhone({ color = '4e4e4e', title = 'Phone' }) {
+    return (
+        <div title={title}>
+            <svg fill={color} viewBox="0 0 24 24">
+                <path fill={color} stroke='transparent' d="M16.57 22.002a2 2 0 0 0 1.43-.59l2.71-2.71a1 1 0 0 0 0-1.41l-4-4a1 1 0 0 0-1.41 0l-1.6 1.59a7.55 7.55 0 0 1-3-1.59 7.62 7.62 0 0 1-1.59-3l1.59-1.6a1 1 0 0 0 0-1.41l-4-4a1 1 0 0 0-1.41 0l-2.7 2.72A2 2 0 0 0 2 7.432a15.28 15.28 0 0 0 4.3 10.27 15.28 15.28 0 0 0 10.27 4.3ZM6 5.412l2.59 2.59-1.29 1.29a1 1 0 0 0-.3.91 10.12 10.12 0 0 0 2.3 4.5 10.08 10.08 0 0 0 4.5 2.3 1 1 0 0 0 .91-.27l1.29-1.32 2.59 2.59-2 2a13.28 13.28 0 0 1-8.87-3.71A13.28 13.28 0 0 1 4 7.412l2-2Zm14 5.59h2a8.809 8.809 0 0 0-9-9v2a6.77 6.77 0 0 1 7 7Z"></path>
+                <path fill={color} stroke='transparent' d="M13 8c2.1 0 3 .9 3 3h2c0-3.22-1.78-5-5-5v2Z"></path>
+            </svg>
+        </div>
     );
 };
