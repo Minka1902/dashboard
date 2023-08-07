@@ -1,6 +1,12 @@
 /* ! app */
 @import url('./components/app/app.css');
 
+/* ! cards */
+@import url('./components/cards/cards.css');
+
+/* ! about us */
+@import url('./components/aboutus/aboutUs.css');
+
 /* ! rightClickMenu */
 @import url('./components/rightClickMenu/rightClickMenu.css');
 
@@ -12,6 +18,9 @@
 
 /* ! header */
 @import url('./components/header/header.css');
+
+/* ! main */
+@import url('./components/main/main.css');
 
 /* ! navbar */
 @import url('./components/navBar/navBar.css');
