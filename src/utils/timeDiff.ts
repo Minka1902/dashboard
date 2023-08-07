@@ -5,10 +5,34 @@
  * @returns ISO Formatted date string YYYY-MM-DD
  */
 
- const reduceDays = (date: Date, n: number): string => {
+const reduceMinute = (date: Date, n: number): string => {
+	const newDate = new Date(date);
+	newDate.setMinutes(newDate.getMinutes() - n);
+	return newDate.toISOString();
+};
+
+const reduceHour = (date: Date, n: number): string => {
+	const newDate = new Date(date);
+	newDate.setHours(newDate.getHours() - n);
+	return newDate.toISOString();
+};
+
+const reduceDays = (date: Date, n: number): string => {
 	const newDate = new Date(date);
 	newDate.setDate(newDate.getDate() - n);
 	return newDate.toISOString().substring(0, 10);
-  };
-  
-  export { reduceDays };
+};
+
+const reduceMonth = (date: Date, n: number): string => {
+	const newDate = new Date(date);
+	newDate.setMonth(newDate.getMonth() - n);
+	return newDate.toISOString().substring(0, 10);
+};
+
+const reduceYear = (date: Date, n: number): string => {
+	const newDate = new Date(date);
+	newDate.setFullYear(newDate.getFullYear() - n);
+	return newDate.toISOString().substring(0, 10);
+};
+
+export { reduceMinute, reduceHour, reduceDays, reduceMonth, reduceYear };
