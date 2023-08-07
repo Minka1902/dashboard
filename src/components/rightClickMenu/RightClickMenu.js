@@ -89,9 +89,8 @@ export default function RightClickMenu({ items, isLoggedIn }) {
                 } else {
                     if (isLoggedIn) {
                         return <RightClickItem item={item} key={index} index={index} handleClick={handleItemClick} isNone={handleFilter(evt ? evt.target : undefined, item.filter).found} />
-                    } else {
-                        return <></>
                     }
+                    return null;
                 }
             })}
         </div>

@@ -8,15 +8,17 @@ import usersApiOBJ from '../../utils/usersApi';
 import collectionApiObj from '../../utils/collectionApi';
 import * as auth from '../../utils/auth';
 import Header from '../header/Header';
+import AboutUs from '../aboutus/AboutUs';
 import * as Buttons from '../buttons/Buttons';
 import RightClickMenu from '../rightClickMenu/RightClickMenu';
-import Resource from '../resource/Resource';
+import Main from '../main/Main';
 import * as Charts from '../chart/Charts';
 import { formatMemory, formatDate } from '../../constants/functions';
 import Preloader from '../preloader/Preloader';
 import LoginPopup from '../popup/LoginPopup';
 import ConfirmPopup from '../popup/ConfirmPopup';
 import AddSourcePopup from '../popup/AddSourcePopup';
+import { reduceHour } from '../../utils/timeDiff.ts';
 import Footer from '../footer/Footer';
 
 function App() {
@@ -34,6 +36,7 @@ function App() {
   const [isConfirmPopupOpen, setIsConfirmLoginPopupOpen] = React.useState(false);
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
   const [isRefresh, setIsRefresh] = React.useState(false);
+  const [isFromZero, setIsFromZero] = React.useState(true);
   const [isPreloader, setIsPreloader] = React.useState(false);
   const [isEditSource, setIsEditSource] = React.useState(false);
   const [chartData, setChartData] = React.useState();
@@ -328,6 +331,12 @@ function App() {
       });
   };
 
+  const changeFromZero = (isFound) => {
+    if (isFound.found) {
+      setIsFromZero(!isFromZero);
+    }
+  };
+
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!!     ROUTE handling     !!!!!!!!!!!!!!
   // ???????????????????????????????????????????????????
@@ -368,6 +377,11 @@ function App() {
     { buttonText: 'edit resource', buttonClicked: editClicked, filter: 'resource', isAllowed: false },
     { buttonText: 'watch resource', buttonClicked: handleWatchResource, filter: 'memory', isAllowed: false },
     { buttonText: 'delete resource', buttonClicked: deleteClicked, filter: 'resource', isAllowed: false },
+    { buttonText: `Percent from ${isFromZero ? 'lowest' : 'zero'}`, buttonClicked: changeFromZero, filter: 'app__chart', isAllowed: true },
+  ];
+
+  const theTeam = [
+    { name: 'nathan scharff', title: 'Founder & CEO', image: require('../../images/nathan-scharff.jpg'), social: { linkedin: 'https://www.linkedin.com/in/nathanscharff', } },
   ];
 
   // ???????????????????????????????????????????????????
@@ -425,44 +439,39 @@ function App() {
 
         <Switch>
           <Route exact path='/'>
-            <section name='home' id='home'>
-              {loggedIn ? <h3 className='app__title'>{currentUser.username}, welcome back!</h3> : <h3 className='app__title'>Welcome.<br />To edit resources please <span className='signin' onClick={switchPopups}>sign in</span>.</h3>}
-              <div className='resources' >
-                {resources.length !== 0 ? resources.map((resource, index) => {
-                  return <Resource isRefresh={isRefresh} resource={resource} key={index} onClick={resourceClick} />
-                }) : <></>}
-              </div>
-            </section>
+            <Main
+              resources={resources.length !== 0 ? resources : []}
+              isRefresh={isRefresh}
+              resourceClick={resourceClick}
+              switchPopups={switchPopups}
+            />
           </Route>
 
           <Route path='/about-us'>
-            <section name='about-us' id='about-us'>
-              <h1>Geomage</h1>
-              <p>Geomage is a company founded in 2003.</p>
-            </section>
+            <AboutUs people={theTeam} />
           </Route>
 
           <ProtectedRoute path={`/resource/${currentResource ? currentResource._id : ''}`} loggedIn={loggedIn && window.innerWidth >= 530}>
-            <h3 className='app__title'>https://{currentResource ? currentResource.url : ''}</h3>
-            <div className="add-button__container">
-              <Buttons.ButtonAdd title='Reload' buttonText="Reload" onClick={() => { resourceClick(currentResource, () => { setIsPreloader(false) }) }} />
-            </div>
-            <div>
+            <section name='watch-resource' id='watch-resource'>
+              <h3 className='section__title'>https://{currentResource ? currentResource.url : ''}</h3>
+              <div className="add-button__container">
+                <Buttons.ButtonAdd title='Reload' buttonText="Reload" onClick={() => { resourceClick(currentResource, () => { setIsPreloader(false) }) }} />
+              </div>
               {isPreloader ?
                 <Preloader />
                 :
-                <Charts.LineChart title={{ text: 'Time / Capacity' }} chartClass='app__chart' chartData={chartData} subtitle={false} />
+                <Charts.LineChart title={{ text: 'Time / % capacity in use' }} chartClass='app__chart' chartData={chartData} subtitle={false} isYZero={isFromZero} />
               }
               <div className='app__resource_info-container'>
                 {currentResource ? <div className='flex row width50 auto around'>
-                  <p className='zero-margin'>Resource: <span className={`${currentResource ? (currentResource.isActive ? 'green' : 'red') : 'red'}`}>{currentResource ? (currentResource.isActive ? 'active' : 'not active') : 'not active'}</span></p>
-                  <p className='zero-margin'>Status: <span className={`${currentResource.status === 200 ? 'green' : 'red'}`}>{currentResource ? currentResource.status : 'Not available'}</span></p>
+                  <p className='zero-margin'>Resource: <span className={`${reduceHour(currentResource.lastChecked, 1) < new Date() ? (currentResource.isActive ? 'green' : 'red') : 'red'}`}>{reduceHour(currentResource.lastChecked, 1) < new Date() ? (currentResource.isActive ? 'active' : 'not active') : 'not active'}</span></p>
+                  <p className='zero-margin'>Status: <span className={`${reduceHour(currentResource.lastChecked, 1) < new Date() ? 'green' : 'red'}`}>{reduceHour(currentResource.lastChecked, 1) < new Date() ? currentResource.status : 'Not available'}</span></p>
                 </div> : <></>}
-                {currentResource ? <p className='zero-margin'>Available memory: {formatMemory(currentResource ? currentResource.memoryLeft : 0)} of {formatMemory(currentResource ? currentResource.totalMemory : 0)}</p> : <></>}
+                {currentResource ? <p className='zero-margin'>{reduceHour(currentResource.lastChecked, 1) < new Date() ? 'A' : 'Last a'}vailable memory: {formatMemory(currentResource ? currentResource.memoryLeft : 0)} of {formatMemory(currentResource ? currentResource.totalMemory : 0)}</p> : <></>}
                 {currentResource ? <p className='zero-margin'>Last checked: {formatDate(currentResource.lastChecked)}</p> : <></>}
                 {currentResource ? (currentResource.status !== 200 ? <p className='zero-margin'>Last active: {formatDate(currentResource.lastActive)}</p> : <></>) : <></>}
               </div>
-            </div>
+            </section>
           </ProtectedRoute>
         </Switch>
 

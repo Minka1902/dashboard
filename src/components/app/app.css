@@ -5,7 +5,7 @@
     height: 100vh;
 }
 
-.app__title {
+.section__title {
     margin: 0 auto;
     text-align: center;
 }
@@ -17,8 +17,8 @@
 
 .app__chart {
     margin: 0 auto;
-    width: 50%;
-    height: 50%;
+    width: clamp(500px, calc(100% - 40px), 900px);
+    height: clamp(250px, calc(100% - 40px), 450px);
 }
 
 .flex {
@@ -53,12 +53,12 @@
     color: rgb(255, 0, 0);
 }
 
-.signin{
+.signin {
     color: rgb(0, 105, 204);
     cursor: pointer;
 }
 
-.signin:hover{
+.signin:hover {
     color: rgb(0, 80, 150);
 }
 
@@ -71,7 +71,7 @@
     transition: .3s;
 }
 
-.app__resource_info-container{
+.app__resource_info-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -82,39 +82,33 @@
     opacity: 1;
 }
 
-.resources {
-    margin: 10px auto 0 auto;
-    display: grid;
-    grid-template-columns: 130px 130px 130px 130px 130px;
-    grid-template-rows: 180px;
-    grid-gap: 15px;
-    width: min-content;
-}
-
 section {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding-bottom: 80px;
 }
 
 @media screen and (max-width: 300px) {
-    .resources {
-        grid-template-columns: 130px;
-        grid-template-rows: 180px;
-        padding-bottom: 40px;
+    section {
+        padding-bottom: 34px;
     }
 }
 
 @media screen and (min-width: 300.5px) and (max-width: 500px) {
-    .resources {
-        grid-template-columns: 130px 130px;
-        padding-bottom: 65px;
+    section {
+        padding-bottom: 47px;
     }
 }
 
 @media screen and (min-width: 500.5px) and (max-width: 800px) {
-    .resources {
-        grid-template-columns: 130px 130px 130px;
-        padding-bottom: 38px;
+    section {
+        padding-bottom: 32px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .add-button__container {
+        top: 84px;
     }
 }
