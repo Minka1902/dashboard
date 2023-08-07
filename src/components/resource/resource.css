@@ -34,6 +34,16 @@
     box-sizing: border-box;
 }
 
+.resource__more-button {
+    margin-top: 2px;
+    opacity: 0.6;
+    height: 24px;
+}
+
+.resource__more-button:hover{
+    opacity: 1;
+}
+
 .resource__image_light {
     width: 76px;
     height: 76px;
@@ -100,20 +110,6 @@
 
 .no-memory {
     height: 154px;
-}
-
-.resource__button {
-    background-image: url('../../images/delete-icon.svg');
-    background-color: transparent;
-    background-repeat: no-repeat;
-    width: 20px;
-    height: 20px;
-    border: none;
-    margin: 3px 4px 0 0;
-}
-
-.resource__button:hover {
-    background-image: url('../../images/delete-icon_hover.svg');
 }
 
 .resource__name_container {
