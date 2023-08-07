@@ -2,6 +2,7 @@ import React from "react";
 import Preloader from '../preloader/Preloader';
 import ProgressBar from "../progressBar/ProgressBar";
 import { formatDate } from '../../constants/functions';
+import { reduceHour } from "../../utils/timeDiff.ts";
 import { changeStringLength } from "../../constants/functions";
 import { SvgMore } from "../../images/SvgComponents";
 
@@ -13,8 +14,8 @@ export default function Resource(props) {
 
     const resourceClick = (evt) => {
         evt.preventDefault();
-        if (!evt.target.classList.contains('resource__button')) {
-            if (evt.target.classList.contains('resource__reload-icon')) {
+        if (evt.target.classList.length !== 0 && !evt.target.classList.contains("preloader__circle")) {
+            if (evt.target.classList.contains('resource__reload-icon') || evt.target.previousSibling.classList.contains('resource__reload-icon')) {
                 setIsPreloader(true);
                 onClick(resource, setIsPreloaderFalse);
             }
@@ -88,12 +89,21 @@ export default function Resource(props) {
         }
     }, [isRefresh]);   //eslint-disable-line
 
+    React.useEffect(() => { // * starting the interval to check for new sources
+        const interval = setInterval(() => {
+
+        }, (10 * 1000));
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <>
             <div className={`resource ${resource.memoryLeft !== undefined ? 'memory' : ''}`} id={resource._id} onClick={resourceClick}>
                 <div className={`resource__name_container ${resource.name}`}>
                     <h3 className={`resource__name ${resource.name}`} title={resource.name}>{formatName(resource.name)}</h3>
-                    <SvgMore />
+                    <div className="resource__more-button" title={`More options`}>
+                        <SvgMore />
+                    </div>
                 </div>
                 {renderInfo()}
             </div>
