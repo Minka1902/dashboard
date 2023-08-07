@@ -1,0 +1,40 @@
+.the-team {
+    margin: 10px auto;
+    display: grid;
+    grid-template-columns: 200px 200px 200px;
+    grid-template-rows: 250px;
+    grid-gap: 15px;
+}
+
+.about-us__copy-message {
+    position: fixed;
+    width: 170px;
+    height: 26px;
+    text-align: center;
+    top: calc(50% - 13px);
+    left: calc(50% - 85px);
+    opacity: 0;
+    background-color: #ccc;
+    border: 1px solid #7e7e7e;
+}
+
+.less-width {
+    width: 100px;
+    left: calc(50% - 50px);
+}
+
+.copied {
+    opacity: 1;
+}
+
+@media screen and (max-width: 704px) {
+    .the-team {
+        grid-template-columns: 200px;
+    }
+}
+
+@media screen and (min-width: 500px) and (max-width: 704px) {
+    .the-team {
+        grid-template-columns: 200px 200px;
+    }
+}
