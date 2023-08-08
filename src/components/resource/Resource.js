@@ -14,9 +14,11 @@ export default function Resource(props) {
     const resourceClick = (evt) => {
         evt.preventDefault();
         if (evt.target.classList.length !== 0 && !evt.target.classList.contains("preloader__circle")) {
-            if (evt.target.classList.contains('resource__reload-icon') || evt.target.previousSibling.classList.contains('resource__reload-icon')) {
-                setIsPreloader(true);
-                onClick(resource, setIsPreloaderFalse);
+            if (evt.target.classList.contains('resource__reload-icon') || evt.target.previousSibling !== null) {
+                if (evt.target.previousSibling.classList.contains('resource__reload-icon')) {
+                    setIsPreloader(true);
+                    onClick(resource, setIsPreloaderFalse);
+                }
             }
         }
     };
