@@ -15,44 +15,6 @@
     position: relative;
 }
 
-.app__chart {
-    margin: 0 auto;
-    width: clamp(500px, calc(100% - 40px), 900px);
-    height: clamp(250px, calc(100% - 40px), 450px);
-}
-
-.flex {
-    display: flex;
-}
-
-.row {
-    flex-direction: row;
-}
-
-.width50 {
-    width: 50%;
-}
-
-.auto {
-    margin: auto;
-}
-
-.around {
-    justify-content: space-around;
-}
-
-.zero-margin {
-    margin: 0;
-}
-
-.green {
-    color: rgb(0, 255, 20);
-}
-
-.red {
-    color: rgb(255, 0, 0);
-}
-
 .signin {
     color: rgb(0, 105, 204);
     cursor: pointer;
@@ -60,26 +22,6 @@
 
 .signin:hover {
     color: rgb(0, 80, 150);
-}
-
-.add-button__container {
-    position: fixed;
-    top: 74px;
-    right: 10px;
-    z-index: 1;
-    opacity: 0.7;
-    transition: .3s;
-}
-
-.app__resource_info-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.add-button__container:hover {
-    opacity: 1;
 }
 
 section {
@@ -104,11 +46,5 @@ section {
 @media screen and (min-width: 500.5px) and (max-width: 800px) {
     section {
         padding-bottom: 32px;
-    }
-}
-
-@media screen and (min-width: 1200px) {
-    .add-button__container {
-        top: 84px;
     }
 }

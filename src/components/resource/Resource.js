@@ -2,7 +2,6 @@ import React from "react";
 import Preloader from '../preloader/Preloader';
 import ProgressBar from "../progressBar/ProgressBar";
 import { formatDate } from '../../constants/functions';
-import { reduceHour } from "../../utils/timeDiff.ts";
 import { changeStringLength } from "../../constants/functions";
 import { SvgMore } from "../../images/SvgComponents";
 

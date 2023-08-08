@@ -37,6 +37,9 @@
 /* ! Footer */
 @import url('./components/footer/footer.css');
 
+/* ! watch resource */
+@import url('./components/watchResource/watchResource.css');
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

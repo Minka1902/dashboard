@@ -9,16 +9,12 @@ import collectionApiObj from '../../utils/collectionApi';
 import * as auth from '../../utils/auth';
 import Header from '../header/Header';
 import AboutUs from '../aboutus/AboutUs';
-import * as Buttons from '../buttons/Buttons';
+import WatchResource from '../watchResource/WatchResource';
 import RightClickMenu from '../rightClickMenu/RightClickMenu';
 import Main from '../main/Main';
-import * as Charts from '../chart/Charts';
-import { formatMemory, formatDate } from '../../constants/functions';
-import Preloader from '../preloader/Preloader';
 import LoginPopup from '../popup/LoginPopup';
 import ConfirmPopup from '../popup/ConfirmPopup';
 import AddSourcePopup from '../popup/AddSourcePopup';
-import { reduceHour } from '../../utils/timeDiff.ts';
 import Footer from '../footer/Footer';
 
 function App() {
@@ -377,7 +373,7 @@ function App() {
     { buttonText: 'edit resource', buttonClicked: editClicked, filter: 'resource', isAllowed: false },
     { buttonText: 'watch resource', buttonClicked: handleWatchResource, filter: 'memory', isAllowed: false },
     { buttonText: 'delete resource', buttonClicked: deleteClicked, filter: 'resource', isAllowed: false },
-    { buttonText: `Percent from ${isFromZero ? 'lowest' : 'zero'}`, buttonClicked: changeFromZero, filter: 'app__chart', isAllowed: true },
+    { buttonText: `Percent from ${isFromZero ? 'lowest' : 'zero'}`, buttonClicked: changeFromZero, filter: 'watch-resource__chart', isAllowed: true },
   ];
 
   const theTeam = [
@@ -452,26 +448,13 @@ function App() {
           </Route>
 
           <ProtectedRoute path={`/resource/${currentResource ? currentResource._id : ''}`} loggedIn={loggedIn && window.innerWidth >= 530}>
-            <section name='watch-resource' id='watch-resource'>
-              <h3 className='section__title'>https://{currentResource ? currentResource.url : ''}</h3>
-              <div className="add-button__container">
-                <Buttons.ButtonAdd title='Reload' buttonText="Reload" onClick={() => { resourceClick(currentResource, () => { setIsPreloader(false) }) }} />
-              </div>
-              {isPreloader ?
-                <Preloader />
-                :
-                <Charts.LineChart title={{ text: 'Time / % capacity in use' }} chartClass='app__chart' chartData={chartData} subtitle={false} isYZero={isFromZero} />
-              }
-              <div className='app__resource_info-container'>
-                {currentResource ? <div className='flex row width50 auto around'>
-                  <p className='zero-margin'>Resource: <span className={`${reduceHour(currentResource.lastChecked, 1) < new Date() ? (currentResource.isActive ? 'green' : 'red') : 'red'}`}>{reduceHour(currentResource.lastChecked, 1) < new Date() ? (currentResource.isActive ? 'active' : 'not active') : 'not active'}</span></p>
-                  <p className='zero-margin'>Status: <span className={`${reduceHour(currentResource.lastChecked, 1) < new Date() ? 'green' : 'red'}`}>{reduceHour(currentResource.lastChecked, 1) < new Date() ? currentResource.status : 'Not available'}</span></p>
-                </div> : <></>}
-                {currentResource ? <p className='zero-margin'>{reduceHour(currentResource.lastChecked, 1) < new Date() ? 'A' : 'Last a'}vailable memory: {formatMemory(currentResource ? currentResource.memoryLeft : 0)} of {formatMemory(currentResource ? currentResource.totalMemory : 0)}</p> : <></>}
-                {currentResource ? <p className='zero-margin'>Last checked: {formatDate(currentResource.lastChecked)}</p> : <></>}
-                {currentResource ? (currentResource.status !== 200 ? <p className='zero-margin'>Last active: {formatDate(currentResource.lastActive)}</p> : <></>) : <></>}
-              </div>
-            </section>
+            <WatchResource
+              chartData={chartData}
+              resourceClick={resourceClick}
+              isFromZero={isFromZero}
+              isPreloader={isPreloader}
+              setIsPreloader={setIsPreloader}
+            />
           </ProtectedRoute>
         </Switch>
 
