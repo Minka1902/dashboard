@@ -615,30 +615,27 @@
 /* !!!!!!!!!!!!!!!!      FOLLOW      !!!!!!!!!!!!!!!!! */
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
-.main {
+.button-follow {
     display: flex;
     flex-direction: column;
     gap: 0.5em;
 }
 
-.up {
+.button-follow__part {
     display: flex;
     flex-direction: row;
     gap: 0.5em;
 }
 
-.down {
-    display: flex;
-    flex-direction: row;
-    gap: 0.5em;
-}
-
-.card1 {
+.button-follow__card {
     width: 90px;
     height: 90px;
     outline: none;
     border: none;
     background: white;
+}
+
+.card1 {
     border-radius: 90px 5px 5px 5px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     transition: .2s ease-in-out;
@@ -651,11 +648,6 @@
 }
 
 .card2 {
-    width: 90px;
-    height: 90px;
-    outline: none;
-    border: none;
-    background: white;
     border-radius: 5px 90px 5px 5px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     transition: .2s ease-in-out;
@@ -668,11 +660,6 @@
 }
 
 .card3 {
-    width: 90px;
-    height: 90px;
-    outline: none;
-    border: none;
-    background: white;
     border-radius: 5px 5px 5px 90px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     transition: .2s ease-in-out;
@@ -684,11 +671,6 @@
 }
 
 .card4 {
-    width: 90px;
-    height: 90px;
-    outline: none;
-    border: none;
-    background: white;
     border-radius: 5px 5px 90px 5px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     transition: .2s ease-in-out;
@@ -700,44 +682,32 @@
     fill: #8c9eff;
 }
 
-.card1:hover {
+.card1:hover .follow-instagram,
+.card2:hover .follow-twitter,
+.card3:hover .follow-github,
+.card4:hover .follow-linkedin {
+    fill: #FFFFFF;
+}
+
+.button-follow__card:hover {
     cursor: pointer;
     scale: 1.1;
+}
+
+.card1:hover {
     background: linear-gradient(90deg, #ecfd02 0%, #f700ff 100%);
 }
 
-.card1:hover .follow-instagram {
-    fill: white;
-}
-
 .card2:hover {
-    cursor: pointer;
-    scale: 1.1;
     background-color: #03A9F4;
 }
 
-.card2:hover .follow-twitter {
-    fill: white;
-}
-
 .card3:hover {
-    cursor: pointer;
-    scale: 1.1;
     background-color: black;
 }
 
-.card3:hover .follow-github {
-    fill: white;
-}
-
 .card4:hover {
-    cursor: pointer;
-    scale: 1.1;
     background-color: #8c9eff;
-}
-
-.card4:hover .follow-linkedin {
-    fill: white;
 }
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
@@ -1646,7 +1616,7 @@
     fill: #FFFFFF;
 }
 
-.add-button:hover .no-rotate svg{
+.add-button:hover .no-rotate svg {
     animation: none;
 }
 

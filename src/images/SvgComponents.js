@@ -81,19 +81,19 @@ export function SvgGithub({ color = '#000', isColored = true }) {
     );
 };
 
-export function SvgInstagram({ color = '#cc39a4', isColored = true }) {
+export function SvgInstagram({ color = '#cc39a4', isColored = true, classes = '', onHover, onClick }) {
     return (
-        <svg fill={isColored ? color : 'currentColor'} viewBox="0 0 24 24">
-            <path fill={isColored ? color : 'currentColor'} d="M16.375 3.25a4.388 4.388 0 0 1 4.375 4.375v8.75a4.388 4.388 0 0 1-4.375 4.375h-8.75a4.389 4.389 0 0 1-4.375-4.375v-8.75A4.388 4.388 0 0 1 7.625 3.25h8.75Zm0-1.75h-8.75C4.256 1.5 1.5 4.256 1.5 7.625v8.75c0 3.369 2.756 6.125 6.125 6.125h8.75c3.369 0 6.125-2.756 6.125-6.125v-8.75c0-3.369-2.756-6.125-6.125-6.125Z"></path>
-            <path fill={isColored ? color : 'currentColor'} d="M17.688 7.625a1.313 1.313 0 1 1 0-2.625 1.313 1.313 0 0 1 0 2.625Z"></path>
-            <path fill={isColored ? color : 'currentColor'} d="M12 8.5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7Zm0-1.75a5.25 5.25 0 1 0 0 10.5 5.25 5.25 0 0 0 0-10.5Z"></path>
+        <svg fill={isColored ? color : 'currentColor'} fillRule="nonzero" viewBox="0 0 24 24" className={classes} onMouseEnter={onHover} onClick={onClick}>
+            <path fill={isColored ? color : 'currentColor'} onClick={onClick} d="M16.375 3.25a4.388 4.388 0 0 1 4.375 4.375v8.75a4.388 4.388 0 0 1-4.375 4.375h-8.75a4.389 4.389 0 0 1-4.375-4.375v-8.75A4.388 4.388 0 0 1 7.625 3.25h8.75Zm0-1.75h-8.75C4.256 1.5 1.5 4.256 1.5 7.625v8.75c0 3.369 2.756 6.125 6.125 6.125h8.75c3.369 0 6.125-2.756 6.125-6.125v-8.75c0-3.369-2.756-6.125-6.125-6.125Z"></path>
+            <path fill={isColored ? color : 'currentColor'} onClick={onClick} d="M17.688 7.625a1.313 1.313 0 1 1 0-2.625 1.313 1.313 0 0 1 0 2.625Z"></path>
+            <path fill={isColored ? color : 'currentColor'} onClick={onClick} d="M12 8.5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7Zm0-1.75a5.25 5.25 0 1 0 0 10.5 5.25 5.25 0 0 0 0-10.5Z"></path>
         </svg>
     );
 };
 
-export function SvgLinkedIn({ color = '#0A66C2', isColored = true }) {
+export function SvgLinkedIn({ color = '#0A66C2', isColored = true, classes = '' }) {
     return (
-        <svg viewBox="0 0 24 24">
+        <svg viewBox="0 0 24 24" className={classes}>
             <path fill={isColored ? color : 'currentColor'} d="M20.82 1.5H3.294c-.957 0-1.794.69-1.794 1.635v17.566c0 .951.837 1.799 1.794 1.799h17.521c.963 0 1.685-.854 1.685-1.8V3.136c.006-.946-.722-1.635-1.68-1.635ZM8.01 19.005H5V9.65h3.01v9.354ZM6.61 8.228h-.022c-.963 0-1.586-.716-1.586-1.613C5.002 5.7 5.642 5 6.626 5c.984 0 1.587.695 1.608 1.614 0 .897-.624 1.613-1.625 1.613Zm12.395 10.777h-3.009V13.89c0-1.225-.438-2.063-1.526-2.063-.832 0-1.324.563-1.543 1.111-.082.197-.104.465-.104.739v5.328H9.815V9.65h3.008v1.301c.438-.623 1.122-1.52 2.713-1.52 1.975 0 3.469 1.301 3.469 4.108v5.465Z"></path>
         </svg>
     );
@@ -155,6 +155,15 @@ export function SvgReload({ color = '#000', lineWidth = '2', isColored = true })
         <svg stroke={isColored ? color : 'currentColor'} strokeLinecap="round" strokeWidth={lineWidth} viewBox="0 0 24 24">
             <path fill='transparent' d="m18.75 6.938-.99-1.152A8.973 8.973 0 0 0 11.25 3c-4.969 0-9 4.031-9 9s4.031 9 9 9a9.004 9.004 0 0 0 8.488-6"></path>
             <path fill={isColored ? color : 'currentColor'} stroke="none" d="M21.75 4.565v5.183a.75.75 0 0 1-.75.75h-5.184a.75.75 0 0 1-.53-1.28l5.184-5.184a.75.75 0 0 1 1.28.53Z"></path>
+        </svg>
+    );
+};
+
+export function SvgRefresh({ color = '#00AAA0', }) {
+    return (
+        <svg stroke={color} fill={color} viewBox="0 0 512 512">
+            <path stroke={color} fill={color} d="M403.925,108.102c-27.595-27.595-62.899-47.558-102.459-56.29L304.182,0L201.946,53.867l-27.306,14.454 l-5.066,2.654l8.076,4.331l38.16,20.542l81.029,43.602l2.277-42.859c28.265,7.546,53.438,22.53,73.623,42.638 c29.94,29.939,48.358,71.119,48.358,116.776c0,23.407-4.843,45.58-13.575,65.687l40.37,17.532 c11.076-25.463,17.242-53.637,17.242-83.219C465.212,198.306,441.727,145.904,403.925,108.102z"></path>
+            <path stroke={color} fill={color} d="M296.256,416.151l-81.101-43.612l-2.272,42.869c-28.26-7.555-53.51-22.53-73.618-42.636 c-29.945-29.95-48.364-71.12-48.364-116.767c0-23.427,4.844-45.522,13.576-65.697l-40.37-17.531 c-11.076,25.53-17.242,53.723-17.242,83.228c0,57.679,23.407,110.157,61.21,147.893c27.595,27.594,62.899,47.548,102.453,56.202 l-2.716,51.9l102.169-53.878l27.455-14.454l4.988-2.643l-7.999-4.332L296.256,416.151z"></path>
         </svg>
     );
 };
