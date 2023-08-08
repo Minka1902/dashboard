@@ -1638,8 +1638,16 @@
     width: 17px;
 }
 
+.add-button:hover .add-button__sign svg {
+    animation: rotate 4s linear infinite;
+}
+
 .add-button__sign svg path {
-    fill: white;
+    fill: #FFFFFF;
+}
+
+.add-button:hover .no-rotate svg{
+    animation: none;
 }
 
 /* text */
@@ -1680,6 +1688,16 @@
 /* button click effect*/
 .add-button:active {
     transform: translate(2px, 2px);
+}
+
+@keyframes rotateRefresh {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(-360deg);
+    }
 }
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */

@@ -1,6 +1,6 @@
 import React from "react";
 import './buttons.css';
-import { SvgDoubleCheck, SvgSend } from "../../images/SvgComponents";
+import { SvgDoubleCheck, SvgSend, SvgRefresh } from "../../images/SvgComponents";
 
 export function ButtonGlitch({ buttonText = 'Click Me!', onClick }) {
     return (
@@ -166,14 +166,11 @@ export function ButtonCheckbox({ todoList }) {
     );
 };
 
-export function ButtonAdd({ buttonText, onClick, color = "white", title = buttonText }) {
+export function ButtonAdd({ buttonText, onClick, title = buttonText, children = <SvgRefresh />, isRotating = true }) {
     return (
         <button className="add-button" onClick={onClick} title={title}>
-            <div className="add-button__sign">
-                <svg fill={color} stroke={color} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path d="M12 5.25v13.5"></path>
-                    <path d="M18.75 12H5.25"></path>
-                </svg>
+            <div className={`add-button__sign${isRotating ? '' : ' no-rotate'}`}>
+                {children}
             </div>
             <div className="add-button__text">{buttonText}</div>
         </button>
