@@ -16,6 +16,8 @@
     opacity: 0;
     background-color: #ccc;
     border: 1px solid #7e7e7e;
+    border-radius: 7px;
+    transition: opacity 0.5s linear;
 }
 
 .less-width {
@@ -25,6 +27,7 @@
 
 .copied {
     opacity: 1;
+    transition: opacity 0.5s linear;
 }
 
 @media screen and (max-width: 704px) {

@@ -15,7 +15,10 @@ import Main from '../main/Main';
 import LoginPopup from '../popup/LoginPopup';
 import ConfirmPopup from '../popup/ConfirmPopup';
 import AddSourcePopup from '../popup/AddSourcePopup';
+import PopupSettings from '../popup/PopupSettings';
 import Footer from '../footer/Footer';
+import * as Buttons from '../buttons/Buttons';
+import * as Svgs from '../../images/SvgComponents';
 
 function App() {
   const currentUserContext = React.useContext(CurrentUserContext);    // eslint-disable-line
@@ -31,6 +34,7 @@ function App() {
   const [isLoginPopupOpen, setIsLoginPopupOpen] = React.useState(false);
   const [isConfirmPopupOpen, setIsConfirmLoginPopupOpen] = React.useState(false);
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
+  const [isSettingsPopupOpen, setIsSettingsPopupOpen] = React.useState(false);
   const [isRefresh, setIsRefresh] = React.useState(false);
   const [isFromZero, setIsFromZero] = React.useState(true);
   const [isPreloader, setIsPreloader] = React.useState(false);
@@ -120,6 +124,7 @@ function App() {
     setIsAddSourcePopupOpen(false);
     setIsConfirmLoginPopupOpen(false);
     setIsEditSource(false);
+    setIsSettingsPopupOpen(false);
   };
 
   const openPopup = () => {
@@ -142,6 +147,8 @@ function App() {
       }
     }
   };
+
+  const openSettings = () => setIsSettingsPopupOpen(true);
 
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!!     SOURCE handling     !!!!!!!!!!!!!
@@ -327,12 +334,6 @@ function App() {
       });
   };
 
-  const changeFromZero = (isFound) => {
-    if (isFound.found) {
-      setIsFromZero(!isFromZero);
-    }
-  };
-
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!!     ROUTE handling     !!!!!!!!!!!!!!
   // ???????????????????????????????????????????????????
@@ -373,12 +374,23 @@ function App() {
     { buttonText: 'edit resource', buttonClicked: editClicked, filter: 'resource', isAllowed: false },
     { buttonText: 'watch resource', buttonClicked: handleWatchResource, filter: 'memory', isAllowed: false },
     { buttonText: 'delete resource', buttonClicked: deleteClicked, filter: 'resource', isAllowed: false },
-    { buttonText: `Percent from ${isFromZero ? 'lowest' : 'zero'}`, buttonClicked: changeFromZero, filter: 'watch-resource__chart', isAllowed: true },
+    // { buttonText: `Percent from ${isFromZero ? 'lowest' : 'zero'}`, buttonClicked: changeFromZero, filter: 'watch-resource__chart', isAllowed: true },
   ];
 
   const theTeam = [
     { name: 'nathan scharff', title: 'Founder & CEO', image: require('../../images/nathan-scharff.jpg'), social: { linkedin: 'https://www.linkedin.com/in/nathanscharff', } },
   ];
+
+  // ???????????????????????????????????????????????????
+  // !!!!!!!!!!!!     SETTINGS handling     !!!!!!!!!!!!
+  // ???????????????????????????????????????????????????
+
+  const setSettings = (settings) => {
+    if (settings) {
+      setIsFromZero(settings.yAxis === 'zero' ? true : false);
+      closeAllPopups();
+    }
+  };
 
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!!     EVENT handling     !!!!!!!!!!!!!!
@@ -417,7 +429,7 @@ function App() {
   React.useEffect(() => { // * starting the interval to check for new sources
     const interval = setInterval(() => {
       initialize();
-    }, (10 * 1000));
+    }, (20 * 1000));
     return () => clearInterval(interval);
   }, []);       //eslint-disable-line
 
@@ -432,6 +444,12 @@ function App() {
           handleButtonClick={openPopup}
           theme={true}
         />
+
+        <div className="settings-button__container">
+          <Buttons.ButtonSVG title='Reload' buttonText="Settings" onClick={openSettings}  >
+            <Svgs.SvgSettings classes='setting__button-class' />
+          </Buttons.ButtonSVG>
+        </div>
 
         <Switch>
           <Route exact path='/'>
@@ -483,6 +501,12 @@ function App() {
           popupTitle={isEditSource ? "Edit source" : "Add source"}
           handleSwitchPopup={switchPopups}
           onClose={closeAllPopups}
+        />
+
+        <PopupSettings
+          isOpen={isSettingsPopupOpen}
+          onClose={closeAllPopups}
+          handleSubmit={setSettings}
         />
         <RightClickMenu items={rightClickItems} isLoggedIn={loggedIn} />
         <Footer homeClick={handleHomeClick} />

@@ -10,12 +10,18 @@ export default function WatchResource({ resourceClick, chartData, isFromZero, is
     const currentResource = React.useContext(CurrentResourceContext);
     const now = new Date();
 
+    const calculatePercentage = () => {
+        const percent = currentResource.memoryLeft * 100;
+        return (percent / currentResource.totalMemory).toFixed(2);
+    };
+
     return (
         <section name='watch-resource' id='watch-resource'>
             <h3 className='watch-resource__title'>{currentResource ? currentResource.url : ''}</h3>
-            <div className="add-button__container">
-                <Buttons.ButtonAdd title='Reload' buttonText="Reload" onClick={() => { resourceClick(currentResource, () => { setIsPreloader(false) }) }} />
+            <div className="refresh-button__container">
+                <Buttons.ButtonSVG title='Reload' buttonText="Reload" onClick={() => { resourceClick(currentResource, () => { setIsPreloader(false) }) }} />
             </div>
+
             {isPreloader ?
                 <Preloader />
                 :
@@ -23,12 +29,11 @@ export default function WatchResource({ resourceClick, chartData, isFromZero, is
             }
             <div className='watch-resource__resource_info-container'>
                 {currentResource ? <div className='watch-resource__container'>
-                    <p className='zero-margin'>Resource: <span className={`${new Date(currentResource.lastChecked) > reduceMinute(now, 10) ? (currentResource.isActive ? 'green' : 'red') : 'red'}`}>{new Date(currentResource.lastChecked) > reduceMinute(now, 10) ? (currentResource.isActive ? 'active' : 'not active') : 'not active'}</span></p>
+                    <p className='zero-margin'>Resource: <span className={`${new Date(currentResource.lastChecked) > reduceMinute(now, 10) ? (currentResource.isActive ? 'green' : 'red') : 'red'}`}>{new Date(currentResource.lastChecked) > reduceMinute(now, 10) ? (currentResource.isActive ? 'active' : 'not active') : 'Not active'}</span></p>
                     <p className='zero-margin'>Status: <span className={`${new Date(currentResource.lastChecked) > reduceMinute(now, 10) ? 'green' : 'red'}`}>{new Date(currentResource.lastChecked) > reduceMinute(now, 10) ? currentResource.status : 'Not available'}</span></p>
                 </div> : <></>}
-                {currentResource ? <p className='zero-margin'>{new Date(currentResource.lastChecked) > reduceMinute(now, 10) ? 'A' : 'Last a'}vailable memory: {formatMemory(currentResource ? currentResource.memoryLeft : 0)} of {formatMemory(currentResource ? currentResource.totalMemory : 0)}</p> : <></>}
-                {currentResource ? <p className='zero-margin'>Last checked: {formatDate(currentResource.lastChecked)}</p> : <></>}
-                {currentResource ? (currentResource.status !== 200 ? <p className='zero-margin'>Last active: {formatDate(currentResource.lastActive)}</p> : <></>) : <></>}
+                {currentResource ? <p className='zero-margin'>{new Date(currentResource.lastChecked) > reduceMinute(now, 10) ? 'A' : 'Last a'}vailable memory: <b>{formatMemory(currentResource ? currentResource.memoryLeft : 0)}</b> of {formatMemory(currentResource ? currentResource.totalMemory : 0)}. Which are <b>{calculatePercentage()}%</b>.</p> : <></>}
+                {currentResource ? <p className='zero-margin'>Last responded: {formatDate(currentResource.lastChecked)}</p> : <></>}
             </div>
         </section>
     );
