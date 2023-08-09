@@ -243,6 +243,43 @@ svg {
     transition: visibility 0s, opacity 0.5s linear;
 }
 
+.popup__setting {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.popup__setting:last-child {
+    margin-bottom: 0;
+}
+
+.popup__settings_title {}
+
+select {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    font: normal 11px/22px Arial, Sans-Serif;
+    color: black;
+    border: 1px solid #ccc;
+    text-align: center;
+    text-transform: capitalize;
+    width: 40%;
+
+}
+
+select option {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    text-transform: capitalize;
+}
+
+select option:hover {
+    background-color: #B6BCBF;
+}
+
 @media screen and (max-width:500px) {
     .popup__button {
         width: 100%;
