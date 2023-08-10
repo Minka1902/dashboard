@@ -19,7 +19,11 @@
 }
 
 .watch-resource__chart {
+    text-align: center;
     margin: 0 auto;
+    padding: 5px;
+    font-weight: 700;
+    font-size: 20px;
     width: clamp(500px, calc(100% - 40px), 900px);
     height: clamp(250px, calc(100% - 40px), 450px);
 }

@@ -35,7 +35,6 @@ export default function PopupSettings({ isOpen, handleSubmit, onClose }) {
                     <label className="popup__setting">
                         Theme:
                         <select className="popup__settings-select" onChange={changeTheme} value={theme}>
-                            <option>dark</option>
                             <option>light</option>
                         </select>
                     </label>

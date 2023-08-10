@@ -1,7 +1,7 @@
 import PopupWithForm from './PopupWithForm';
 
 export default function ConfirmPopup(props) {
-    const { isOpen, onClose, handleSubmit, isDeleteSource = false } = props;
+    const { isOpen, onClose, handleSubmit, isDeleteSource } = props;
 
     const onSubmit = (evt) => {
         evt.preventDefault();
@@ -11,7 +11,7 @@ export default function ConfirmPopup(props) {
             }
         } else {
             if (evt.type === 'click' && evt.target.classList.contains('popup__button')) {
-                onClose();
+                handleSubmit();
             }
         }
     };

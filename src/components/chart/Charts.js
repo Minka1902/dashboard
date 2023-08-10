@@ -133,8 +133,8 @@ export function LineChart({ chartData, title = 'Please pass a title.', subtitle 
         </div>
     );
     else return (
-        <div>
-            You have no data.
+        <div className={chartClass}>
+            Not enough data to make a chart
         </div>
     );
 };
