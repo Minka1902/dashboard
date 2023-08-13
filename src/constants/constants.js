@@ -12,3 +12,7 @@ const resource5 = { name: '89.192.15.11', status: 208, lastActive: '12.11.2022 0
 export const resources = [resource1, resource2, resource3, resource4, resource5];
 
 export const memoryUnits = ['BYTES', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+export const theTeam = [
+    { name: 'nathan scharff', title: 'Founder & CEO', image: require('../images/nathan-scharff.jpg'), social: { linkedin: 'https://www.linkedin.com/in/nathanscharff', } },
+];

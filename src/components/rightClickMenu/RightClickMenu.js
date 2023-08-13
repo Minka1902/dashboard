@@ -37,7 +37,14 @@ export default function RightClickMenu({ items, isLoggedIn }) {
             if (items.some(item => handleFilter(event.target, item.filter).found)) {
                 setIsOpen(true);
             }
-            setPosition({ x: event.clientX, y: event.clientY });
+            let tempX = event.clientX, tempY = event.clientY;
+            if (event.clientX > window.screen.availWidth - (window.outerWidth - window.innerWidth) - 148) {
+                tempX = window.screen.availWidth - (window.outerWidth - window.innerWidth) - 148;
+            }
+            if (event.clientY > window.screen.availHeight - (window.outerHeight - window.innerHeight) - 66) {
+                tempY = window.screen.availHeight - (window.outerHeight - window.innerHeight) - 66;
+            }
+            setPosition({ x: tempX, y: tempY });
         };
         //! closing the menu when the user clicks outside of it
         const closeMenu = (evt) => {

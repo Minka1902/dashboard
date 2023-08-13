@@ -30,6 +30,10 @@
     border-radius: 30%;
 }
 
+.capitalized {
+    text-transform: capitalize;
+}
+
 .card-person__title {
     text-align: center;
     color: var(--font-color);

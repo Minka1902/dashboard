@@ -7,6 +7,7 @@ import sourceApiOBJ from '../../utils/sourceApi';
 import usersApiOBJ from '../../utils/usersApi';
 import collectionApiObj from '../../utils/collectionApi';
 import * as auth from '../../utils/auth';
+import { theTeam } from '../../constants/constants';
 import Header from '../header/Header';
 import AboutUs from '../aboutus/AboutUs';
 import WatchResource from '../watchResource/WatchResource';
@@ -374,11 +375,6 @@ function App() {
     { buttonText: 'edit resource', buttonClicked: editClicked, filter: 'resource', isAllowed: false },
     { buttonText: 'watch resource', buttonClicked: handleWatchResource, filter: 'memory', isAllowed: false },
     { buttonText: 'delete resource', buttonClicked: deleteClicked, filter: 'resource', isAllowed: false },
-    // { buttonText: `Percent from ${isFromZero ? 'lowest' : 'zero'}`, buttonClicked: changeFromZero, filter: 'watch-resource__chart', isAllowed: true },
-  ];
-
-  const theTeam = [
-    { name: 'nathan scharff', title: 'Founder & CEO', image: require('../../images/nathan-scharff.jpg'), social: { linkedin: 'https://www.linkedin.com/in/nathanscharff', } },
   ];
 
   // ???????????????????????????????????????????????????
