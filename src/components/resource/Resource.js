@@ -14,10 +14,16 @@ export default function Resource(props) {
     const resourceClick = (evt) => {
         evt.preventDefault();
         if (evt.target.classList.length !== 0 && !evt.target.classList.contains("preloader__circle")) {
-            if (evt.target.classList.contains('resource__reload-icon') || evt.target.previousSibling !== null) {
-                if (evt.target.previousSibling.classList.contains('resource__reload-icon')) {
-                    setIsPreloader(true);
-                    onClick(resource, setIsPreloaderFalse);
+            console.log(evt.target.classList);
+            if (evt.target.classList.contains('resource__reload-icon')) {
+                setIsPreloader(true);
+                onClick(resource, setIsPreloaderFalse);
+            } else {
+                if (evt.target.previousSibling !== null) {
+                    if (evt.target.previousSibling.classList.contains('resource__reload-icon')) {
+                        setIsPreloader(true);
+                        onClick(resource, setIsPreloaderFalse);
+                    }
                 }
             }
         }
@@ -99,10 +105,10 @@ export default function Resource(props) {
 
     return (
         <>
-            <div className={`resource ${resource.memoryLeft !== undefined ? 'memory' : ''}`} id={resource._id} onClick={resourceClick}>
+            <div className={`resource${resource.memoryLeft !== undefined ? ' memory' : ''}`} id={resource._id} onClick={resourceClick}>
                 <div className={`resource__name_container ${resource.name}`}>
                     <h3 className={`resource__name ${resource.name}`} title={resource.name}>{formatName(resource.name)}</h3>
-                    <div className="resource__more-button" title={`More options`}>
+                    <div className="resource__more-button" title='More options'>
                         <SvgMore />
                     </div>
                 </div>

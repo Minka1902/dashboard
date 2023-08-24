@@ -273,7 +273,7 @@ export const formatDate = (dateString, isWeekday) => {
     const formattedDate = new Date(dateString).toLocaleString('en-US', options);
 
     const [, day, time, dayPart] = formattedDate.match(/(.+), (\d{2}:\d{2}) (.+)/);
-    if (dayPart === 'PM') {
+    if (dayPart === 'PM' && time[0] !== '1' && time[1] !== '2') {
         let tempNum = parseFloat(`${time[0]}${time[1]}`) + 12;
         let temp = tempNum.toString();
         realTime += temp[0];

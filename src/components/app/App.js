@@ -206,10 +206,7 @@ function App() {
     sourceApiOBJ.createSource(source)
       .then((data) => {
         if (data) {
-          createCollection(data.name)
-            .finally(() => {
-              initialize();
-            });
+          initialize();
         }
       })
       .catch((err) => {
@@ -276,7 +273,7 @@ function App() {
         if (data) {
           setCurrentResource(data);
           if (isWatch) {
-            getAllEntries(data.name);
+            getAllEntries(data.url);
           }
         }
       })
@@ -303,15 +300,6 @@ function App() {
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!     COLLECTION handling     !!!!!!!!!!!
   // ???????????????????????????????????????????????????
-  const createCollection = (name) => {
-    return collectionApiObj.createCollection(name)
-      .catch((err) => {
-        if (err) {
-          console.log(err);
-        }
-      })
-  };
-
   const deleteCollection = (name) => {
     return collectionApiObj.deleteCollection(name)
       .catch((err) => {
@@ -373,7 +361,7 @@ function App() {
     { buttonText: 'sign out', buttonClicked: handleLogout, filter: 'header', isAllowed: true },
     { buttonText: 'add resource', buttonClicked: openPopup, filter: 'resources', isAllowed: true },
     { buttonText: 'edit resource', buttonClicked: editClicked, filter: 'resource', isAllowed: false },
-    { buttonText: 'watch resource', buttonClicked: handleWatchResource, filter: 'memory', isAllowed: false },
+    { buttonText: 'watch resource', buttonClicked: handleWatchResource, filter: 'resource', isAllowed: true },
     { buttonText: 'delete resource', buttonClicked: deleteClicked, filter: 'resource', isAllowed: false },
   ];
 
@@ -458,7 +446,11 @@ function App() {
           </Route>
 
           <Route path='/about-us'>
-            <AboutUs people={theTeam} />
+            <AboutUs
+              people={theTeam}
+              title='Geomage'
+              subtitle="Geomage is a company founded in 2003."
+            />
           </Route>
 
           <ProtectedRoute path={`/resource/${currentResource ? currentResource._id : ''}`} loggedIn={loggedIn && window.innerWidth >= 530}>

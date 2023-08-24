@@ -26,7 +26,7 @@ class sourceApi {
 
     updateSource = (name, newData) => this._fetch({ method: 'PUT', data: newData, url: `/update/${name}` })
 
-    deleteSource = (name) => this._fetch({ method: 'DELETE', url: `/remove-source/${name}` })
+    deleteSource = (id) => this._fetch({ method: 'DELETE', url: `/remove-source/${id}` })
 
     checkSource = (url) => this._fetch({ method: 'GET', url: `/check-source/${url}`, isPrivate: true })
 

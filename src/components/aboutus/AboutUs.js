@@ -1,7 +1,7 @@
 import React from "react";
 import { CardPerson } from '../cards/Cards';
 
-export default function AboutUs({ people }) {
+export default function AboutUs({ people, title, subtitle }) {
     const [isCopied, setIsCopied] = React.useState(false);
     const [whatWasCopied, setWhatWasCopied] = React.useState('');
     const delay = (seconds) => new Promise(res => setTimeout(res, seconds * 1000));
@@ -15,8 +15,8 @@ export default function AboutUs({ people }) {
 
     return (
         <section name='about-us' id='about-us'>
-            <h1 className='section__title'>Geomage</h1>
-            <p className='section__title'>Geomage is a company founded in 2003.</p>
+            <h1 className='section__title'>{title}</h1>
+            <p className='section__title'>{subtitle}</p>
             <div className='the-team'>
                 {people.map((man, index) => {
                     return <CardPerson person={man} isEmail={true} isInstagram={false} isGithub={false} key={index} onCopy={copy} />

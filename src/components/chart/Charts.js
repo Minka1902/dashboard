@@ -89,11 +89,11 @@ export function LineChart({ chartData, title = 'Please pass a title.', subtitle 
             labels: chartData.map((data) => formatDate(data.checkedAt, false)),
             datasets: [{
                 label: label,
-                data: chartData.map((data) => 100 - data.percent),
+                data: chartData.map((data) => data.memoryLeft ? 100 - data.percent : (data.isActive ? 1 : 0)),
                 backgroundColor: [
-                    '#ABCDEF',
+                    '#FEDCBA',
                 ],
-                borderColor: "black",
+                borderColor: "transparent",
                 borderWidth: 2
             }],
         };
@@ -108,7 +108,7 @@ export function LineChart({ chartData, title = 'Please pass a title.', subtitle 
                             beginAtZero: isYZero,
                         },
                         x: {
-                            beginAtZero: isXZero
+                            beginAtZero: isXZero,
                         }
                     },
                     plugins: {
