@@ -14,7 +14,6 @@ export default function Resource(props) {
     const resourceClick = (evt) => {
         evt.preventDefault();
         if (evt.target.classList.length !== 0 && !evt.target.classList.contains("preloader__circle")) {
-            console.log(evt.target.classList);
             if (evt.target.classList.contains('resource__reload-icon')) {
                 setIsPreloader(true);
                 onClick(resource, setIsPreloaderFalse);
