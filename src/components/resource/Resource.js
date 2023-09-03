@@ -46,7 +46,7 @@ export default function Resource(props) {
                         <>
                             <div className="resource__image">
                                 <div className={`resource__reload-icon ${resource.name}`} />
-                                <div className="resource__image_light" title={`Last checked: ${formatDate(resource.lastChecked)}`}></div>
+                                <div className="resource__image_light" title={`Last checked: ${formatDate(resource.lastActive)}`}></div>
                             </div>
                             <h3 className={`resource__200_text ${resource.name}`} title={`${100 - calculatePercentage()}%`}><ProgressBar value={100 - calculatePercentage()} maxValue={100} /></h3>
                         </>
@@ -55,10 +55,10 @@ export default function Resource(props) {
                     return (
                         <>
                             <div className="resource__image">
-                                <div className={`resource__reload-icon ${resource.name}`} title={`Last checked: ${formatDate(resource.lastChecked)}`} />
-                                <div className="resource__image_light" title={`Last checked: ${formatDate(resource.lastChecked)}`}></div>
+                                <div className={`resource__reload-icon ${resource.name}`} title={`Last checked: ${formatDate(resource.lastActive)}`} />
+                                <div className="resource__image_light" title={`Last checked: ${formatDate(resource.lastActive)}`}></div>
                             </div>
-                            <h3 className={`resource__200_text ${resource.name}`} title={`http://${resource.url}`}>{formatDate(resource.updatedAt, false)}</h3>
+                            <h3 className={`resource__200_text ${resource.name}`} title={`http://${resource.url}`}>{formatDate(resource.lastActive, false)}</h3>
                         </>
                     );
                 }

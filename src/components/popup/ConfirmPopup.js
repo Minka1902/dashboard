@@ -11,7 +11,11 @@ export default function ConfirmPopup(props) {
             }
         } else {
             if (evt.type === 'click' && evt.target.classList.contains('popup__button')) {
-                handleSubmit();
+                if (evt.target.innerText !== "Don`t delete.") {
+                    handleSubmit();
+                } else {
+                    onClose();
+                }
             }
         }
     };

@@ -29,10 +29,10 @@ export default function WatchResource({ resourceClick, chartData, isFromZero, is
             }
             <div className='watch-resource__resource_info-container'>
                 {currentResource ? <div className='watch-resource__container'>
-                    <p className='zero-margin'>Resource: <span className={`${new Date(currentResource.lastChecked) > reduceMinute(now, 10) ? (currentResource.isActive ? 'green' : 'red') : 'red'}`}>{new Date(currentResource.lastChecked) > reduceMinute(now, 10) ? (currentResource.isActive ? 'active' : 'not active') : 'Not active'}</span></p>
-                    <p className='zero-margin'>Status: <span className={`${new Date(currentResource.lastChecked) > reduceMinute(now, 10) ? 'green' : 'red'}`}>{new Date(currentResource.lastChecked) > reduceMinute(now, 10) ? currentResource.status : 'Not available'}</span></p>
+                    <p className='zero-margin'>Resource: <span className={`${new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? (currentResource.isActive ? 'green' : 'red') : 'red'}`}>{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? (currentResource.isActive ? 'active' : 'not active') : 'Not active'}</span></p>
+                    <p className='zero-margin'>Status: <span className={`${new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? 'green' : 'red'}`}>{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? currentResource.status : 'Not available'}</span></p>
                 </div> : <></>}
-                {currentResource && currentResource.totalMemory ? <p className='zero-margin'>{new Date(currentResource.lastChecked) > reduceMinute(now, 10) ? 'A' : 'Last a'}vailable memory: <b>{formatMemory(currentResource ? currentResource.memoryLeft : 0)}</b> of {formatMemory(currentResource ? currentResource.totalMemory : 0)}. Which are <b>{calculatePercentage()}%</b>.</p> : <></>}
+                {currentResource && currentResource.totalMemory ? <p className='zero-margin'>{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? 'A' : 'Last a'}vailable memory: <b>{formatMemory(currentResource ? currentResource.memoryLeft : 0)}</b> of {formatMemory(currentResource ? currentResource.totalMemory : 0)}. Which are <b>{calculatePercentage()}%</b>.</p> : <></>}
                 {currentResource ? <p className='zero-margin'>Last responded: {formatDate(currentResource.lastChecked)}</p> : <></>}
             </div>
         </section>
