@@ -171,7 +171,6 @@ function App() {
         initialize();
         setCurrentResource(undefined);
       });
-
   };
 
   const resourceClick = (resource, hidePreloader) => {
@@ -309,8 +308,8 @@ function App() {
       })
   };
 
-  const getAllEntries = (name) => {
-    collectionApiObj.getEntries(name)
+  const getAllEntries = (url) => {
+    collectionApiObj.getEntries(url)
       .then(({ data, found }) => {
         if (found !== 0) {
           setChartData(data);
