@@ -82,7 +82,7 @@ export function BarChart({ chartData, title = defTitle, subtitle = defSubtitle, 
     );
 };
 
-export function LineChart({ chartData, title = 'Please pass a title.', subtitle = defSubtitle, chartClass = 'chart-bar-container', label, isXZero = false, isYZero = false }) {
+export function LineChart({ chartData, title = 'Please pass a title.', subtitle = defSubtitle, chartClass = 'chart-bar-container', label, maxY = 100, isXZero = false, isYZero = false }) {
     let data;
     if (chartData !== undefined)
         data = {
@@ -116,6 +116,8 @@ export function LineChart({ chartData, title = 'Please pass a title.', subtitle 
                     scales: {
                         y: {
                             beginAtZero: isYZero,
+                            stepSize: 10,
+                            max: maxY,
                         },
                         x: {
                             beginAtZero: isXZero,

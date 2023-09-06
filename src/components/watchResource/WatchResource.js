@@ -25,7 +25,14 @@ export default function WatchResource({ resourceClick, chartData, isFromZero, is
             {isPreloader ?
                 <Preloader />
                 :
-                <Charts.LineChart title={{ text: currentResource && currentResource.totalMemory !== undefined ? 'Time / % capacity in use' : 'Time / 0-Disabled 1-Active' }} chartClass='watch-resource__chart' chartData={chartData} subtitle={false} isYZero={chartData && chartData[0].status ? true : isFromZero} />
+                <Charts.LineChart
+                    title={{ text: currentResource && currentResource.totalMemory !== undefined ? 'Time / % capacity in use' : 'Time / 0-Disabled 1-Active' }}
+                    maxY={currentResource && currentResource.totalMemory !== undefined ? 100 : 1}
+                    chartClass='watch-resource__chart'
+                    chartData={chartData}
+                    subtitle={false}
+                    isYZero={chartData && chartData[0].status ? true : isFromZero}
+                />
             }
             <div className='watch-resource__resource_info-container'>
                 {currentResource ? <div className='watch-resource__container'>
