@@ -4,6 +4,7 @@ import ProgressBar from "../progressBar/ProgressBar";
 import { formatDate } from '../../constants/functions';
 import { changeStringLength } from "../../constants/functions";
 import { SvgMore } from "../../images/SvgComponents";
+import { reduceMinute } from '../../utils/timeDiff.ts';
 
 export default function Resource(props) {
     const { resource, onClick, isRefresh } = props;
@@ -39,42 +40,58 @@ export default function Resource(props) {
                 <Preloader text="Reloading, please wait." />
             );
         } else {
-            if (resource.status === 200) {
-                if (resource.memoryLeft) {
-                    return (
-                        <>
-                            <div className="resource__image">
-                                <div className={`resource__reload-icon ${resource.name}`} />
-                                <div className="resource__image_light" title={`Last checked: ${formatDate(resource.lastActive)}`}></div>
-                            </div>
-                            <h3 className={`resource__200_text ${resource.name}`} title={`${100 - calculatePercentage()}%`}><ProgressBar value={100 - calculatePercentage()} maxValue={100} /></h3>
-                        </>
-                    );
+            const now = reduceMinute(Date(), 5);
+            if (new Date(resource.lastChecked) > now) {
+                if (resource.status === 200) {
+                    if (resource.memoryLeft) {
+                        return (
+                            <>
+                                <div className="resource__image">
+                                    <div className={`resource__reload-icon ${resource.name}`} />
+                                    <div className="resource__image_light" title={`Last checked: ${formatDate(resource.lastActive)}`}></div>
+                                </div>
+                                <h3 className={`resource__200_text ${resource.name}`} title={`${100 - calculatePercentage()}%`}><ProgressBar value={100 - calculatePercentage()} maxValue={100} /></h3>
+                            </>
+                        );
+                    } else {
+                        return (
+                            <>
+                                <div className="resource__image">
+                                    <div className={`resource__reload-icon ${resource.name}`} title={`Last checked: ${formatDate(resource.lastActive)}`} />
+                                    <div className="resource__image_light" title={`Last checked: ${formatDate(resource.lastActive)}`}></div>
+                                </div>
+                                <h3 className={`resource__200_text ${resource.name}`} title={`http://${resource.url}`}>{formatDate(resource.lastActive, false)}</h3>
+                            </>
+                        );
+                    }
                 } else {
-                    return (
-                        <>
-                            <div className="resource__image">
-                                <div className={`resource__reload-icon ${resource.name}`} title={`Last checked: ${formatDate(resource.lastActive)}`} />
-                                <div className="resource__image_light" title={`Last checked: ${formatDate(resource.lastActive)}`}></div>
-                            </div>
-                            <h3 className={`resource__200_text ${resource.name}`} title={`http://${resource.url}`}>{formatDate(resource.lastActive, false)}</h3>
-                        </>
-                    );
+                    return (<>
+                        {
+                            resource.memoryLeft ?
+                                <div className={`resource__memory_content ${resource.name}`}>
+                                    <ProgressBar value={100 - calculatePercentage() * 1} maxValue={100} />
+                                </div>
+                                :
+                                <></>
+                        }
+                        <div className={`resource__reload-icon ${resource.name}`} title={`Last checked: ${formatDate(resource.lastChecked)}`} />
+                        <h3 className={`resource__error-text${resource.totalMemory ? '' : ' no-memory'} ${resource.name}`}>Last active: {formatDate(resource.lastActive)} <br /><br />Last tried: {formatDate(resource.lastChecked, false)}</h3>
+                        <h3 className={`resource__status ${resource.status === 200 ? (new Date(resource.lastChecked) > now ? '' : 'not-') : 'not-'}working ${resource.name}`} title={`http://${resource.url}`} >{resource.status}</h3>
+                    </>);
                 }
             } else {
                 return (<>
                     {
                         resource.memoryLeft ?
                             <div className={`resource__memory_content ${resource.name}`}>
-                                <div className={`resource__reload-icon ${resource.name}`} title={`Last checked: ${formatDate(resource.lastChecked)}`} />
-                                <ProgressBar value={calculatePercentage()} title={`${100 - calculatePercentage()}%`} maxValue={100} />
+                                <ProgressBar value={100 - calculatePercentage() * 1} maxValue={100} />
                             </div>
                             :
                             <></>
                     }
                     <div className={`resource__reload-icon ${resource.name}`} title={`Last checked: ${formatDate(resource.lastChecked)}`} />
                     <h3 className={`resource__error-text${resource.totalMemory ? '' : ' no-memory'} ${resource.name}`}>Last active: {formatDate(resource.lastActive)} <br /><br />Last tried: {formatDate(resource.lastChecked, false)}</h3>
-                    <h3 className={`resource__status ${resource.status === 200 ? '' : 'not-'}working ${resource.name}`} title={`http://${resource.url}`} >{resource.status}</h3>
+                    <h3 className={`resource__status ${resource.status === 200 ? (new Date(resource.lastChecked) > now ? '' : 'not-') : 'not-'}working ${resource.name}`} title={`http://${resource.url}`} >{new Date(resource.lastChecked) > now ? resource.status : 'Not responding'}</h3>
                 </>);
             }
         }
