@@ -333,9 +333,9 @@ export const formatAmount = (amount) => {
 export const formatMemory = (memory = 0) => {
     let counter = 0;
     let tempMem = memory;
-    while (tempMem >= 1000) {
+    while (tempMem >= 1024) {
         counter++;
-        tempMem = tempMem / 1000;
+        tempMem = tempMem / 1024;
     }
     return `${memory === 0 ? 0 : tempMem.toFixed(4)} ${memoryUnits[counter]}`;
 };
