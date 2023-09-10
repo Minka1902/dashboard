@@ -38,6 +38,7 @@ function App() {
   const [isSettingsPopupOpen, setIsSettingsPopupOpen] = React.useState(false);
   const [isRefresh, setIsRefresh] = React.useState(false);
   const [isFromZero, setIsFromZero] = React.useState(true);
+  const [isCapacity, setIsCapacity] = React.useState(true);
   const [isPreloader, setIsPreloader] = React.useState(false);
   const [isEditSource, setIsEditSource] = React.useState(false);
   const [chartData, setChartData] = React.useState();
@@ -370,7 +371,8 @@ function App() {
 
   const setSettings = (settings) => {
     if (settings) {
-      setIsFromZero(settings.yAxis === 'zero' ? true : false);
+      setIsFromZero(settings.yAxis === 'zero');
+      setIsCapacity(settings.watch === 'capacity');
       closeAllPopups();
     }
   };
@@ -459,6 +461,7 @@ function App() {
               isFromZero={isFromZero}
               isPreloader={isPreloader}
               setIsPreloader={setIsPreloader}
+              isCapacity={isCapacity}
             />
           </ProtectedRoute>
         </Switch>
