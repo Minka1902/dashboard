@@ -31,7 +31,7 @@ export default function WatchResource({ resourceClick, chartData, isFromZero, is
                 <Preloader />
                 :
                 <Charts.LineChart
-                    title={{ text: !isCapacity && !currentResource.totalMemory ? 'Time / 0-Disabled 1-Active' : (isCapacity ? 'Time / Capacity in use' : 'Time / % Memory in use') }}
+                    title={{ text: !currentResource.totalCapacity && !currentResource.totalMemory ? 'Time / 0-Disabled 1-Active' : (isCapacity ? 'Time / Capacity in use' : 'Time / % Memory in use') }}
                     maxY={currentResource.totalMemory !== undefined ? 100 : 1}
                     chartClass='watch-resource__chart'
                     chartData={chartData}
