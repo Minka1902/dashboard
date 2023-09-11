@@ -310,10 +310,12 @@ function App() {
   };
 
   const getAllEntries = (url) => {
+    setIsPreloader(true);
     collectionApiObj.getEntries(url)
       .then(({ data, found }) => {
         if (found !== 0) {
           setChartData(data);
+          setIsPreloader(false);
         }
       })
       .catch((err) => {
