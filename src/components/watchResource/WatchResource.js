@@ -31,8 +31,8 @@ export default function WatchResource({ resourceClick, chartData, isFromZero, is
                 <Preloader />
                 :
                 <Charts.LineChart
-                    title={{ text: isCapacity ? 'Time / % capacity in use' : (currentResource && currentResource.totalMemory !== undefined ? 'Time / Memory in use' : 'Time / 0-Disabled 1-Active') }}
-                    maxY={currentResource && currentResource.totalMemory !== undefined ? 100 : 1}
+                    title={{ text: !isCapacity && !currentResource.totalMemory ? 'Time / 0-Disabled 1-Active' : (isCapacity ? 'Time / Capacity in use' : 'Time / % Memory in use') }}
+                    maxY={currentResource.totalMemory !== undefined ? 100 : 1}
                     chartClass='watch-resource__chart'
                     chartData={chartData}
                     subtitle={false}
@@ -45,8 +45,8 @@ export default function WatchResource({ resourceClick, chartData, isFromZero, is
                     <p className='zero-margin'>Resource: <span className={`${new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? (currentResource.isActive ? 'green' : 'red') : 'red'}`}>{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? (currentResource.isActive ? 'active' : 'not active') : 'Not active'}</span></p>
                     <p className='zero-margin'>Status: <span className={`${new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? 'green' : 'red'}`}>{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? currentResource.status : 'Not available'}</span></p>
                 </div> : <></>}
-                {currentResource && currentResource.totalCapacity ? <p className='zero-margin'>{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? 'A' : 'Last a'}vailable capacity: <b>{formatMemory(currentResource ? currentResource.capacityLeft : 0)}</b> of {formatMemory(currentResource ? currentResource.totalCapacity : 0)}. Which are <b>{calculatePercentage(true)}%</b>.</p> : <></>}
-                {currentResource && currentResource.totalMemory ? <p className="zero-margin">{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? 'A' : 'Last a'}vailable RAM: <b>{formatMemory(currentResource ? currentResource.freeMemory : 0)}</b> of {formatMemory(currentResource ? currentResource.totalMemory : 0)}. Which are <b>{calculatePercentage(false)}%</b>.</p> : <></>}
+                {currentResource.totalCapacity ? <p className='zero-margin'>{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? 'A' : 'Last a'}vailable capacity: <b>{formatMemory(currentResource.capacityLeft)}</b> of {formatMemory(currentResource.totalCapacity)}. Which are <b>{calculatePercentage(true)}%</b>.</p> : <></>}
+                {currentResource.totalMemory ? <p className="zero-margin">{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? 'A' : 'Last a'}vailable RAM: <b>{formatMemory(currentResource.freeMemory)}</b> of {formatMemory(currentResource.totalMemory)}. Which are <b>{calculatePercentage(false)}%</b>.</p> : <></>}
                 {currentResource ? <p className='zero-margin'>Last responded: {formatDate(currentResource.lastChecked)}</p> : <></>}
             </div>
         </section>

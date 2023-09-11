@@ -273,6 +273,7 @@ function App() {
         if (data) {
           setCurrentResource(data);
           if (isWatch) {
+            history.push(`/resource/${id}`);
             getAllEntries(data.url);
           }
         }
@@ -331,7 +332,6 @@ function App() {
   const setIsRefreshTrue = () => setIsRefresh(true);
 
   const handleWatchResource = ({ id }) => {
-    history.push(`/resource/${id}`);
     getSource(id, true);
   };
 
