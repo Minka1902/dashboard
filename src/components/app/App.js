@@ -362,6 +362,7 @@ function App() {
     { buttonText: 'refresh', buttonClicked: setIsRefreshTrue, filter: 'root', isAllowed: true },
     { buttonText: 'sign out', buttonClicked: handleLogout, filter: 'header', isAllowed: true },
     { buttonText: 'add resource', buttonClicked: openPopup, filter: 'resources', isAllowed: true },
+    { buttonText: 'open settings', buttonClicked: openSettings, filter: 'root', isAllowed: false },
     { buttonText: 'edit resource', buttonClicked: editClicked, filter: 'resource', isAllowed: false },
     { buttonText: 'watch resource', buttonClicked: handleWatchResource, filter: 'resource', isAllowed: true },
     { buttonText: 'delete resource', buttonClicked: deleteClicked, filter: 'resource', isAllowed: false },
@@ -370,7 +371,6 @@ function App() {
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!     SETTINGS handling     !!!!!!!!!!!!
   // ???????????????????????????????????????????????????
-
   const setSettings = (settings) => {
     if (settings) {
       setIsFromZero(settings.yAxis === 'zero');
