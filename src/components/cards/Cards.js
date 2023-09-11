@@ -36,14 +36,20 @@ export function CardPerson({ person, isInstagram = true, isLinkedin = true, isGi
     };
 
     const handleCopy = (isNumber) => {
+        const tempInput = document.createElement("input");
+        tempInput.style = "position: absolute; left: -1000px; top: -1000px";
         if (onCopy) {
             if (isNumber) {
-                navigator.clipboard.writeText('+972 58-5241224');
+                tempInput.value = "+972-585241224";
                 onCopy('Phone number');
             } else {
-                navigator.clipboard.writeText('minka@geomage.com');
+                tempInput.value = "minka@geomage.com";
                 onCopy('Email');
             }
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy", tempInput.value);
+            document.body.removeChild(tempInput);
         }
     };
 
