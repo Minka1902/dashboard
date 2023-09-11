@@ -31,7 +31,7 @@ main {
     }
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 580px) {
     .main__title {
         width: calc(100% - 55px);
         margin-right: 0;
