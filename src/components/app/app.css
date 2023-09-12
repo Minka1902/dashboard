@@ -9,6 +9,7 @@
 }
 
 .section__title {
+    width: auto;
     margin: 0 auto;
     text-align: center;
 }
@@ -56,6 +57,13 @@ section {
 @media screen and (min-width: 300.5px) and (max-width: 500px) {
     section {
         padding-bottom: 47px;
+    }
+}
+
+@media screen and (max-width: 580px) {
+    .section__title {
+        width: calc(100% - 55px);
+        margin-right: 0;
     }
 }
 
