@@ -40,7 +40,7 @@
     height: 24px;
 }
 
-.resource__more-button:hover{
+.resource__more-button:hover {
     opacity: 1;
 }
 
@@ -55,6 +55,11 @@
 
 .resource:hover .resource__reload-icon {
     opacity: 0.5;
+}
+
+div.resource__200_text {
+    font-weight: 600;
+    margin-left: 4px;
 }
 
 .resource__200_text {
