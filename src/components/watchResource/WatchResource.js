@@ -1,5 +1,6 @@
 import React from "react";
 import CurrentResourceContext from "../../contexts/CurrentResourceContext";
+import LastEntryContext from "../../contexts/LastEntryContext";
 import Preloader from '../preloader/Preloader';
 import * as Charts from '../chart/Charts';
 import * as Buttons from '../buttons/Buttons';
@@ -8,6 +9,7 @@ import { formatMemory, formatDate } from '../../constants/functions';
 
 export default function WatchResource({ resourceClick, chartData, isFromZero, isPreloader, setIsPreloader, isCapacity }) {
     const currentResource = React.useContext(CurrentResourceContext);
+    const lastEntry = React.useContext(LastEntryContext);
     const now = new Date();
 
     const calculatePercentage = (isCapacity) => {
@@ -47,6 +49,7 @@ export default function WatchResource({ resourceClick, chartData, isFromZero, is
                 </div> : <></>}
                 {currentResource.totalCapacity ? <p className='zero-margin'>{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? 'A' : 'Last a'}vailable capacity: <b>{formatMemory(currentResource.capacityLeft)}</b> of {formatMemory(currentResource.totalCapacity)}. Which are <b>{calculatePercentage(true)}%</b>.</p> : <></>}
                 {currentResource.totalMemory ? <p className="zero-margin">{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? 'A' : 'Last a'}vailable RAM: <b>{formatMemory(currentResource.freeMemory)}</b> of {formatMemory(currentResource.totalMemory)}. Which are <b>{calculatePercentage(false)}%</b>.</p> : <></>}
+                {lastEntry && new Date(lastEntry.checkedAt) > reduceMinute(now, 30) ? <p className='zero-margin green'>gAgent last update: {formatDate(lastEntry.checkedAt)}</p> : <p className="zero-margin red">{currentResource.name}'s gAgent last entry was {formatDate(lastEntry.checkedAt)}</p>}
                 {currentResource ? <p className='zero-margin'>Last responded: {formatDate(currentResource.lastChecked)}</p> : <></>}
             </div>
         </section>
