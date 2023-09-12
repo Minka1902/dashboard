@@ -277,8 +277,7 @@ function App() {
           setCurrentResource(data);
           if (isWatch) {
             getAllEntries(data.url);
-            getLastEntry(data.url);
-            history.push(`/resource/${id}`);
+            getLastEntry(data.url, id);
           }
         }
       })
@@ -314,11 +313,12 @@ function App() {
       })
   };
 
-  const getLastEntry = (url) => {
+  const getLastEntry = (url, id) => {
     collectionApiObj.getLastEntry(url)
-      .then((data) => {
-        if (data.message === "Entry found") {
-          setLastEntry(data.entry)
+      .then(({ message, entry }) => {
+        if (message === "Entry found") {
+          setLastEntry(entry);
+          history.push(`/resource/${id}`);
         }
       })
       .catch((err) => {
