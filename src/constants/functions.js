@@ -264,7 +264,7 @@ export const formatCreditCardNumber = (number, isHidden, howMuch) => {
 // ! 	gets a date string and returns it after some formatting 
 // TODO formatDate('2023-06-26T14:06:21.868Z')
 // ?  	14:06 26.06
-export const formatDate = (dateString, isWeekday) => {
+export const formatDate = (dateString, isWeekday, isDay = true) => {
     let options = { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' };
     let realTime = '';
     if (isWeekday === undefined) {
@@ -282,7 +282,11 @@ export const formatDate = (dateString, isWeekday) => {
             realTime += time[i];
         }
     }
-    return `${day} ${realTime !== '' ? realTime : time}`;
+    if (isDay) {
+        return `${day} ${realTime !== '' ? realTime : time}`;
+    } else {
+        return `${realTime !== '' ? realTime : time}`;
+    }
 };
 
 // ! 	gets a number and returns it after some formatting 
