@@ -3,6 +3,7 @@ import { Route, Switch, withRouter, useHistory } from 'react-router-dom';
 import ProtectedRoute from '../protectedRoute/ProtectedRoute';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 import CurrentResourceContext from '../../contexts/CurrentResourceContext';
+import LastEntryContext from '../../contexts/LastEntryContext';
 import sourceApiOBJ from '../../utils/sourceApi';
 import usersApiOBJ from '../../utils/usersApi';
 import collectionApiObj from '../../utils/collectionApi';
@@ -24,6 +25,7 @@ import * as Svgs from '../../images/SvgComponents';
 function App() {
   const currentUserContext = React.useContext(CurrentUserContext);    // eslint-disable-line
   const currentResourceContext = React.useContext(CurrentResourceContext);    // eslint-disable-line
+  const lastEntryContext = React.useContext(LastEntryContext);    // eslint-disable-line
   const safeDocument = typeof document !== 'undefined' ? document : {};
   const html = safeDocument.documentElement;
   const history = useHistory();
@@ -32,6 +34,7 @@ function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState(undefined);
   const [currentResource, setCurrentResource] = React.useState(undefined);
+  const [lastEntry, setLastEntry] = React.useState(undefined);
   const [isLoginPopupOpen, setIsLoginPopupOpen] = React.useState(false);
   const [isConfirmPopupOpen, setIsConfirmLoginPopupOpen] = React.useState(false);
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
@@ -273,8 +276,9 @@ function App() {
         if (data) {
           setCurrentResource(data);
           if (isWatch) {
-            history.push(`/resource/${id}`);
             getAllEntries(data.url);
+            getLastEntry(data.url);
+            history.push(`/resource/${id}`);
           }
         }
       })
@@ -310,6 +314,20 @@ function App() {
       })
   };
 
+  const getLastEntry = (url) => {
+    collectionApiObj.getLastEntry(url)
+      .then((data) => {
+        if (data.message === "Entry found") {
+          setLastEntry(data.entry)
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+  };
+
   const getAllEntries = (url) => {
     setIsPreloader(true);
     collectionApiObj.getEntries(url)
@@ -337,7 +355,8 @@ function App() {
 
   const handleHomeClick = () => {
     history.push('/');
-    setCurrentResource(undefined)
+    setCurrentResource(undefined);
+    setLastEntry(undefined);
   };
 
   const buttons = [
@@ -353,7 +372,8 @@ function App() {
       path: '/about-us',
       onClick: () => {
         history.push('/about-us');
-        setCurrentResource(undefined)
+        setCurrentResource(undefined);
+        setLastEntry(undefined);
       }
     },
   ];
@@ -423,85 +443,87 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <CurrentResourceContext.Provider value={currentResource}>
-        <Header
-          noScroll={noScroll}
-          scroll={scroll}
-          isLoggedIn={false}
-          buttons={buttons}
-          handleButtonClick={openPopup}
-          theme={true}
-        />
+        <LastEntryContext.Provider value={lastEntry}>
+          <Header
+            noScroll={noScroll}
+            scroll={scroll}
+            isLoggedIn={false}
+            buttons={buttons}
+            handleButtonClick={openPopup}
+            theme={true}
+          />
 
-        <div className="settings-button__container">
-          <Buttons.ButtonSVG title='Reload' buttonText="Settings" onClick={openSettings}  >
-            <Svgs.SvgSettings classes='setting__button-class' />
-          </Buttons.ButtonSVG>
-        </div>
+          <div className="settings-button__container">
+            <Buttons.ButtonSVG title='Reload' buttonText="Settings" onClick={openSettings}  >
+              <Svgs.SvgSettings classes='setting__button-class' />
+            </Buttons.ButtonSVG>
+          </div>
 
-        <Switch>
-          <Route exact path='/'>
-            <Main
-              resources={resources.length !== 0 ? resources : []}
-              isRefresh={isRefresh}
-              resourceClick={resourceClick}
-              switchPopups={switchPopups}
-            />
-          </Route>
+          <Switch>
+            <Route exact path='/'>
+              <Main
+                resources={resources.length !== 0 ? resources : []}
+                isRefresh={isRefresh}
+                resourceClick={resourceClick}
+                switchPopups={switchPopups}
+              />
+            </Route>
 
-          <Route path='/about-us'>
-            <AboutUs
-              people={theTeam}
-              title='Geomage'
-              subtitle="Geomage is a company founded in 2003."
-            />
-          </Route>
+            <Route path='/about-us'>
+              <AboutUs
+                people={theTeam}
+                title='Geomage'
+                subtitle="Geomage is a company founded in 2003."
+              />
+            </Route>
 
-          <ProtectedRoute path={`/resource/${currentResource ? currentResource._id : ''}`} loggedIn={loggedIn && window.innerWidth >= 530}>
-            <WatchResource
-              chartData={chartData}
-              resourceClick={resourceClick}
-              isFromZero={isFromZero}
-              isPreloader={isPreloader}
-              setIsPreloader={setIsPreloader}
-              isCapacity={isCapacity}
-            />
-          </ProtectedRoute>
-        </Switch>
+            <ProtectedRoute path={`/resource/${currentResource ? currentResource._id : ''}`} loggedIn={loggedIn && window.innerWidth >= 530}>
+              <WatchResource
+                chartData={chartData}
+                resourceClick={resourceClick}
+                isFromZero={isFromZero}
+                isPreloader={isPreloader}
+                setIsPreloader={setIsPreloader}
+                isCapacity={isCapacity}
+              />
+            </ProtectedRoute>
+          </Switch>
 
-        <LoginPopup
-          handleLogin={handleLoginSubmit}
-          isOpen={isLoginPopupOpen}
-          isFound={isUserFound}
-          linkText='Add source'
-          onClose={closeAllPopups}
-          handleSwitchPopup={switchPopups}
-          onSignOut={handleLogout}
-        />
+          <LoginPopup
+            handleLogin={handleLoginSubmit}
+            isOpen={isLoginPopupOpen}
+            isFound={isUserFound}
+            linkText='Add source'
+            onClose={closeAllPopups}
+            handleSwitchPopup={switchPopups}
+            onSignOut={handleLogout}
+          />
 
-        <ConfirmPopup
-          isOpen={isConfirmPopupOpen}
-          isDeleteSource={true}
-          onClose={closeAllPopups}
-          handleSubmit={deleteSource}
-        />
+          <ConfirmPopup
+            isOpen={isConfirmPopupOpen}
+            isDeleteSource={true}
+            onClose={closeAllPopups}
+            handleSubmit={deleteSource}
+          />
 
-        <AddSourcePopup
-          isLoggedIn={loggedIn}
-          onSubmit={isEditSource ? editSource : handleAddSourceSubmit}
-          isOpen={isAddSourcePopupOpen}
-          linkText='Sign in'
-          popupTitle={isEditSource ? "Edit source" : "Add source"}
-          handleSwitchPopup={switchPopups}
-          onClose={closeAllPopups}
-        />
+          <AddSourcePopup
+            isLoggedIn={loggedIn}
+            onSubmit={isEditSource ? editSource : handleAddSourceSubmit}
+            isOpen={isAddSourcePopupOpen}
+            linkText='Sign in'
+            popupTitle={isEditSource ? "Edit source" : "Add source"}
+            handleSwitchPopup={switchPopups}
+            onClose={closeAllPopups}
+          />
 
-        <PopupSettings
-          isOpen={isSettingsPopupOpen}
-          onClose={closeAllPopups}
-          handleSubmit={setSettings}
-        />
-        <RightClickMenu items={rightClickItems} isLoggedIn={loggedIn} />
-        <Footer homeClick={handleHomeClick} />
+          <PopupSettings
+            isOpen={isSettingsPopupOpen}
+            onClose={closeAllPopups}
+            handleSubmit={setSettings}
+          />
+          <RightClickMenu items={rightClickItems} isLoggedIn={loggedIn} />
+          <Footer homeClick={handleHomeClick} />
+        </LastEntryContext.Provider>
       </CurrentResourceContext.Provider>
     </CurrentUserContext.Provider >
   );
