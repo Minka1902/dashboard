@@ -86,7 +86,7 @@ export function LineChart({ chartData, isCapacity = true, title = 'Please pass a
     let data;
     if (chartData !== undefined)
         data = {
-            labels: chartData.map((data) => formatDate(data.checkedAt, false)),
+            labels: chartData.map((data) => formatDate(data.checkedAt, false, false)),
             datasets: [{
                 label: label,
                 data: chartData.map((data) => {
