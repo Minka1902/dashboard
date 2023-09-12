@@ -94,7 +94,7 @@ export function LineChart({ chartData, isCapacity = true, title = 'Please pass a
                         return (100 - data.capacityPercent);
                     } else {
                         if (data.freeMemory) {
-                            return data.memoryPercent;
+                            return (100 - data.memoryPercent);
                         } else {
                             if (data.status) {
                                 return 1;
