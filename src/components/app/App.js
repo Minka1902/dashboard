@@ -427,12 +427,12 @@ function App() {
   // ???????????????????????????????????????????????????
   const setSettings = (settings) => {
     if (settings) {
-      tempChartFilter = settings.chartFilter;
       setIsFromZero(settings.yAxis === 'zero');
       setIsCapacity(settings.watch === 'capacity');
-      if (settings.chartFilter) {
+      if (settings.chartFilter !== tempChartFilter) {
         handleWatchResource({ id: currentResource._id });
       }
+      tempChartFilter = settings.chartFilter;
       closeAllPopups();
     }
   };
@@ -524,6 +524,13 @@ function App() {
                 setIsPreloader={setIsPreloader}
                 isCapacity={isCapacity}
               />
+            </ProtectedRoute>
+
+            <Route path="/404">
+              <h1>some error message</h1>
+            </Route>
+
+            <ProtectedRoute path="*" redirectTo='/404'>
             </ProtectedRoute>
           </Switch>
 
