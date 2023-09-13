@@ -42,6 +42,7 @@ function App() {
   const [isRefresh, setIsRefresh] = React.useState(false);
   const [isFromZero, setIsFromZero] = React.useState(true);
   const [isCapacity, setIsCapacity] = React.useState(true);
+  const [chartFilter, setChartFilter] = React.useState(6);
   const [isPreloader, setIsPreloader] = React.useState(false);
   const [isEditSource, setIsEditSource] = React.useState(false);
   const [chartData, setChartData] = React.useState();
@@ -333,7 +334,11 @@ function App() {
     collectionApiObj.getEntries(url)
       .then(({ data, found }) => {
         if (found !== 0) {
-          setChartData(data);
+          if (found >= 2000) {
+            setChartData(getEverySixthObject(data));
+          } else {
+            setChartData(data);
+          }
           setIsPreloader(false);
         }
       })
@@ -342,6 +347,36 @@ function App() {
           console.log(err);
         }
       });
+  };
+
+  // ???????????????????????????????????????????????????
+  // !!!!!!!!!!!!!     Data processing     !!!!!!!!!!!!!
+  // ???????????????????????????????????????????????????
+  let tempChartFilter = 6;
+
+  const getEverySixthObject = (inputArray) => {
+    const resultArray = [];
+
+    for (let i = 0; i < inputArray.length; i += tempChartFilter) {
+      const slice = inputArray.slice(i, i + tempChartFilter);
+      if (slice.length > 0) {
+        let temp = { capacityLeft: 0, totalCapacity: 0, capacityPercent: 0, freeMemory: 0, totalMemory: 0, memoryPercent: 0 };
+        slice.reduce((acc, obj) => {
+          temp.capacityLeft += obj.capacityLeft;
+          temp.totalCapacity += obj.totalCapacity;
+          temp.capacityPercent += obj.capacityPercent;
+          temp.freeMemory += obj.freeMemory;
+          temp.totalMemory += obj.totalMemory;
+          temp.memoryPercent += obj.memoryPercent;
+        }, 0);
+        for (let prop in temp) {
+          temp[prop] = temp[prop] / tempChartFilter;
+        }
+        temp.checkedAt = slice[0].checkedAt;
+        resultArray.push(temp);
+      }
+    }
+    return resultArray;
   };
 
   // ???????????????????????????????????????????????????
@@ -391,10 +426,15 @@ function App() {
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!     SETTINGS handling     !!!!!!!!!!!!
   // ???????????????????????????????????????????????????
-  const setSettings = (settings) => {
+  const setSettings = async (settings) => {
     if (settings) {
+      setChartFilter(settings.chartFilter);
+      tempChartFilter = settings.chartFilter;
       setIsFromZero(settings.yAxis === 'zero');
       setIsCapacity(settings.watch === 'capacity');
+      if (settings.chartFilter) {
+        handleWatchResource({ id: currentResource._id });
+      }
       closeAllPopups();
     }
   };
