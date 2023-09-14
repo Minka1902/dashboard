@@ -1,13 +1,12 @@
-import { PUBLIC_URL, PRIVATE_URL } from "./auth";
+import { PUBLIC_URL } from "./auth";
 
 class sourceApi {
     constructor() {
         this._publicUrl = PUBLIC_URL;
-        this._privateUrl = PRIVATE_URL;
     }
 
-    _fetch = ({ method = "GET", url, data, isPrivate = false }) =>
-        fetch(`${isPrivate ? this._privateUrl : this._publicUrl}${url}`, {
+    _fetch = ({ method = "GET", url, data }) =>
+        fetch(`${this._publicUrl}${url}`, {
             method: method,
             body: JSON.stringify(data),
             headers: {
@@ -27,8 +26,6 @@ class sourceApi {
     updateSource = (name, newData) => this._fetch({ method: 'PUT', data: newData, url: `/update/${name}` })
 
     deleteSource = (id) => this._fetch({ method: 'DELETE', url: `/remove-source/${id}` })
-
-    checkSource = (url) => this._fetch({ method: 'GET', url: `/check-source/${url}`, isPrivate: true })
 
     editSource = (name, newData) => this._fetch({ method: 'PUT', data: newData, url: `/edit/${name}` })
 }
