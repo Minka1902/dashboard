@@ -45,12 +45,11 @@ export default function WatchResource({ resourceClick, chartData, isFromZero, is
             <div className='watch-resource__resource_info-container'>
                 {currentResource ? <div className='watch-resource__container'>
                     <p className='zero-margin'>Resource: <span className={`${new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? (currentResource.isActive ? 'green' : 'red') : 'red'}`}>{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? (currentResource.isActive ? 'active' : 'not active') : 'Not active'}</span></p>
-                    <p className='zero-margin'>Status: <span className={`${new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? 'green' : 'red'}`}>{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? currentResource.status : 'Not available'}</span></p>
+                    <p className='zero-margin'>Status: <span className={`${new Date(currentResource.lastChecked) > reduceMinute(now, 5) && currentResource.status === 200 ? 'green' : 'red'}`}>{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? currentResource.status : 'Not available'}</span></p>
                 </div> : <></>}
                 {currentResource.totalCapacity ? <p className='zero-margin'>{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? 'A' : 'Last a'}vailable capacity: <b>{formatMemory(currentResource.capacityLeft)}</b> of {formatMemory(currentResource.totalCapacity)}. Which are <b>{calculatePercentage(true)}%</b>.</p> : <></>}
                 {currentResource.totalMemory ? <p className="zero-margin">{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? 'A' : 'Last a'}vailable RAM: <b>{formatMemory(currentResource.freeMemory)}</b> of {formatMemory(currentResource.totalMemory)}. Which are <b>{calculatePercentage(false)}%</b>.</p> : <></>}
                 {lastEntry && new Date(lastEntry.checkedAt) > reduceMinute(now, 30) ? <p className='zero-margin green'>gAgent last update: {formatDate(lastEntry.checkedAt)}</p> : <p className="zero-margin red">{currentResource.name}'s gAgent last entry was {formatDate(lastEntry.checkedAt)}</p>}
-                {currentResource ? <p className='zero-margin'>Last responded: {formatDate(currentResource.lastChecked)}</p> : <></>}
             </div>
         </section>
     );
