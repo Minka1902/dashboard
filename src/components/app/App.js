@@ -360,7 +360,7 @@ function App() {
       const slice = inputArray.slice(i, i + tempChartFilter);
       if (slice.length > 0) {
         let temp = { capacityLeft: 0, totalCapacity: 0, capacityPercent: 0, freeMemory: 0, totalMemory: 0, memoryPercent: 0 };
-        slice.reduce((acc, obj) => {
+        slice.reduce((acc, obj) => {            // eslint-disable-line
           temp.capacityLeft += obj.capacityLeft;
           temp.totalCapacity += obj.totalCapacity;
           temp.capacityPercent += obj.capacityPercent;
