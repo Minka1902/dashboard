@@ -13,6 +13,25 @@
     width: min-content;
 }
 
+.main__not-found-message {
+    position: fixed;
+    width: 140px;
+    height: 26px;
+    text-align: center;
+    top: calc(50% - 13px);
+    left: calc(50% - 85px);
+    opacity: 0;
+    background-color: #ccc;
+    border: 1px solid #7e7e7e;
+    border-radius: 7px;
+    transition: opacity 0.5s linear;
+}
+
+.opened {
+    opacity: 1;
+    transition: opacity 0.5s linear;
+}
+
 main {
     display: flex;
     flex-direction: column;

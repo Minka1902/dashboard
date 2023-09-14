@@ -2,7 +2,7 @@ import React from "react";
 import Resource from "../resource/Resource";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 
-export default function Main({ resources, isRefresh, resourceClick, switchPopups }) {
+export default function Main({ resources, isRefresh, resourceClick, switchPopups, isAgentNotFound }) {
     const currentUser = React.useContext(CurrentUserContext);
 
     return (
@@ -10,9 +10,10 @@ export default function Main({ resources, isRefresh, resourceClick, switchPopups
             {currentUser ? <h1 className='main__title'>{currentUser.username}, welcome back!</h1> : <h1 className='main__title'>Welcome.<br />To edit resources please <span className='signin' onClick={switchPopups}>sign in</span>.</h1>}
             <div className='resources' >
                 {resources.length !== 0 ? resources.map((resource, index) => {
-                    return <Resource isRefresh={isRefresh} resource={resource} key={index} onClick={resourceClick} />
+                    return <Resource isRefresh={isRefresh} resource={resource.data} key={index} onClick={resourceClick} lastEntry={resource.lastEntry} />
                 }) : <></>}
             </div>
+            <div className={`main__not-found-message${isAgentNotFound ? ' opened' : ''}`}>Agent not found</div>
         </main>
     );
 };
