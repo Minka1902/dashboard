@@ -1,10 +1,10 @@
 import React from "react";
+import { delay } from "../../constants/constants";
 import { CardPerson } from '../cards/Cards';
 
 export default function AboutUs({ people, title, subtitle }) {
     const [isCopied, setIsCopied] = React.useState(false);
     const [whatWasCopied, setWhatWasCopied] = React.useState('');
-    const delay = (seconds) => new Promise(res => setTimeout(res, seconds * 1000));
 
     const copy = async (whatWasCopied) => {
         setIsCopied(true);
