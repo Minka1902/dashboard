@@ -21,8 +21,6 @@ class collectionApi {
 
     getEntries = (name) => this._fetch({ method: 'GET', url: `/collection/${name}` })
 
-    getLastEntry = (name) => this._fetch({ method: 'GET', url: `/collection/last/${name}`, })
-
     deleteCollection = (name) => this._fetch({ method: "DELETE", url: `/collections/remove/${name}` })
 }
 
