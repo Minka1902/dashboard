@@ -23,8 +23,6 @@ class sourceApi {
 
     createSource = (newSource) => this._fetch({ method: 'POST', url: '/add-source', data: newSource })
 
-    updateSource = (name, newData) => this._fetch({ method: 'PUT', data: newData, url: `/update/${name}` })
-
     deleteSource = (id) => this._fetch({ method: 'DELETE', url: `/remove-source/${id}` })
 
     editSource = (name, newData) => this._fetch({ method: 'PUT', data: newData, url: `/edit/${name}` })
