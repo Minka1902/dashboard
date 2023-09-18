@@ -77,7 +77,7 @@ export default function Resource(props) {
                                 <></>
                         }
                         <div className={`resource__reload-icon ${resource.name}`} title={`Last checked: ${formatDate(resource.lastChecked)}`} />
-                        <h3 className={`resource__error-text${resource.totalCapacity ? '' : ' no-memory'} ${resource.name}`}>Last active: {formatDate(resource.lastActive)} <br /><br />Last tried: {formatDate(resource.lastChecked, false)}</h3>
+                        <h3 className={`resource__error-text${resource.totalCapacity ? '' : ' no-memory'} ${resource.name}`}>{lastEntry === null ? '' : 'Resource doesn`t react'} <br /><br />Last tried: {formatDate(resource.lastChecked, false)}</h3>
                         <h3 className={`resource__status ${resource.status === 200 ? (new Date(resource.lastChecked) > now ? '' : 'not-') : 'not-'}working ${resource.name}`} title={`http://${resource.url}`} >{resource.status}</h3>
                     </>);
                 }
@@ -92,7 +92,7 @@ export default function Resource(props) {
                             <></>
                     }
                     <div className={`resource__reload-icon ${resource.name}`} title={`Last checked: ${formatDate(resource.lastChecked)}`} />
-                    <h3 className={`resource__error-text${resource.totalCapacity ? '' : ' no-memory'} ${resource.name}`}>{lastEntry === null ? 'Resource has no gAgent' : ''} <br /><br />Last tried: {formatDate(resource.lastChecked, false)}</h3>
+                    <h3 className={`resource__error-text${resource.totalCapacity ? '' : ' no-memory'} ${resource.name}`}>{lastEntry === null ? 'Resource has no gAgent' : 'Resource has a problem'} <br /><br />Last tried: {formatDate(resource.lastChecked, false)}</h3>
                     <h3 className={`resource__status ${resource.status === 200 ? (new Date(resource.lastChecked) > now ? '' : 'not-') : 'not-'}working ${resource.name}`} title={`http://${resource.url}`} >{new Date(resource.lastChecked) > now ? resource.status : 'Not responding'}</h3>
                 </>);
             }
@@ -121,7 +121,7 @@ export default function Resource(props) {
         return () => clearInterval(interval);
     }, []);
 
-    return (
+    return (resource ?
         <>
             <div className={`resource${resource.capacityLeft !== undefined ? ' capacity' : ''}`} id={resource._id} onClick={resourceClick}>
                 <div className={`resource__name_container ${resource.name}`}>
@@ -132,6 +132,6 @@ export default function Resource(props) {
                 </div>
                 {renderInfo()}
             </div>
-        </>
+        </> : <></>
     );
 };
