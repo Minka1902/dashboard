@@ -44,10 +44,19 @@
     opacity: 1;
 }
 
-.resource__image_light {
+.resource__image_light_green {
     width: 76px;
     height: 76px;
     background: linear-gradient(150deg, #ffffff 0%, rgb(20, 255, 0) 50%, rgb(20, 255, 0) 100%);
+    border-radius: 50%;
+    border: 6px solid rgb(61, 61, 61);
+    z-index: 1;
+}
+
+.resource__image_light_red {
+    width: 76px;
+    height: 76px;
+    background: linear-gradient(150deg, #ffffff 0%, rgb(255, 0, 0) 50%, rgb(255, 0, 0) 100%);
     border-radius: 50%;
     border: 6px solid rgb(61, 61, 61);
     z-index: 1;

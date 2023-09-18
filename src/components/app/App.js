@@ -8,7 +8,7 @@ import sourceApiOBJ from '../../utils/sourceApi';
 import usersApiOBJ from '../../utils/usersApi';
 import collectionApiObj from '../../utils/collectionApi';
 import * as auth from '../../utils/auth';
-import { theTeam } from '../../constants/constants';
+import { theTeam, delay } from '../../constants/constants';
 import Header from '../header/Header';
 import AboutUs from '../aboutus/AboutUs';
 import WatchResource from '../watchResource/WatchResource';
@@ -44,6 +44,7 @@ function App() {
   const [isCapacity, setIsCapacity] = React.useState(true);
   const [isPreloader, setIsPreloader] = React.useState(false);
   const [isEditSource, setIsEditSource] = React.useState(false);
+  const [isAgentNotFound, setIsAgentNotFound] = React.useState(false);
   const [chartData, setChartData] = React.useState();
 
   // ???????????????????????????????????????????????????
@@ -179,29 +180,17 @@ function App() {
 
   const resourceClick = (resource, hidePreloader) => {
     setIsPreloader(true);
-    sourceApiOBJ.checkSource(resource.url)
+
+    sourceApiOBJ.getSourceInfo(resource._id)
       .then((data) => {
-        let newData = { lastActive: data.isActive ? new Date() : resource.lastActive };
-        newData.isActive = data ? data.isActive : false;
-        newData.status = data.status;
-        newData.lastChecked = data.lastChecked;
-        sourceApiOBJ.updateSource(resource.name, newData)
-          .catch((err) => {
-            if (err) {
-              console.log(err);
-            }
-          })
-          .finally(() => {
-            initialize();
-          });
+        if (data) {
+          hidePreloader();
+        }
       })
       .catch((err) => {
         if (err) {
           console.log(err);
         }
-      })
-      .finally(() => {
-        hidePreloader();
       });
   };
 
@@ -274,10 +263,9 @@ function App() {
     return sourceApiOBJ.getSourceInfo(id)
       .then((data) => {
         if (data) {
-          setCurrentResource(data);
+          setCurrentResource(data.source);
           if (isWatch) {
-            getAllEntries(data.url);
-            getLastEntry(data.url, id);
+            getAllEntries(data.source.url, id);
           }
         }
       })
@@ -313,32 +301,24 @@ function App() {
       })
   };
 
-  const getLastEntry = (url, id) => {
-    collectionApiObj.getLastEntry(url)
-      .then(({ message, entry }) => {
-        if (message === "Entry found") {
-          setLastEntry(entry);
-          history.push(`/resource/${id}`);
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
-  };
-
-  const getAllEntries = (url) => {
+  const getAllEntries = (url, id) => {
     setIsPreloader(true);
     collectionApiObj.getEntries(url)
-      .then(({ data, found }) => {
-        if (found !== 0) {
+      .then(async ({ data, found, lastEntry }) => {
+        if (found > 0) {
           if (found >= 2000) {
+            setLastEntry(lastEntry);
             setChartData(getEverySixthObject(data));
           } else {
+            setLastEntry(lastEntry);
             setChartData(data);
           }
           setIsPreloader(false);
+          history.push(`/resource/${id}`);
+        } else {
+          setIsAgentNotFound(true);
+          await delay(0.9);
+          setIsAgentNotFound(false);
         }
       })
       .catch((err) => {
@@ -504,6 +484,7 @@ function App() {
                 isRefresh={isRefresh}
                 resourceClick={resourceClick}
                 switchPopups={switchPopups}
+                isAgentNotFound={isAgentNotFound}
               />
             </Route>
 
@@ -524,13 +505,6 @@ function App() {
                 setIsPreloader={setIsPreloader}
                 isCapacity={isCapacity}
               />
-            </ProtectedRoute>
-
-            <Route path="/404">
-              <h1>some error message</h1>
-            </Route>
-
-            <ProtectedRoute path="*" redirectTo='/404'>
             </ProtectedRoute>
           </Switch>
 
