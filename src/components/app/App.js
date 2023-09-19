@@ -45,6 +45,7 @@ function App() {
   const [isPreloader, setIsPreloader] = React.useState(false);
   const [isEditSource, setIsEditSource] = React.useState(false);
   const [isAgentNotFound, setIsAgentNotFound] = React.useState(false);
+  const [chartFilter, setChartFilter] = React.useState(6);
   const [chartData, setChartData] = React.useState();
 
   // ???????????????????????????????????????????????????
@@ -331,13 +332,11 @@ function App() {
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!!     Data processing     !!!!!!!!!!!!!
   // ???????????????????????????????????????????????????
-  let tempChartFilter = 6;
-
   const getEverySixthObject = (inputArray) => {
     const resultArray = [];
 
-    for (let i = 0; i < inputArray.length; i += tempChartFilter) {
-      const slice = inputArray.slice(i, i + tempChartFilter);
+    for (let i = 0; i < inputArray.length; i += chartFilter) {
+      const slice = inputArray.slice(i, i + chartFilter);
       if (slice.length > 0) {
         let temp = { capacityLeft: 0, totalCapacity: 0, capacityPercent: 0, freeMemory: 0, totalMemory: 0, memoryPercent: 0 };
         slice.reduce((acc, obj) => {            // eslint-disable-line
@@ -349,9 +348,11 @@ function App() {
           temp.memoryPercent += obj.memoryPercent;
         }, 0);
         for (let prop in temp) {
-          temp[prop] = temp[prop] / tempChartFilter;
+          temp[prop] = temp[prop] / chartFilter;
         }
         temp.checkedAt = slice[0].checkedAt;
+        temp.status = slice[0].status;
+        temp.isActive = slice[0].isActive;
         resultArray.push(temp);
       }
     }
@@ -405,14 +406,15 @@ function App() {
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!     SETTINGS handling     !!!!!!!!!!!!
   // ???????????????????????????????????????????????????
-  const setSettings = (settings) => {
+  const setSettings = async (settings) => {
     if (settings) {
-      setIsFromZero(settings.yAxis === 'zero');
-      setIsCapacity(settings.watch === 'capacity');
-      if (settings.chartFilter !== tempChartFilter) {
+      if (settings.chartFilter !== chartFilter) {
+        await setChartFilter(settings.chartFilter);
         handleWatchResource({ id: currentResource._id });
       }
-      tempChartFilter = settings.chartFilter;
+      await setIsFromZero(settings.yAxis === 'zero');
+      await setIsCapacity(settings.watch === 'capacity');
+      await setChartFilter(settings.chartFilter);
       closeAllPopups();
     }
   };

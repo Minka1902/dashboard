@@ -7,5 +7,5 @@ export const delay = (seconds) => new Promise((res) => setTimeout(res, seconds *
 export const memoryUnits = ['BYTES', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
 export const theTeam = [
-    { name: 'nathan scharff', title: 'Founder & CEO', image: require('../images/nathan-scharff.jpg'), social: { linkedin: 'https://www.linkedin.com/in/nathanscharff', } },
+    // { name: 'nathan scharff', title: 'Founder & CEO', image: require('../images/nathan-scharff.jpg'), social: { linkedin: 'https://www.linkedin.com/in/nathanscharff', } },
 ];
