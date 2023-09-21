@@ -68,7 +68,7 @@
 
 div.resource__200_text {
     font-weight: 600;
-    margin-left: 4px;
+    padding-left: 4px;
 }
 
 .resource__200_text {
@@ -97,6 +97,7 @@ div.resource__200_text {
 
 .not-working {
     color: red;
+    margin: 0;
 }
 
 .resource__error-text {

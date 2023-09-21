@@ -1,4 +1,4 @@
-import React from "react";
+import { useContext } from "react";
 import CurrentResourceContext from "../../contexts/CurrentResourceContext";
 import LastEntryContext from "../../contexts/LastEntryContext";
 import Preloader from '../preloader/Preloader';
@@ -8,18 +8,33 @@ import { reduceMinute } from '../../utils/timeDiff.ts';
 import { formatMemory, formatDate } from '../../constants/functions';
 
 export default function WatchResource({ resourceClick, chartData, isFromZero, isPreloader, setIsPreloader, isCapacity }) {
-    const currentResource = React.useContext(CurrentResourceContext);
-    const lastEntry = React.useContext(LastEntryContext);
-    const now = new Date();
+    const currentResource = useContext(CurrentResourceContext);
+    const lastEntry = useContext(LastEntryContext);
+    const fiveMin = reduceMinute(new Date(), 5);
 
     const calculatePercentage = (isCapacity) => {
         if (isCapacity) {
-            const percent = currentResource.capacityLeft * 100;
-            return (percent / currentResource.totalCapacity).toFixed(2);
+            const percent = lastEntry.capacityLeft * 100;
+            return (percent / lastEntry.totalCapacity).toFixed(2);
         } else {
-            const percent = currentResource.freeMemory * 100;
-            return (percent / currentResource.totalMemory).toFixed(2);
+            const percent = lastEntry.freeMemory * 100;
+            return (percent / lastEntry.totalMemory).toFixed(2);
         }
+    };
+
+    const createErrorMessage = (isToFar = false) => {
+        let tempMsg;
+        if (isToFar) {
+            tempMsg = 'Last entry`s ';
+        } else {
+            tempMsg = 'Resource`s ';
+        }
+        for (let prop in lastEntry.error) {
+            if (prop && prop !== null) {
+                tempMsg += `error ${prop}-${lastEntry.error[prop]}, `;
+            }
+        }
+        return tempMsg === 'Last entry`s ' || tempMsg === 'Resource`s ' ? '' : tempMsg;
     };
 
     return (
@@ -33,8 +48,8 @@ export default function WatchResource({ resourceClick, chartData, isFromZero, is
                 <Preloader />
                 :
                 <Charts.LineChart
-                    title={{ text: !currentResource.totalCapacity && !currentResource.totalMemory ? 'Time / 0-Disabled 1-Active' : (isCapacity ? 'Time / Capacity in use' : 'Time / % Memory in use') }}
-                    maxY={currentResource.totalMemory !== undefined ? 100 : 1}
+                    title={{ text: !lastEntry.totalCapacity && !lastEntry.totalMemory ? 'Time / 0-Disabled 1-Active' : (isCapacity ? 'Time / Capacity in use' : 'Time / % Memory in use') }}
+                    maxY={lastEntry.totalMemory !== undefined ? 100 : 1}
                     chartClass='watch-resource__chart'
                     chartData={chartData}
                     subtitle={false}
@@ -43,13 +58,14 @@ export default function WatchResource({ resourceClick, chartData, isFromZero, is
                 />
             }
             <div className='watch-resource__resource_info-container'>
-                {currentResource ? <div className='watch-resource__container'>
-                    <p className='zero-margin'>Resource: <span className={`${new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? (currentResource.isActive ? 'green' : 'red') : 'red'}`}>{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? (currentResource.isActive ? 'active' : 'not active') : 'Not active'}</span></p>
-                    <p className='zero-margin'>Status: <span className={`${new Date(currentResource.lastChecked) > reduceMinute(now, 5) && currentResource.status === 200 ? 'green' : 'red'}`}>{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? currentResource.status : 'Not available'}</span></p>
+                {!currentResource.isMachine ? <div className='watch-resource__container'>
+                    <p className='zero-margin'>Resource: <span className={`${new Date(currentResource.lastChecked) > fiveMin ? (currentResource.isActive ? 'green' : 'red') : 'red'}`}>{new Date(currentResource.lastChecked) > fiveMin ? (currentResource.isActive ? 'active' : 'not active') : 'Not active'}</span></p>
+                    <p className='zero-margin'>Status: <span className={`${new Date(currentResource.lastChecked) > fiveMin && currentResource.status === 200 ? 'green' : 'red'}`}>{new Date(currentResource.lastChecked) > fiveMin ? currentResource.status : 'Not available'}</span></p>
                 </div> : <></>}
-                {currentResource.totalCapacity ? <p className='zero-margin'>{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? 'A' : 'Last a'}vailable capacity: <b>{formatMemory(currentResource.capacityLeft)}</b> of {formatMemory(currentResource.totalCapacity)}. Which are <b>{calculatePercentage(true)}%</b>.</p> : <></>}
-                {currentResource.totalMemory ? <p className="zero-margin">{new Date(currentResource.lastChecked) > reduceMinute(now, 5) ? 'A' : 'Last a'}vailable RAM: <b>{formatMemory(currentResource.freeMemory)}</b> of {formatMemory(currentResource.totalMemory)}. Which are <b>{calculatePercentage(false)}%</b>.</p> : <></>}
-                {lastEntry && new Date(lastEntry.checkedAt) > reduceMinute(now, 10) ? <p className='zero-margin green'>gAgent last update: {formatDate(lastEntry.checkedAt)}</p> : <p className="zero-margin red">{currentResource.name}'s gAgent last entry was {formatDate(lastEntry.checkedAt)}</p>}
+                {lastEntry.totalCapacity ? <p className='zero-margin'>{new Date(lastEntry.lastChecked) > fiveMin ? 'A' : 'Last a'}vailable capacity: <b>{formatMemory(lastEntry.capacityLeft)}</b> of {formatMemory(lastEntry.totalCapacity)}. Which are <b>{calculatePercentage(true)}%</b>.</p> : <></>}
+                {lastEntry.totalMemory ? <p className="zero-margin">{new Date(lastEntry.lastChecked) > fiveMin ? 'A' : 'Last a'}vailable RAM: <b>{formatMemory(lastEntry.freeMemory)}</b> of {formatMemory(lastEntry.totalMemory)}. Which are <b>{calculatePercentage(false)}%</b>.</p> : <></>}
+                {lastEntry && new Date(lastEntry.checkedAt) > fiveMin ? <p className='zero-margin green'>gAgent last update: {formatDate(lastEntry.checkedAt)}</p> : <p className="zero-margin red">{currentResource.name}'s gAgent last entry was {formatDate(lastEntry.checkedAt)}</p>}
+                {new Date(lastEntry.checkedAt) > fiveMin && lastEntry.error ? <p className='zero-margin'>{createErrorMessage()}</p> : <p className='zero-margin'>{createErrorMessage(true)}</p>}
             </div>
         </section>
     );
