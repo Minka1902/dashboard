@@ -6,6 +6,10 @@
     grid-gap: 15px;
 }
 
+.about-us__paragraph{
+    margin: auto;
+}
+
 .about-us__copy-message {
     position: fixed;
     width: 170px;

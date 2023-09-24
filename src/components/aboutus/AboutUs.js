@@ -16,13 +16,13 @@ export default function AboutUs({ people, title, subtitle }) {
     return (
         <section name='about-us' id='about-us'>
             <h1 className='section__title'>{title}</h1>
-            <p className='section__title'>{subtitle}</p>
+            <h4 className='section__title'>{subtitle}</h4>
+            <p className="about-us__paragraph">Geomage is a service driven software and technology company with an expertise, focus and passion for R&D innovations.</p>
             <div className='the-team'>
                 {people.map((man, index) => {
                     return <CardPerson person={man} isEmail={true} isInstagram={false} isGithub={false} key={index} onCopy={copy} />
                 })}
             </div>
-
             <div className={`about-us__copy-message${whatWasCopied === 'Email' ? ' less-width' : ''}${isCopied ? ' copied' : ''}`}>{whatWasCopied} copied</div>
         </section>
     );

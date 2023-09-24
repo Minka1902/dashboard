@@ -6,11 +6,40 @@
 
 .resources {
     margin: 10px auto 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.machines {
+    margin: 0 auto;
     display: grid;
     grid-template-columns: 130px 130px 130px 130px 130px;
     grid-template-rows: 180px;
     grid-gap: 15px;
     width: min-content;
+}
+
+.sources {
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 130px 130px 130px 130px 130px;
+    grid-template-rows: 180px;
+    grid-gap: 15px;
+    width: min-content;
+}
+
+.resource-type__title {
+    margin: 15px 0 5px 0;
+    height: 20px;
+    line-height: 18px;
+    font-size: 17px;
+    text-transform: capitalize;
+    font-style: italic;
+    font-family: 'Roboto', Arial, sans-serif;
+}
+
+.resource-type__title::after {
+    content: ':';
 }
 
 .main__not-found-message {
