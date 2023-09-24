@@ -22,8 +22,8 @@ export default function Main({ resources, isRefresh, resourceClick, switchPopups
     };
 
     React.useEffect(() => {
-        splitResources();
-    }, [resources]);
+        splitResources(true);
+    }, [resources]);    // eslint-disable-line
 
     return (
         sources.length !== 0 && machines.length !== 0 ?
