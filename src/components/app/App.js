@@ -36,7 +36,7 @@ function App() {
   const [currentResource, setCurrentResource] = React.useState(undefined);
   const [lastEntry, setLastEntry] = React.useState(undefined);
   const [isLoginPopupOpen, setIsLoginPopupOpen] = React.useState(false);
-  const [isConfirmPopupOpen, setIsConfirmLoginPopupOpen] = React.useState(false);
+  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = React.useState(false);
   const [isAddSourcePopupOpen, setIsAddSourcePopupOpen] = React.useState(false);
   const [isSettingsPopupOpen, setIsSettingsPopupOpen] = React.useState(false);
   const [isRefresh, setIsRefresh] = React.useState(false);
@@ -129,7 +129,7 @@ function App() {
   const closeAllPopups = () => {
     setIsLoginPopupOpen(false);
     setIsAddSourcePopupOpen(false);
-    setIsConfirmLoginPopupOpen(false);
+    setIsConfirmPopupOpen(false);
     setIsEditSource(false);
     setIsSettingsPopupOpen(false);
   };
@@ -286,7 +286,7 @@ function App() {
   };
 
   const deleteClicked = ({ id }) => {
-    setIsConfirmLoginPopupOpen(true);
+    setIsConfirmPopupOpen(true);
     setCurrentResource({ idToDelete: id });
   };
 
